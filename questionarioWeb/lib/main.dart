@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:questionario/views/home.dart';
-import 'package:questionario/views/questionario.dart';
-import 'package:questionario/views/resultado.dart';
+import 'package:questionario/views/home/home.dart';
+import 'package:questionario/views/questionario/questionario.dart';
+import 'package:questionario/views/resultado/resultado.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Questionário',
       theme: ThemeData(
         //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,

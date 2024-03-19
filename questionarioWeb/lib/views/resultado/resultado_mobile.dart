@@ -9,17 +9,16 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-//import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
+class ResultPageMobile extends StatefulWidget {
+  late Map<String, dynamic> dados = {};
 
-class ResultPage extends StatefulWidget {
-  const ResultPage({super.key});
+  ResultPageMobile({super.key, required Map<String, dynamic> dados});
 
   @override
-  State<ResultPage> createState() => _ResultPageState();
+  State<ResultPageMobile> createState() => _ResultPageMobileState();
 }
 
-class _ResultPageState extends State<ResultPage> {
-  late Map<String, dynamic> dados = {};
+class _ResultPageMobileState extends State<ResultPageMobile> {
   late String jsonData;
   final GlobalKey _qrImageKey = GlobalKey();
 
@@ -27,33 +26,24 @@ class _ResultPageState extends State<ResultPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    dados = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
-    jsonData = jsonEncode(dados);
+    jsonData = jsonEncode(widget.dados);
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        title: const Text("Resultado", style: TextStyle(fontSize: 20, color: Colors.white),),
-      ),
-      body: Center(
-          child: Container(
-            height: screenHeight,
-            width: screenWidth,
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                top(screenWidth),
-                body(screenHeight, screenWidth),
-              ],
-            ),
-          )
+    return Container(
+      height: screenHeight,
+      width: screenWidth,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          top(screenWidth),
+          body(screenHeight, screenWidth),
+        ],
       ),
     );
   }
-  
+
   Widget top(num screenWidth){
     return Container(
       width: screenWidth * 0.8,
@@ -63,21 +53,21 @@ class _ResultPageState extends State<ResultPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-        SizedBox(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("O que é o código?"),
-              Icon(Icons.account_circle_rounded, size: 20, color: Colors.deepPurple,)
-            ],
+          SizedBox(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("O que é o código?", style: TextStyle(fontSize: 12)),
+                Icon(Icons.account_circle_rounded, size: 20, color: Colors.deepPurple,)
+              ],
+            ),
           ),
-        ),
-      ],
-    ),
-  ); 
+        ],
+      ),
+    );
   }
-  
+
   Widget body(num screenHeight, num screenWidth){
     return Container(
       height: screenHeight * 0.8,
@@ -87,7 +77,7 @@ class _ResultPageState extends State<ResultPage> {
         children: [
           Container(
               padding: const EdgeInsets.only(bottom: 30),
-              child: const Text("Resultado:")
+              child: const Text("Resultado:",  style: TextStyle(fontSize: 14))
           ),
           result()
         ],
@@ -106,7 +96,8 @@ class _ResultPageState extends State<ResultPage> {
         final directory = await getApplicationDocumentsDirectory();
         final imagePath = '${directory.path}/qrcode.png';
         File(imagePath).writeAsBytesSync(pngBytes);
-        await Share.shareFiles([imagePath], text: 'Download do QR Code');
+        final XFile xFile = XFile(imagePath);
+        await Share.shareXFiles([xFile], text: 'Download do QR Code');
       }
     } catch (e) {
       print(e.toString());
@@ -118,29 +109,39 @@ class _ResultPageState extends State<ResultPage> {
       child: Column(
         children: [
           Container(
-              padding: const EdgeInsets.only(top: 20),
-              child: const Text("data", style: TextStyle(fontSize: 26, color: Colors.indigo)),
+            padding: const EdgeInsets.only(top: 20),
+            child: const Text("data", style: TextStyle(fontSize: 22, color: Colors.indigo)),
           ),
           Container(
-              padding: const EdgeInsets.only(top: 20, bottom: 50),
-              child: const Text("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ndataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ndataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", style: TextStyle(fontSize: 14)),
+            width: 250,
+            padding: const EdgeInsets.only(top: 20, bottom: 50),
+            child: const Text("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              style: TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
           ),
-          dados['codHash'] != ""?
-          SizedBox(
+          widget.dados['codHash'] != ""?
+          Container(
             child: Column(
               children: [
                 RepaintBoundary(
                   key: _qrImageKey,
-                  child: SizedBox(
-                      child: QrImageView(
-                        data: jsonData, // Usando a string JSON como dados
-                        version: QrVersions.auto,
-                        size: 150.0,
-                      ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 2.0,
+                            color: Colors.grey
+                        )
+                    ),
+                    child: QrImageView(
+                      data: jsonData, // Usando a string JSON como dados
+                      version: QrVersions.auto,
+                      size: 100.0,
+                    ),
                   ),
                 ),
                 Container(
-                  width: 240,
+                  width: 210,
                   padding: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
                       onPressed: () async{
@@ -156,7 +157,7 @@ class _ResultPageState extends State<ResultPage> {
                               margin: const EdgeInsets.only(right: 15),
                               child: const Icon(Icons.download, size: 16, color: Colors.white)
                           ),
-                          const Text("Download da Imagem", style: TextStyle(fontSize: 16, color: Colors.white))
+                          const Text("Download da Imagem", style: TextStyle(fontSize: 12, color: Colors.white))
                         ],
                       )
                   ),
@@ -167,7 +168,7 @@ class _ResultPageState extends State<ResultPage> {
               :
           const SizedBox(height: 30,),
           Container(
-            width: 180,
+            width: 150,
             padding: const EdgeInsets.only(top: 50),
             child: ElevatedButton(
                 onPressed: ()=>{
@@ -183,7 +184,7 @@ class _ResultPageState extends State<ResultPage> {
                         margin: const EdgeInsets.only(right: 10),
                         child: const Icon(Icons.replay, size: 16, color: Colors.white)
                     ),
-                    const Text("Refazer teste", style: TextStyle(fontSize: 16, color: Colors.white))
+                    const Text("Refazer teste", style: TextStyle(fontSize: 12, color: Colors.white))
                   ],
                 )
             ),

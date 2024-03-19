@@ -1,5 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:questionario/shared/snackbar_notify.dart';
+import 'package:questionario/views/questionario/questionario_desktop.dart';
+import 'package:questionario/views/questionario/questionario_mobile.dart';
+import 'package:questionario/views/questionario/questionario_tablet.dart';
 
 
 class QuizPage extends StatefulWidget {
@@ -113,50 +117,16 @@ class _QuizPageState extends State<QuizPage> {
         title: const Text("Questionario", style: TextStyle(fontSize: 20, color: Colors.white),),
       ),
       body: Center(
-          child: Container(
-            height: screenHeight,
-            width: screenWidth,
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  width: screenWidth * 0.8,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      informHash(),
-                      const SizedBox(
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("O que é o código?"),
-                            Icon(Icons.account_circle_rounded, size: 20, color: Colors.deepPurple,)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  //color: Colors.orange,
-                  //height: screenHeight * 0.60,
-                  width: screenWidth * 0.8,
-                  child: Column(
-                    children: [
-                      line(),
-                      listQuestions(screenHeight)
-                    ],
-                  ),
-                ),
-                butFinished()
-              ],
-            ),
-          )
+          child: LayoutBuilder(builder: (context, constraints) {
+            print("with: ${constraints.maxWidth}");
+            if(constraints.maxWidth < 730){
+              return QuizPageMobile();
+            }else if(constraints.maxWidth < 1250){
+              return QuizPageTablet(constraints.maxWidth);
+            }else {
+              return QuizPageDesktop();
+            }
+          }),
       ),
     );
   }
@@ -241,8 +211,7 @@ class _QuizPageState extends State<QuizPage> {
     int q = index+1;
     return Container(
       color: index%2==0? Colors.deepPurple.shade50: Colors.white,
-      height: 60,
-      width: 300,
+      height: 70,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,7 +229,8 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   child: Text(q.toString(), style: const TextStyle(fontSize: 12, color: Colors.white)),
                 ),
-                Container(
+                SizedBox(
+                  width: 800,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,7 +238,7 @@ class _QuizPageState extends State<QuizPage> {
                       Text(info['first'], style: const TextStyle(fontSize: 13, color: Colors.black)),
                       info['second'] != ''?
                       Text(info['second'], style: const TextStyle(fontSize: 13, color: Colors.black87)):
-                      const SizedBox(height: 1,)
+                      const SizedBox(height: 1)
                     ],
                   ),
                 ),
