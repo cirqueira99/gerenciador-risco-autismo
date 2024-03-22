@@ -11,9 +11,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ResultPageDesktop extends StatefulWidget {
-  late Map<String, dynamic> dados = {};
+  late Map<String, dynamic> dados;
 
-  ResultPageDesktop({super.key, required Map<String, dynamic> dados});
+  ResultPageDesktop({super.key, required this.dados});
 
   @override
   State<ResultPageDesktop> createState() => _ResultPageDesktopState();

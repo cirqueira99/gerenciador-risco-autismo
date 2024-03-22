@@ -13,7 +13,7 @@ import 'package:share_plus/share_plus.dart';
 class ResultPageTablet extends StatefulWidget {
   late Map<String, dynamic> dados = {};
 
-  ResultPageTablet({super.key, required Map<String, dynamic> dados});
+  ResultPageTablet({super.key, required this.dados});
 
   @override
   State<ResultPageTablet> createState() => _ResultPageTabletState();

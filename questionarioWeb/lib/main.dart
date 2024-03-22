@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         '/questionario': (context) => const QuizPage(),
         '/resultado': (context) => const ResultPage()
       },
-      initialRoute: "/questionario",
+      initialRoute: "/",
     );
   }
 }
