@@ -19,14 +19,11 @@ class ShowDialogYesNo{
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const SizedBox(width: 40),
+                const SizedBox(width: 30),
                 Container(
                     margin: const EdgeInsets.only(left: 10),
                     width: 180,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                    )
+                    child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center)
                 ),
                 SizedBox(
                   width: 40,

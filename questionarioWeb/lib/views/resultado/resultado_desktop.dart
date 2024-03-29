@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'dart:html' as html;
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -102,6 +103,26 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
     }
   }
 
+  void downloadFile() async{
+    try{
+      RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage();
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+      if (byteData != null) {
+        Uint8List pngBytes = byteData.buffer.asUint8List();
+        final blob = html.Blob([pngBytes]);
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.AnchorElement(href: url)
+          ..setAttribute("download", "qrcode.png")
+          ..click();
+        html.Url.revokeObjectUrl(url);
+      }
+    }catch(e){
+      print(e);
+    }
+  }
+
   Widget result(){
     return SizedBox(
       child: Column(
@@ -143,7 +164,12 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
                   padding: const EdgeInsets.only(top: 30),
                   child: ElevatedButton(
                       onPressed: () async{
-                        await _gerarArquivo();
+                        try{
+                          //await _gerarArquivo();
+                          downloadFile();
+                        }catch(e){
+                          print(e);
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.deepPurple
