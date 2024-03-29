@@ -1,18 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'dart:typed_data';
-import 'package:path_provider/path_provider.dart';
 import 'package:questionario/views/resultado/resultado_desktop.dart';
 import 'package:questionario/views/resultado/resultado_mobile.dart';
 import 'package:questionario/views/resultado/resultado_tablet.dart';
-import 'package:share_plus/share_plus.dart';
-
-//import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 
 class ResultPage extends StatefulWidget {
   const ResultPage({super.key});
@@ -35,7 +24,6 @@ class _ResultPageState extends State<ResultPage> {
       ),
       body: Center(
         child: LayoutBuilder(builder: (context, constraints) {
-          print("with: ${constraints.maxWidth}");
           if(constraints.maxWidth < 510){
             return ResultPageMobile(dados: dados);
           }else if(constraints.maxWidth < 750){

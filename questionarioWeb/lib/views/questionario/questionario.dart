@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/snackbar_notify.dart';
+import 'package:questionario/shared/showDialog_notify.dart';
 import 'package:questionario/views/questionario/questionario_desktop.dart';
 import 'package:questionario/views/questionario/questionario_mobile.dart';
 import 'package:questionario/views/questionario/questionario_tablet.dart';
@@ -99,7 +99,6 @@ class _QuizPageState extends State<QuizPage> {
   ];
   Map<String, dynamic> message = {};
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -110,7 +109,6 @@ class _QuizPageState extends State<QuizPage> {
       ),
       body: Center(
           child: LayoutBuilder(builder: (context, constraints) {
-            print("with: ${constraints.maxWidth}");
             if(constraints.maxWidth < 730){
               return QuizPageMobile(questions: questions);
             }else if(constraints.maxWidth < 1250){

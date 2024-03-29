@@ -27,7 +27,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    jsonData = jsonEncode(widget.dados);
+    jsonData = jsonEncode(widget.dados['answer']);
 
     return Container(
       height: screenHeight,
@@ -120,7 +120,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
               textAlign: TextAlign.center,
             ),
           ),
-          widget.dados['codHash'] != ""?
+          widget.dados['viewQrcode'] == "Yes"?
           Container(
             child: Column(
               children: [

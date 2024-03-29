@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -28,7 +27,7 @@ class _ResultPageTabletState extends State<ResultPageTablet> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    jsonData = jsonEncode(widget.dados);
+    jsonData = jsonEncode(widget.dados['answer']);
 
     return Container(
       height: screenHeight,
@@ -119,7 +118,7 @@ class _ResultPageTabletState extends State<ResultPageTablet> {
               textAlign: TextAlign.center,
             ),
           ),
-          widget.dados['codHash'] != ""?
+          widget.dados['viewQrcode'] == "Yes"?
           SizedBox(
             child: Column(
               children: [

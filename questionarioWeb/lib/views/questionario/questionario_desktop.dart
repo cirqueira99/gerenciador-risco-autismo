@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/snackbar_notify.dart';
+import 'package:questionario/shared/showDialog_notify.dart';
+import '../../shared/showDialog_modal_yes_no.dart';
 
 
 class QuizPageDesktop extends StatefulWidget {
@@ -12,15 +13,16 @@ class QuizPageDesktop extends StatefulWidget {
 }
 
 class _QuizPageDesktopState extends State<QuizPageDesktop> {
-  Map<String, dynamic> data = {
-    'codHash': '',
-    'result': '',
-    'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
-  };
-
-  //'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
   Map<String, dynamic> message = {};
-
+  Map<String, dynamic> data = {
+    'viewQrcode': false,
+    'answer': {
+      'result': '',
+      'answers': ['Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
+    }
+  };
+  //'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+  num answeredTotal = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -39,26 +41,14 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
             width: screenWidth * 0.8,
             margin: const EdgeInsets.only(top: 20),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                informHash(),
-                const SizedBox(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("O que é o código?", style: TextStyle(fontSize: 14),),
-                      Icon(Icons.account_circle_rounded, size: 20, color: Colors.deepPurple,)
-                    ],
-                  ),
-                ),
+                Text("${answeredTotal.toString()}/20", style: const TextStyle(fontSize: 18)),
               ],
             ),
           ),
-          Container(
-            //color: Colors.orange,
-            //height: screenHeight * 0.60,
+          SizedBox(
             width: screenWidth * 0.8,
             child: Column(
               children: [
@@ -73,46 +63,6 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
     );
   }
 
-  Widget informHash(){
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Se você recebeu o código de acesso, informe no campo abaixo.", style: TextStyle(fontSize: 14)),
-          Container(
-            height: 60,
-            width: 250,
-            margin: const EdgeInsets.only(top: 20, bottom: 5, left: 0, right: 5),
-            child: TextFormField(
-              initialValue: '',
-              maxLength: 6,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'Informe o código...',
-                labelStyle: const TextStyle(fontSize: 12, color: Colors.black54),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 2, color: Colors.black12),
-                    borderRadius: BorderRadius.circular(10.0)
-                ),
-              ),
-              style: const TextStyle(fontSize: 14, color: Colors.deepPurple),
-              validator: (String? value){
-                if(value == null || value.isEmpty){
-                  return "Preencha o campo descrição!";
-                }
-                return null;
-              },
-              onChanged: (String? value) => setState(() {
-                data['codHash'] = value ?? "";
-              }),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget line(){
     return Container(
       height: 30,
@@ -120,11 +70,11 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-              margin: EdgeInsets.only(right: 20),
-              child: Text("Sim")
+              margin: const EdgeInsets.only(right: 20),
+              child: const Text("Sim")
           ),
           Container(
-              margin: EdgeInsets.only(right: 40),
+              margin: const EdgeInsets.only(right: 40),
               child: const Text("Não")
           ),
         ],
@@ -135,7 +85,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
   Widget listQuestions(num screenHeight){
 
     return SizedBox(
-      height: screenHeight * 0.60,
+      height: screenHeight * 0.72,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
@@ -158,7 +108,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
+          SizedBox(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -177,9 +127,9 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(info['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.black)),
+                      Text(info['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0XFF535353))),
                       info['second'] != ''?
-                      Text(info['second'], style: const TextStyle(fontSize: 13, color: Colors.black87)):
+                      Text(info['second'], style: const TextStyle(fontSize: 12, color: Color(0XFF535353))):
                       const SizedBox(height: 1)
                     ],
                   ),
@@ -190,7 +140,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
           Container(
               width: 100,
               margin: const EdgeInsets.only(right: 25),
-              child: RadioWidget(index, utpadeAnswers)
+              child: RadioWidget(index, updateAnswers)
           ),
         ],
       ),
@@ -200,14 +150,24 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
   Widget butFinished(){
     return Container(
       width: 200,
-      padding: const EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 30),
       child: ElevatedButton(
-          onPressed: (){
-            if(data['answers'].contains("")){
+          onPressed:  () async{
+            String option = "";
+
+            if(data['answer']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
-              Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+              try{
+                option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
+                if(option == "Yes" || option == "No" ){
+                  data['viewQrcode'] = option;
+                  Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+                }
+              }catch(e){
+                print(e.toString());
+              }
             }
           },
           style: ElevatedButton.styleFrom(
@@ -227,9 +187,13 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
     );
   }
 
-  void utpadeAnswers(int index, String answer){
-    data['answers'][index] = answer;
-    print(data['answers']);
+  void updateAnswers(int index, String answer){
+    setState(() {
+      if(data['answer']['answers'][index] == ""){
+        answeredTotal += 1;
+      }
+      data['answer']['answers'][index] = answer;
+    });
   }
 }
 

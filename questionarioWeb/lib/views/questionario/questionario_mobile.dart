@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:questionario/shared/snackbar_notify.dart';
+import 'package:questionario/shared/showDialog_notify.dart';
+import '../../shared/showDialog_modal_yes_no.dart';
 
 
 class QuizPageMobile extends StatefulWidget {
@@ -14,13 +13,15 @@ class QuizPageMobile extends StatefulWidget {
 }
 
 class _QuizPageMobileState extends State<QuizPageMobile> {
-  Map<String, dynamic> data = {
-    'codHash': '',
-    'result': '',
-    'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
-  };
-
   Map<String, dynamic> message = {};
+  Map<String, dynamic> data = {
+    'viewQrcode': false,
+    'answer': {
+      'result': '',
+      'answers': ['Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
+    }
+  };
+  num answeredTotal = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -38,22 +39,14 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
           Container(
             width: screenWidth * 0.8,
             margin: const EdgeInsets.only(top: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      //Text("O que é o código?", style: TextStyle(fontSize: 12),),
-                      //Icon(Icons.account_circle_rounded, size: 16, color: Colors.deepPurple,)
-                    ],
-                  ),
-                ),
-                informHash()
-              ],
+            child: SizedBox(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("${answeredTotal.toString()}/20", style: const TextStyle(fontSize: 18)),
+                ],
+              ),
             ),
           ),
           listQuestions(screenHeight, screenWidth),
@@ -63,71 +56,9 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
     );
   }
 
-  Widget informHash(){
-    return Container(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Se você recebeu o código de acesso, informe no campo abaixo.", style: TextStyle(fontSize: 12), textAlign: TextAlign.center,),
-          SizedBox(
-            width: double.infinity,
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 60,
-                    width: 250,
-                    margin: const EdgeInsets.only(top: 20, bottom: 5, left: 0, right: 5),
-                    child: TextFormField(
-                      initialValue: '',
-                      maxLength: 6,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: 'Informe o código...',
-                        labelStyle: const TextStyle(fontSize: 12, color: Colors.black54),
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: const BorderSide(width: 2, color: Colors.black12),
-                            borderRadius: BorderRadius.circular(10.0)
-                        ),
-                      ),
-                      style: const TextStyle(fontSize: 14, color: Colors.deepPurple),
-                      validator: (String? value){
-                        if(value == null || value.isEmpty){
-                          return "Preencha o campo descrição!";
-                        }
-                        return null;
-                      },
-                      onChanged: (String? value) => setState(() {
-                        data['codHash'] = value ?? "";
-                      }),
-                    ),
-                  ),
-                  Container(
-                      height: 25,
-                      width: 25,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.deepPurple,
-                      ),
-                      margin: const EdgeInsets.only(left: 10),
-                      child: const Icon(Icons.question_mark, size: 20, color: Colors.white,)
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget listQuestions(num screenHeight, num screenWidth){
-
     return Container(
-      height: screenHeight * 0.60,
+      height: screenHeight * 0.72,
       width: 400,
       margin: const EdgeInsets.only(top: 25),
       child: ListView.builder(
@@ -146,14 +77,13 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
   Widget cardQuestion(Map<String, dynamic> info, int index){
     int q = index+1;
     return Container(
-      height: info['second'] != ''? 160: 110,
       color: index%2==0? Colors.deepPurple.shade50: Colors.grey.shade50,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,9 +104,9 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(info['first'], style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black), textAlign: TextAlign.center,),
+                      Text(info['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0XFF535353)), textAlign: TextAlign.center,),
                       info['second'] != ''?
-                      Text(info['second'], style: const TextStyle(fontSize: 12, color: Colors.black87), textAlign: TextAlign.center):
+                      Text(info['second'], style: const TextStyle(fontSize: 12, color: Color(0XFF535353)), textAlign: TextAlign.center):
                       const SizedBox(height: 1)
                     ],
                   ),
@@ -184,7 +114,7 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
               ],
             ),
           ),
-          RadioWidget(index, utpadeAnswers),
+          RadioWidget(index, updateAnswers),
         ],
       ),
     );
@@ -193,14 +123,24 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
   Widget butFinished(){
     return Container(
       width: 200,
-      padding: const EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 30),
       child: ElevatedButton(
-          onPressed: (){
-            if(data['answers'].contains("")){
+          onPressed:  () async{
+            String option = "";
+
+            if(data['answer']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
-              Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+              try{
+                option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
+                if(option == "Yes" || option == "No" ){
+                  data['viewQrcode'] = option;
+                  Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+                }
+              }catch(e){
+                print(e.toString());
+              }
             }
           },
           style: ElevatedButton.styleFrom(
@@ -220,9 +160,13 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
     );
   }
 
-  void utpadeAnswers(int index, String answer){
-    data['answers'][index] = answer;
-    print(data['answers']);
+  void updateAnswers(int index, String answer){
+    setState(() {
+      if(data['answer']['answers'][index] == ""){
+        answeredTotal += 1;
+      }
+      data['answer']['answers'][index] = answer;
+    });
   }
 }
 
