@@ -11,9 +11,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ResultPageDesktop extends StatefulWidget {
-  late Map<String, dynamic> dados;
+  final Map<String, dynamic> dados;
 
-  ResultPageDesktop({super.key, required this.dados});
+  const ResultPageDesktop({super.key, required this.dados});
 
   @override
   State<ResultPageDesktop> createState() => _ResultPageDesktopState();
@@ -69,7 +69,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
   }
 
   Widget body(num screenHeight, num screenWidth){
-    return Container(
+    return SizedBox(
       height: screenHeight * 0.8,
       width: screenWidth * 0.8,
       child: Column(
@@ -96,7 +96,8 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
         final directory = await getApplicationDocumentsDirectory();
         final imagePath = '${directory.path}/qrcode.png';
         File(imagePath).writeAsBytesSync(pngBytes);
-        await Share.shareFiles([imagePath], text: 'Download do QR Code');
+        final XFile xFile = XFile(imagePath);
+        await Share.shareXFiles([xFile], text: 'Download do QR Code');
       }
     } catch (e) {
       print(e.toString());
@@ -114,7 +115,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
         final blob = html.Blob([pngBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
         final anchor = html.AnchorElement(href: url)
-          ..setAttribute("download", "qrcode.png")
+          ..setAttribute("download", "qrcode.jpg")
           ..click();
         html.Url.revokeObjectUrl(url);
       }

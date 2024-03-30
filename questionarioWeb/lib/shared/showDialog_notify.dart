@@ -26,7 +26,7 @@ class SnackBarNotify{
     }
 
     return Flushbar(
-      messageText: Text(message['message'], textAlign: TextAlign.center, style: TextStyle(color: Colors.black),),
+      messageText: Text(message['message'], textAlign: TextAlign.center, style: const TextStyle(color: Colors.black),),
       duration: const Duration(seconds: 3),
       flushbarPosition: FlushbarPosition.TOP,
       backgroundColor: message["backColor"],

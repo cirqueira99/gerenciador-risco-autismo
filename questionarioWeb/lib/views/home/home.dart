@@ -20,13 +20,12 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: LayoutBuilder(builder: (context, constraints) {
-          print("with: ${constraints.maxWidth}");
           if(constraints.maxWidth < 510){
-            return HomePageMobile();
+            return const HomePageMobile();
           }else if(constraints.maxWidth < 1100){
-            return HomePageTablet();
+            return const HomePageTablet();
           }else {
-            return HomePageDesktop();
+            return const HomePageDesktop();
           }
         }),
       ),

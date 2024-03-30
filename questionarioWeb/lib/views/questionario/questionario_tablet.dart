@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/showDialog_notify.dart';
-import '../../shared/showDialog_modal_yes_no.dart';
+import 'package:questionario/shared/showdialog_notify.dart';
+import '../../shared/showdialog_modal_yes_no.dart';
 
 
 class QuizPageTablet extends StatefulWidget {
-  late List<Map<String, dynamic>> questions;
-  late num maxWith;
-  QuizPageTablet({super.key, required this.questions, required this.maxWith});
+  final List<Map<String, dynamic>> questions;
+  final num maxWith;
+
+  const QuizPageTablet({super.key, required this.questions, required this.maxWith});
 
   @override
   State<QuizPageTablet> createState() => _QuizPageTabletState();
@@ -63,7 +64,7 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
   }
 
   Widget line(){
-    return Container(
+    return SizedBox(
       height: 30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -82,7 +83,7 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
   }
 
   Widget listQuestions(num screenHeight){
-    return Container(
+    return SizedBox(
       height: screenHeight * 0.72,
       child: ListView.builder(
         shrinkWrap: true,
@@ -106,7 +107,7 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
+          SizedBox(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

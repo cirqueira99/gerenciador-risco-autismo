@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/showDialog_notify.dart';
-import '../../shared/showDialog_modal_yes_no.dart';
+import 'package:questionario/shared/showdialog_notify.dart';
+import '../../shared/showdialog_modal_yes_no.dart';
 
 
 class QuizPageDesktop extends StatefulWidget {
-  late List<Map<String, dynamic>> questions;
+  final List<Map<String, dynamic>> questions;
 
-  QuizPageDesktop({super.key, required this.questions});
+  const QuizPageDesktop({super.key, required this.questions});
 
   @override
   State<QuizPageDesktop> createState() => _QuizPageDesktopState();
@@ -64,7 +64,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
   }
 
   Widget line(){
-    return Container(
+    return SizedBox(
       height: 30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -198,10 +198,10 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
 }
 
 class RadioWidget extends StatefulWidget {
-  int index;
-  final Function(int index, String answer) utpadeAnswers;
+  final int index;
+  final Function(int index, String answer) updateAnswers;
 
-  RadioWidget(this.index, this.utpadeAnswers, {super.key});
+  const RadioWidget(this.index, this.updateAnswers, {Key? key}) : super(key: key);
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();
@@ -221,7 +221,7 @@ class _RadioWidgetState extends State<RadioWidget> {
           onChanged: (value) {
             setState(() {
               selectedOption = value;
-              widget.utpadeAnswers(widget.index, selectedOption!);
+              widget.updateAnswers(widget.index, selectedOption!);
             });
           },
         ),
@@ -231,7 +231,7 @@ class _RadioWidgetState extends State<RadioWidget> {
           onChanged: (value) {
             setState(() {
               selectedOption = value;
-              widget.utpadeAnswers(widget.index, selectedOption!);
+              widget.updateAnswers(widget.index, selectedOption!);
             });
           },
         ),

@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/showDialog_notify.dart';
 import 'package:questionario/views/questionario/questionario_desktop.dart';
 import 'package:questionario/views/questionario/questionario_mobile.dart';
 import 'package:questionario/views/questionario/questionario_tablet.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/showDialog_notify.dart';
-import '../../shared/showDialog_modal_yes_no.dart';
+import 'package:questionario/shared/showdialog_notify.dart';
+import '../../shared/showdialog_modal_yes_no.dart';
 
 
 class QuizPageMobile extends StatefulWidget {
-  late List<Map<String, dynamic>> questions;
+  final List<Map<String, dynamic>> questions;
 
   QuizPageMobile({super.key, required this.questions});
 
@@ -98,7 +98,7 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
                   child: Text(q.toString(), style: const TextStyle(fontSize: 12, color: Colors.white)),
                 ),
                 Container(
-                  padding: EdgeInsets.only(right: 10),
+                  padding: const EdgeInsets.only(right: 10),
                   width: 350,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -171,10 +171,10 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 }
 
 class RadioWidget extends StatefulWidget {
-  int index;
-  final Function(int index, String answer) utpadeAnswers;
+  final int index;
+  final Function(int index, String answer) updateAnswers;
 
-  RadioWidget(this.index, this.utpadeAnswers, {super.key});
+  const RadioWidget(this.index, this.updateAnswers, {Key? key}) : super(key: key);
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();
@@ -188,7 +188,7 @@ class _RadioWidgetState extends State<RadioWidget> {
     return Container(
 
       width: double.infinity,
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
@@ -204,7 +204,7 @@ class _RadioWidgetState extends State<RadioWidget> {
                   onChanged: (value) {
                     setState(() {
                       selectedOption = value;
-                      widget.utpadeAnswers(widget.index, selectedOption!);
+                      widget.updateAnswers(widget.index, selectedOption!);
                     });
                   },
                 ),
@@ -224,7 +224,7 @@ class _RadioWidgetState extends State<RadioWidget> {
                   onChanged: (value) {
                     setState(() {
                       selectedOption = value;
-                      widget.utpadeAnswers(widget.index, selectedOption!);
+                      widget.updateAnswers(widget.index, selectedOption!);
                     });
                   },
                 ),

@@ -1,10 +1,8 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
 class ShowDialogYesNo{
-  // Função para exibir o modal dialog com botões "Sim" e "Não"
   static Future<String> exibirModalDialog(BuildContext context, String title, String content)async{
     String option = "";
 
