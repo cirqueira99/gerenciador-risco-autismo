@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: const Color(0xFF703296),
         title: const Text("Lista de Pacientes", style: TextStyle(fontSize: 18, color: Colors.white),),
       ),
       body: Center(
@@ -71,31 +71,47 @@ class _HomePageState extends State<HomePage> {
 
   Widget search(num sW){
     return Container(
-      height: 40,
-      width: sW * 0.9,
-      padding: const EdgeInsets.only(bottom: 10),
-      margin: const EdgeInsets.only(top: 15),
-      decoration: BoxDecoration(
-        color: Colors.grey[200], // Cor de fundo cinza
-        border: Border.all(color: Colors.grey.shade100), // Borda cinza
-        borderRadius: BorderRadius.circular(20),
+      height: 90,
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: Color(0xFF501873),
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.only(left: 8.0, top: 5),
-            child: Icon(Icons.search),
-          ),
-          SizedBox(width: 10),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Pesquisar paciente...',
-                counterStyle: TextStyle(fontSize: 12),
-                border: InputBorder.none
-              ),
+          Container(
+            height: 40,
+            width: sW * 0.9,
+            //padding: const EdgeInsets.only(bottom: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.shade100),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0, top: 5),
+                  child: Icon(Icons.search),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 2.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Pesquisar paciente...',
+                        counterStyle: TextStyle(fontSize: 10),
+                        border: InputBorder.none
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -106,7 +122,7 @@ class _HomePageState extends State<HomePage> {
   Widget listPacients(num sH, num sW){
 
     return SizedBox(
-      height: sH * 0.82,
+      height: sH * 0.80,
       width: sW * 0.9,
       child: Column(
         children: [
@@ -118,13 +134,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget filter(){
-    return SizedBox(
+    return Container(
       height: 50,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.shade200, width: 2.0
+          )
+        )
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt)),
-          IconButton(onPressed: (){}, icon: const Icon(Icons.list))
+          Row(
+            children: [
+              IconButton(onPressed: (){}, icon: const Icon(Icons.person_add, size: 30, color: Colors.black54,)),
+            ],
+          ),
+          Row(
+            children: [
+              IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt, size: 30, color: Colors.black54)),
+              SizedBox(width: 20,),
+              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_downward, size: 30, color: Colors.black54))
+            ],
+          )
         ],
       ),
     );
@@ -161,17 +194,17 @@ class _HomePageState extends State<HomePage> {
       },
       child: Container(
         height: 70,
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(10),
         margin:  const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7F7F7),
+          color: const Color(0xFFF6EEFF),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.shade400.withOpacity(0.3),
               spreadRadius: 0.5,
-              blurRadius: 2,
-              offset: const Offset(2, 1),
+              blurRadius: 4,
+              offset: const Offset(2, 2),
             ),
           ],
         ),
@@ -182,18 +215,9 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      const Text('Nome criança: ', style: TextStyle(fontSize: 12)),
-                      Text(p['nome'], style: const TextStyle(fontSize: 14))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Responsável: ', style: TextStyle(fontSize: 12)),
-                      Text(p['responsavel'], style: const TextStyle(fontSize: 14))
-                    ],
-                  )
+                  const Text('Nome da criança: ', style: TextStyle(fontSize: 12)),
+                  SizedBox(height: 5,),
+                  Text(p['nome'], style: const TextStyle(fontSize: 14)),
                 ],
               ),
             ),
