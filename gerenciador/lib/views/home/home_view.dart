@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador/views/child/child_view.dart';
+import 'package:hive/hive.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,6 +24,9 @@ class _HomePageState extends State<HomePage> {
 
   int _selectedIndex = 0;
 
+  late Box box;
+
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -30,9 +34,29 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState(){
+    _openBox();
+    super.initState();
+  }
+
+  Future<void> _openBox() async {
+    box = await Hive.openBox('db');
+
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
     double screenH = MediaQuery.of(context).size.height;
+
+    if (box == null) {
+      return const CircularProgressIndicator();
+    }
+
+    List<Map<String, dynamic>> childrens = box.get('childrens');
+
+    print(childrens);
 
     return Scaffold(
       appBar: AppBar(
