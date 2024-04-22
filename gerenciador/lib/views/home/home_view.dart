@@ -10,22 +10,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> pacientes = [
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'},
-    {'risco': 'Alto', 'nome': 'Pedro Henrique da Silva', 'responsavel': 'Robertas Silva'}
-  ];
+  late Box box;
+  late Box boxChildren;
+  List<Map<String, dynamic>> pacientes = [];
 
   int _selectedIndex = 0;
-
-  late Box box;
-
 
   void _onItemTapped(int index) {
     setState(() {
@@ -35,28 +24,26 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState(){
-    _openBox();
+    //_openBox();
     super.initState();
   }
 
-  Future<void> _openBox() async {
-    box = await Hive.openBox('db');
-
-    setState(() {});
-  }
+  // Future<void> _openBox() async {
+  //   box = await Hive.openBox('db');
+  //
+  //   setState(() {
+  //     pacientes = box.get('childrens');
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
     double screenH = MediaQuery.of(context).size.height;
 
-    if (box == null) {
-      return const CircularProgressIndicator();
-    }
-
-    List<Map<String, dynamic>> childrens = box.get('childrens');
-
-    print(childrens);
+    // if (box == null) {
+    //   return const CircularProgressIndicator();
+    // }
 
     return Scaffold(
       appBar: AppBar(

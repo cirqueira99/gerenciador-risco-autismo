@@ -1,13 +1,36 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:gerenciador/models/answer_model.dart';
+import 'package:gerenciador/models/child_model.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:gerenciador/views/home/home_view.dart';
+
+import 'adapters/answer_adapter.dart';
+import 'adapters/children_adapter.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
 
   Hive.init(appDocumentDir.path);
+
+  // String boxName = 'db';
+  // Future<bool> boxExists = Hive.boxExists(boxName);
+  // if (await boxExists) {
+  //   // A caixa existe
+  //   print('A caixa existe');
+  //   await Hive.deleteBoxFromDisk(boxName);
+  // } else {
+  //   // A caixa não existe
+  //   print('A caixa não existe');
+  // }
+
+  // Registro dos adaptadores
+  Hive.registerAdapter(ChildrenAdapter());
+  //Hive.registerAdapter(AnswersAdapter());
+
 
   runApp(const MyApp());
 }
@@ -20,7 +43,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Box box;
+  late Box boxChildren;
+  late Box boxAnswers;
 
   @override
   void initState() {
@@ -30,28 +54,45 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _initHiveBox() async {
     try {
-      box = await Hive.openBox('db');
-      // box.clear();
-      // box.put('childrens', [
-      //   {
-      //     'id': 1, 'nome': 'Pedro Henrique da Silva', 'idade': 8, 'sexo': 'masculino', 'responsavel': 'Roberta de Oliveira Juliano da Silva', 'medresults': 0.35
-      //   },
-      //   {
-      //     'id': 2, 'nome': 'Maria Henrique da Silva', 'idade': 8, 'sexo': 'masculino', 'responsavel': 'Roberta de Oliveira Juliano da Silva', 'medresults': 0.35
-      //   },
-      //   {
-      //     'id': 3, 'nome': 'João Henrique', 'idade': 8, 'sexo': 'masculino', 'responsavel': 'Roberta de Oliveira Juliano da Silva', 'medresults': 0.35
-      //   }
-      // ]
+      boxChildren = await Hive.openBox('childrens');
+      // boxChildren.clear();
+      // var children1 = Children(
+      //   name: 'Pedro Henrique da Silva', age: 8, sex: 'masculino', responsible: 'Roberta de Oliveira Juliano da Silva', risk: 'Médio', punctuation: 0.35,
       // );
-      // box.put('answers', [
-      //   {'idReg': 1, 'idCh': 1, 'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.55},
-      //   {'idReg': 2, 'idCh': 1, 'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.25},
-      //   {'idReg': 3, 'idCh': 2, 'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.15},
-      //   {'idReg': 4, 'idCh': 2, 'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.35},
-      //   {'idReg': 5, 'idCh': 3, 'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.55},
-      //   {'idReg': 6, 'idCh': 4, 'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.40}
-      // ]);
+      // var children2 = Children(
+      //   name: 'Maria Henrique da Silva', age: 8, sex: 'masculino', responsible: 'Roberta de Oliveira Juliano da Silva', risk: 'Médio', punctuation: 0.35
+      // );
+      // var children3 = Children(
+      //   name: 'João Henrique', age: 8, sex: 'masculino', responsible: 'Roberta de Oliveira Juliano da Silva', risk: 'Médio', punctuation: 0.35
+      // );
+      //
+      // await boxChildren.add(children1);
+      // await boxChildren.add(children2);
+      // await boxChildren.add(children3);
+
+      // boxAnswers = await Hive.openBox('answers');
+      // boxAnswers.clear();
+      // var answer1 = Answer(
+      //     fkchildren: 1, dateregister: '10/10/2020', kinship: 'Pai', name: 'Roberto Gomes Aparecido Da Silva', risk: 'Médio', punctuation: 0.35
+      // );
+      // var answer2 = Answer(
+      //     fkchildren: 1, dateregister: '10/09/2020', kinship: 'Pai', name: 'Alice Da Silva', risk: 'Médio', punctuation: 0.25
+      // );
+      // var answer3 = Answer(
+      //     fkchildren: 2, dateregister: '10/10/2020', kinship: 'Mãe', name: 'Juliana Oliveira', risk: 'Médio', punctuation: 0.35
+      // );
+      //
+      // await boxAnswers.add(answer1);
+      // await boxAnswers.add(answer2);
+      // await boxAnswers.add(answer3);
+
+      List<Children> childrenList = boxChildren.values.toList().cast<Children>();
+      // List<Answer> answerList = boxAnswers.values.toList().cast<Answer>();
+
+      for (var child in childrenList) {
+        print('{ ${child.name}, ${child.age}, ${child.sex}, ${child.responsible}, ${child.risk}, ${child.punctuation}}');
+      }
+      //print(answerList);
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');
     }
@@ -81,12 +122,11 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _closeHiveBox() async {
     try {
-      final boxChildren = await Hive.box('db');
       await boxChildren.close();
+      //await boxAnswers.close();
+      await Hive.close();
     } catch (e) {
       print('Erro ao fechar a caixa Hive: $e');
     }
-
-    await Hive.close();
   }
 }
