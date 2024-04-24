@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador/models/child_model.dart';
+import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/views/child/child_view.dart';
 import 'package:hive/hive.dart';
 
@@ -11,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Box boxChildren;
+  ChildrenService childrenService = ChildrenService();
   List<Children> childrensList = [];
 
   @override
@@ -22,31 +23,29 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _openBox() async {
     try{
-      boxChildren = await Hive.openBox('childrens');
+      List<Children> listResponse = await childrenService.getAll();
       setState(() {
-        childrensList = boxChildren.values.toList().cast<Children>();
+        childrensList = listResponse;
       });
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');
-    }finally{
-      await boxChildren.close();
     }
   }
 
   @override
   void dispose() async{
-    _closeHiveBox();
+    //_closeHiveBox();
 
     super.dispose();
   }
 
-  Future<void> _closeHiveBox() async {
-    try {
-      await boxChildren.close();
-    } catch (e) {
-      print('Erro ao fechar a caixa Hive: $e');
-    }
-  }
+  // Future<void> _closeHiveBox() async {
+  //   try {
+  //     await boxChildren.close();
+  //   } catch (e) {
+  //     print('Erro ao fechar a caixa Hive: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
