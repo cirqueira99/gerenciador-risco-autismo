@@ -9,6 +9,7 @@ class ChildrenAdapter extends TypeAdapter<Children> {
   @override
   Children read(BinaryReader reader) {
     return Children(
+      id: reader.readString(),
       name: reader.readString(),
       age: reader.readInt(),
       sex: reader.readString(),
@@ -20,6 +21,7 @@ class ChildrenAdapter extends TypeAdapter<Children> {
 
   @override
   void write(BinaryWriter writer, Children obj) {
+    writer.writeString(obj.id);
     writer.writeString(obj.name);
     writer.writeInt(obj.age);
     writer.writeString(obj.sex);

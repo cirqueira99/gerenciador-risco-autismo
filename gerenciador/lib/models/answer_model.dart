@@ -2,7 +2,8 @@
 import 'package:hive/hive.dart';
 
 class Answer extends HiveObject {
-  int fkchildren;
+  late String id;
+  String fkchildren;
   String dateregister;
   String kinship;
   String name;
@@ -10,6 +11,7 @@ class Answer extends HiveObject {
   double punctuation;
 
   Answer({
+    required this.id,
     required this.fkchildren,
     required this.dateregister,
     required this.kinship,
@@ -20,6 +22,7 @@ class Answer extends HiveObject {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'fkchildren': fkchildren,
       'dateregister': dateregister,
       'kinship': kinship,

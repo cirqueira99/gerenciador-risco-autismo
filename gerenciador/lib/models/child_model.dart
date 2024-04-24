@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 
 @HiveType(typeId: 0)
 class Children extends HiveObject {
+  late String id;
   late String name;
   late int age;
   late String sex;
@@ -10,6 +11,7 @@ class Children extends HiveObject {
   late double punctuation;
 
   Children({
+    required this.id,
     required this.name,
     required this.age,
     required this.sex,
@@ -21,6 +23,7 @@ class Children extends HiveObject {
   // Método para converter um objeto Children em um mapa
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'name': name,
       'age': age,
       'sex': sex,

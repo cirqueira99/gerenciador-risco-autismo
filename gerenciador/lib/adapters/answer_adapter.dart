@@ -9,7 +9,8 @@ class AnswersAdapter extends TypeAdapter<Answer> {
   @override
   Answer read(BinaryReader reader) {
     return Answer(
-      fkchildren: reader.readInt(),
+      id: reader.readString(),
+      fkchildren: reader.readString(),
       dateregister: reader.readString(),
       kinship: reader.readString(),
       name: reader.readString(),
@@ -20,7 +21,8 @@ class AnswersAdapter extends TypeAdapter<Answer> {
 
   @override
   void write(BinaryWriter writer, Answer obj) {
-    writer.writeInt(obj.fkchildren);
+    writer.writeString(obj.id);
+    writer.writeString(obj.fkchildren);
     writer.writeString(obj.dateregister);
     writer.writeString(obj.kinship);
     writer.writeString(obj.name);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerenciador/models/child_model.dart';
 import 'package:gerenciador/views/child/child_view.dart';
 import 'package:hive/hive.dart';
 
@@ -10,38 +11,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Box box;
   late Box boxChildren;
-  List<Map<String, dynamic>> pacientes = [];
-
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  List<Children> childrensList = [];
 
   @override
   void initState(){
-    //_openBox();
+    _openBox();
     super.initState();
   }
 
-  // Future<void> _openBox() async {
-  //   box = await Hive.openBox('db');
-  //
-  //   setState(() {
-  //     pacientes = box.get('childrens');
-  //   });
-  // }
+  Future<void> _openBox() async {
+    try{
+      boxChildren = await Hive.openBox('childrens');
+      setState(() {
+        childrensList = boxChildren.values.toList().cast<Children>();
+      });
+    } catch (e) {
+      print('Erro ao inicializar a caixa Hive: $e');
+    }finally{
+      await boxChildren.close();
+    }
+  }
+
+  @override
+  void dispose() async{
+    _closeHiveBox();
+
+    super.dispose();
+  }
+
+  Future<void> _closeHiveBox() async {
+    try {
+      await boxChildren.close();
+    } catch (e) {
+      print('Erro ao fechar a caixa Hive: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
     double screenH = MediaQuery.of(context).size.height;
 
-    // if (box == null) {
+    // if (boxChildren == null) {
     //   return const CircularProgressIndicator();
     // }
 
@@ -180,21 +192,21 @@ class _HomePageState extends State<HomePage> {
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
-          itemCount: pacientes.length,
+          itemCount: childrensList.length,
           itemBuilder: (_, index) {
-            final Map<String, dynamic> item = pacientes[index];
+            final Children item = childrensList[index];
             return card(item);
           }
       ),
     );
   }
 
-  Widget card(Map<String, dynamic> p){
+  Widget card(Children children){
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic> result = {};
         try{
-          result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage()));
+          result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children,)));
         }catch(error){
           throw Exception(error);
         }finally{
@@ -228,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const Text('Nome da criança: ', style: TextStyle(fontSize: 12)),
                   SizedBox(height: 5,),
-                  Text(p['nome'], style: const TextStyle(fontSize: 14)),
+                  Text(children.name, style: const TextStyle(fontSize: 14)),
                 ],
               ),
             ),
@@ -239,7 +251,14 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.white70,
                 borderRadius: BorderRadius.circular(10.0)
               ),
-              child: Text(p['risco'], style: const TextStyle(fontSize: 16), textAlign: TextAlign.center,),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Risco', style: const TextStyle(fontSize: 12), textAlign: TextAlign.center,),
+                  Text(children.risk, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center,),
+                ],
+              ),
             )
           ],
         ),

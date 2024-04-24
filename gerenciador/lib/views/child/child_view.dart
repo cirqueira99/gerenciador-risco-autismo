@@ -1,31 +1,69 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
+
+import '../../models/answer_model.dart';
+import '../../models/child_model.dart';
 
 class ChildrenPage extends StatefulWidget {
-  const ChildrenPage({super.key});
+  final Children children;
+
+  ChildrenPage({super.key, required this.children});
 
   @override
   State<ChildrenPage> createState() => _ChildrenPageState();
 }
 
 class _ChildrenPageState extends State<ChildrenPage> {
-  Map<String, dynamic> children = {
-      'nome': 'Pedro Henrique da Silva',
-      'idade': '8',
-      'sexo': 'masculino',
-      'responsavel': 'Roberta de Oliveira Juliano da Silva',
-      'medresults': 0.35
-    };
+  List<Answer> answersList = [];
 
-  List<Map<String, dynamic>> results = [
-    {'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.55},
-    {'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.25},
-    {'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.15},
-    {'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.35},
-    {'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.55},
-    {'data': '10/10/2020', 'parentesco': 'Pai', 'nome': 'Roberto Gomes Aparecido Da Silva', 'result': 'Risco Médio', 'punctuation': 0.40}
-  ];
+  @override
+  void initState(){
+    _openBox();
+    super.initState();
+  }
+
+  Future<void> _openBox() async {
+    try{
+      List<Answer> listResponse = await getAll(widget.children.id);
+      setState(() {
+        answersList = listResponse;
+      });
+    } catch (e) {
+      print('Erro ao inicializar a caixa Hive: $e');
+    }
+  }
+
+  @override
+  void dispose() async{
+    _closeHiveBox();
+
+    super.dispose();
+  }
+
+  Future<void> _closeHiveBox() async {
+    try {
+    } catch (e) {
+      print('Erro ao fechar a caixa Hive: $e');
+    }
+  }
+
+  Future<List<Answer>> getAll(String fkChildren) async{
+    late Box boxAnswers;
+    List<Answer> answers = [];
+
+    try{
+      boxAnswers = await Hive.openBox('answers');
+      answers = boxAnswers.values.where((a) => a.fkchildren == fkChildren).toList().cast<Answer>();
+
+    } catch (e) {
+      print('Erro ao inicializar a caixa Hive: $e');
+    }finally{
+      await boxAnswers.close();
+    }
+
+    return answers;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +102,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(children['nome'], style: const TextStyle(fontSize: 18, color: Colors.white),),
+                Text(widget.children.name, style: const TextStyle(fontSize: 18, color: Colors.white),),
                 IconButton(
                     onPressed: (){},
                     icon: const Icon(Icons.more_vert, size: 30, color: Colors.white70,)
@@ -125,7 +163,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
           Row(
             children: [
               IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt, size: 25, color: Colors.black54)),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_downward, size: 25, color: Colors.black54))
             ],
           )
@@ -140,89 +178,75 @@ class _ChildrenPageState extends State<ChildrenPage> {
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
-          itemCount: results.length,
+          itemCount: answersList.length,
           itemBuilder: (_, index) {
-            final Map<String, dynamic> item = results[index];
+            final Answer item = answersList[index];
             return card(item);
           }
       ),
     );
   }
 
-  Widget card(Map<String, dynamic> result){
-    return GestureDetector(
-      onTap: () async{
-        Map<String, dynamic> result = {};
-        try{
-
-        }catch(error){
-          throw Exception(error);
-        }finally{
-          //if(result.isNotEmpty) SnackBarNotify.createSnackBar(context, result);
-
-          //widget.refresh(DateFormat('dd/MM/yyyy').format(widget.dateToday));
-        }
-      },
-      child: Container(
-        height: 90,
-        padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
-        margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF6EEFF),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade400.withOpacity(0.3),
-              spreadRadius: 0.5,
-              blurRadius: 2,
-              offset: const Offset(2, 1),
+  Widget card(Answer answer){
+    return Container(
+      height: 90,
+      padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
+      margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF6EEFF),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade400.withOpacity(0.3),
+            spreadRadius: 0.5,
+            blurRadius: 2,
+            offset: const Offset(2, 1),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 300,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Text('Parentesco: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
+                    Text(answer.kinship, style: const TextStyle(fontSize: 12))
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text('Nome: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
+                    Text(answer.name, style: const TextStyle(fontSize: 12))
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text('Resultado: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
+                    Text('Risco ${answer.risk}', style: const TextStyle(fontSize: 12))
+                  ],
+                )
+              ],
             ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 300,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text('Parentesco: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text(result['parentesco'], style: const TextStyle(fontSize: 12))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Nome: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text(result['nome'], style: const TextStyle(fontSize: 12))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text('Resultado: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text(result['result'], style: const TextStyle(fontSize: 12))
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Container(
-              height: 100,
-              width: 30,
-              child: Column(
+          ),
+          Container(
+            height: 100,
+            width: 30,
+            child: Column(
 
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert, size: 25)),
-                ],
-              ),
-            )
-          ],
-        ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert, size: 25)),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
