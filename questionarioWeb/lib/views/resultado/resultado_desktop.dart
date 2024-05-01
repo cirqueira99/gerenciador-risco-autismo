@@ -28,7 +28,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    jsonData = jsonEncode(widget.dados['answer']);
+    jsonData = jsonEncode(widget.dados['result']);
 
     return Container(
       height: screenHeight,

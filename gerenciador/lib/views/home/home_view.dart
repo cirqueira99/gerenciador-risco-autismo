@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gerenciador/models/child_model.dart';
 import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/views/child/child_view.dart';
-import 'package:hive/hive.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -34,18 +33,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() async{
-    //_closeHiveBox();
-
     super.dispose();
   }
-
-  // Future<void> _closeHiveBox() async {
-  //   try {
-  //     await boxChildren.close();
-  //   } catch (e) {
-  //     print('Erro ao fechar a caixa Hive: $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +51,16 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Lista de Pacientes", style: TextStyle(fontSize: 18, color: Colors.white),),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            search(screenW),
-            listPacients(screenH, screenW)
-          ],
+        child: SizedBox(
+          height: screenH,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              search(screenW),
+              listPacients(screenH, screenW)
+            ],
+          ),
         ),
       ),
       // bottomNavigationBar: BottomNavigationBar(
@@ -142,9 +134,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget listPacients(num sH, num sW){
-
     return SizedBox(
-      height: sH * 0.80,
+      height: sH * 0.78,
       width: sW * 0.9,
       child: Column(
         children: [
@@ -170,14 +161,14 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.person_add, size: 30, color: Colors.black54,)),
+              IconButton(onPressed: (){}, icon: const Icon(Icons.person_add, size: 25, color: Colors.black54,)),
             ],
           ),
           Row(
             children: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt, size: 30, color: Colors.black54)),
-              SizedBox(width: 20,),
-              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_downward, size: 30, color: Colors.black54))
+              IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt, size: 25, color: Colors.black54)),
+              const SizedBox(width: 20,),
+              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_downward, size: 25, color: Colors.black54))
             ],
           )
         ],

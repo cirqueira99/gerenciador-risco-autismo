@@ -16,8 +16,8 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
   Map<String, dynamic> message = {};
   Map<String, dynamic> data = {
     'viewQrcode': false,
-    'answer': {
-      'result': '',
+    'result': {
+      'risk': 'Médio',
       'answers': ['Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
     }
   };

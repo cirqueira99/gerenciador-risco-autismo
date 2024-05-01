@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:gerenciador/services/answers_service.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:gerenciador/services/qrcode_scanner.dart';
 
+import '../../services/answers_service.dart';
 import '../../models/answer_model.dart';
 import '../../models/child_model.dart';
 
@@ -16,7 +18,9 @@ class ChildrenPage extends StatefulWidget {
 
 class _ChildrenPageState extends State<ChildrenPage> {
   AnswerService answerService = AnswerService();
+  QrCodeScanner qrCodeScanner = QrCodeScanner();
   List<Answer> answersList = [];
+  Map<String, dynamic> qrCodeInfo = {};
 
   @override
   void initState(){
@@ -37,17 +41,9 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   @override
   void dispose() async{
-    //_closeHiveBox();
 
     super.dispose();
   }
-
-  // Future<void> _closeHiveBox() async {
-  //   try {
-  //   } catch (e) {
-  //     print('Erro ao fechar a caixa Hive: $e');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +62,24 @@ class _ChildrenPageState extends State<ChildrenPage> {
             listAnswers(screenH, screenW)
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.qr_code),
+        onPressed: () async {
+          Map<String, dynamic> result = {};
+          try{
+            result = await qrCodeScanner.readQRcode();
+            if(result['answers'] != 'Não validado'){
+              setState(() {
+                qrCodeInfo = result;
+              });
+
+              print(qrCodeInfo);
+            }
+          }catch(error){
+            throw Exception(error);
+          }
+        },
       ),
     );
   }
