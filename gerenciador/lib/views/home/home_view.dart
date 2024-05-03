@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ChildrenService childrenService = ChildrenService();
-  List<Children> childrensList = [];
+  List<ChildrenModal> childrensList = [];
 
   @override
   void initState(){
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _openBox() async {
     try{
-      List<Children> listResponse = await childrenService.getAll();
+      List<ChildrenModal> listResponse = await childrenService.getAll();
       setState(() {
         childrensList = listResponse;
       });
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF703296),
+        backgroundColor: const Color(0xFF148174),
         title: const Text("Lista de Pacientes", style: TextStyle(fontSize: 18, color: Colors.white),),
       ),
       body: Center(
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       height: 90,
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: Color(0xFF501873),
+        color: Color(0xFF148174),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
       ),
       child: Row(
@@ -184,14 +184,14 @@ class _HomePageState extends State<HomePage> {
           scrollDirection: Axis.vertical,
           itemCount: childrensList.length,
           itemBuilder: (_, index) {
-            final Children item = childrensList[index];
+            final ChildrenModal item = childrensList[index];
             return card(item);
           }
       ),
     );
   }
 
-  Widget card(Children children){
+  Widget card(ChildrenModal children){
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic> result = {};

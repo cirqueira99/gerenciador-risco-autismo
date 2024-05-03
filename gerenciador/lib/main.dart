@@ -53,8 +53,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _initHiveBox() async {
-    List<Children> childrenList = [];
-    List<Answer> answerList = [];
+    List<ChildrenModal> childrenList = [];
+    List<AnswerModal> answerList = [];
 
     //try {
       //boxChildrens = await Hive.openBox('childrens');
@@ -116,7 +116,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Gerenciador Autismo',
       theme: ThemeData(
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF148174)),
         useMaterial3: true,
       ),
       routes: {

@@ -3,13 +3,13 @@ import 'package:hive/hive.dart';
 import '../models/answer_model.dart';
 
 class AnswerService {
-  Future<List<Answer>> getAll(String fkChildren) async{
+  Future<List<AnswerModal>> getAll(String fkChildren) async{
     late Box boxAnswers;
-    List<Answer> answers = [];
+    List<AnswerModal> answers = [];
 
     try{
       boxAnswers = await Hive.openBox('answers');
-      answers = boxAnswers.values.where((a) => a.fkchildren == fkChildren).toList().cast<Answer>();
+      answers = boxAnswers.values.where((a) => a.fkchildren == fkChildren).toList().cast<AnswerModal>();
 
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');

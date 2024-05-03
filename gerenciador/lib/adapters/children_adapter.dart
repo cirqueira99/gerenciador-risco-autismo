@@ -2,13 +2,13 @@ import 'package:hive/hive.dart';
 
 import '../models/child_model.dart';
 
-class ChildrenAdapter extends TypeAdapter<Children> {
+class ChildrenAdapter extends TypeAdapter<ChildrenModal> {
   @override
   final int typeId = 0; // Identificador único para a classe
 
   @override
-  Children read(BinaryReader reader) {
-    return Children(
+  ChildrenModal read(BinaryReader reader) {
+    return ChildrenModal(
       id: reader.readString(),
       name: reader.readString(),
       age: reader.readInt(),
@@ -20,7 +20,7 @@ class ChildrenAdapter extends TypeAdapter<Children> {
   }
 
   @override
-  void write(BinaryWriter writer, Children obj) {
+  void write(BinaryWriter writer, ChildrenModal obj) {
     writer.writeString(obj.id);
     writer.writeString(obj.name);
     writer.writeInt(obj.age);

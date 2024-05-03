@@ -1,7 +1,7 @@
 
 import 'package:hive/hive.dart';
 
-class Answer extends HiveObject {
+class AnswerModal extends HiveObject {
   late String id;
   String fkchildren;
   String dateregister;
@@ -10,7 +10,7 @@ class Answer extends HiveObject {
   String risk;
   double punctuation;
 
-  Answer({
+  AnswerModal({
     required this.id,
     required this.fkchildren,
     required this.dateregister,

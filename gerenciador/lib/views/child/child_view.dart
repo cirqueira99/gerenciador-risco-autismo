@@ -1,14 +1,14 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:gerenciador/services/qrcode_scanner.dart';
 
-import '../../services/answers_service.dart';
+import 'package:flutter/material.dart';
+import 'package:gerenciador/services/qrcode_scanner.dart';
+import 'package:gerenciador/views/answers/answer_add.dart';
+
+import '../../services/answer_service.dart';
 import '../../models/answer_model.dart';
 import '../../models/child_model.dart';
 
 class ChildrenPage extends StatefulWidget {
-  final Children children;
+  final ChildrenModal children;
 
   ChildrenPage({super.key, required this.children});
 
@@ -19,8 +19,7 @@ class ChildrenPage extends StatefulWidget {
 class _ChildrenPageState extends State<ChildrenPage> {
   AnswerService answerService = AnswerService();
   QrCodeScanner qrCodeScanner = QrCodeScanner();
-  List<Answer> answersList = [];
-  Map<String, dynamic> qrCodeInfo = {};
+  List<AnswerModal> answersList = [];
 
   @override
   void initState(){
@@ -30,7 +29,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   Future<void> _openBox() async {
     try{
-      List<Answer> listResponse = await answerService.getAll(widget.children.id);
+      List<AnswerModal> listResponse = await answerService.getAll(widget.children.id);
       setState(() {
         answersList = listResponse;
       });
@@ -52,8 +51,8 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF703296),
-        title: const Text("Perfil da criança", style: TextStyle(fontSize: 20, color: Colors.white),),
+        backgroundColor: const Color(0xFF148174),
+        title: const Text("Perfil da criança", style: TextStyle(fontSize: 20, color: Colors.white)),
       ),
       body: Center(
         child: Column(
@@ -66,15 +65,15 @@ class _ChildrenPageState extends State<ChildrenPage> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.qr_code),
         onPressed: () async {
-          Map<String, dynamic> result = {};
-          try{
-            result = await qrCodeScanner.readQRcode();
-            if(result['answers'] != 'Não validado'){
-              setState(() {
-                qrCodeInfo = result;
-              });
+          Map<String, dynamic> qrCodeInfo = {};
+          Map<String, dynamic> resultAddAnswer = {};
 
-              print(qrCodeInfo);
+          try{
+            qrCodeInfo = await qrCodeScanner.readQRcode();
+            if(qrCodeInfo['answers'] != 'Não validado'){
+                print(qrCodeInfo);
+                resultAddAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: false, qrCodeInfo: qrCodeInfo)));
+
             }
           }catch(error){
             throw Exception(error);
@@ -178,14 +177,14 @@ class _ChildrenPageState extends State<ChildrenPage> {
           scrollDirection: Axis.vertical,
           itemCount: answersList.length,
           itemBuilder: (_, index) {
-            final Answer item = answersList[index];
+            final AnswerModal item = answersList[index];
             return card(item);
           }
       ),
     );
   }
 
-  Widget card(Answer answer){
+  Widget card(AnswerModal answer){
     return Container(
       height: 90,
       padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
