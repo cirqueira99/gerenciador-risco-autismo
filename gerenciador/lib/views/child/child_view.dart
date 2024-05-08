@@ -6,6 +6,7 @@ import 'package:gerenciador/views/answers/answer_add.dart';
 import '../../services/answer_service.dart';
 import '../../models/answer_model.dart';
 import '../../models/child_model.dart';
+import '../../shared/snackbar_notify.dart';
 
 class ChildrenPage extends StatefulWidget {
   final ChildrenModal children;
@@ -23,11 +24,12 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   @override
   void initState(){
-    _openBox();
+    _getInfosPage();
+
     super.initState();
   }
 
-  Future<void> _openBox() async {
+  Future<void> _getInfosPage() async {
     try{
       List<AnswerModal> listResponse = await answerService.getAll(widget.children.id);
       setState(() {
@@ -66,17 +68,32 @@ class _ChildrenPageState extends State<ChildrenPage> {
         child: const Icon(Icons.qr_code),
         onPressed: () async {
           Map<String, dynamic> qrCodeInfo = {};
-          Map<String, dynamic> resultAddAnswer = {};
+          Map<String, dynamic>? resultAddAnswer = {};
 
           try{
             qrCodeInfo = await qrCodeScanner.readQRcode();
+
             if(qrCodeInfo['answers'] != 'Não validado'){
                 print(qrCodeInfo);
-                resultAddAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: false, qrCodeInfo: qrCodeInfo)));
+                resultAddAnswer = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        AnswerAdd(
+                          edit: false,
+                          qrCodeInfo: qrCodeInfo,
+                          answerModal: AnswerModal(id: '', fkchildren: widget.children.id, dateregister: '', risk: '', punctuation: 0, kinship: '', name: ''),
+                        )
+                    )
+                );
 
+                if(resultAddAnswer != null){
+                  SnackBarNotify.createSnackBar(context, resultAddAnswer);
+                  _getInfosPage();
+                }
             }
           }catch(error){
-            throw Exception(error);
+
+            SnackBarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
           }
         },
       ),
@@ -87,7 +104,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
     return Container(
       height: 220,
       width: double.infinity,
-      color: const Color(0xFF501873),
+      color: const Color(0xFF23645D),
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,7 +207,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
       padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
       margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6EEFF),
+        color: const Color(0xFFF6FFFE),
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: [
           BoxShadow(

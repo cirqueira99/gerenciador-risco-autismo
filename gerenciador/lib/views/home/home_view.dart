@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       height: 90,
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: Color(0xFF148174),
+        color: Color(0xFF23645D),
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
       ),
       child: Row(
@@ -194,7 +194,7 @@ class _HomePageState extends State<HomePage> {
   Widget card(ChildrenModal children){
     return GestureDetector(
       onTap: () async{
-        Map<String, dynamic> result = {};
+        Map<String, dynamic>? result = {};
         try{
           result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children,)));
         }catch(error){
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(10),
         margin:  const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6EEFF),
+          color: const Color(0xFFF6FFFE),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text('Nome da criança: ', style: TextStyle(fontSize: 12)),
-                  SizedBox(height: 5,),
+                  const SizedBox(height: 5,),
                   Text(children.name, style: const TextStyle(fontSize: 14)),
                 ],
               ),
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Risco', style: const TextStyle(fontSize: 12), textAlign: TextAlign.center,),
+                  const Text('Risco', style: TextStyle(fontSize: 12), textAlign: TextAlign.center,),
                   Text(children.risk, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center,),
                 ],
               ),

@@ -3,21 +3,22 @@ import 'package:hive/hive.dart';
 
 class AnswerModal extends HiveObject {
   late String id;
-  String fkchildren;
-  String dateregister;
-  String kinship;
-  String name;
-  String risk;
-  double punctuation;
+  late String fkchildren;
+  late String dateregister;
+  late String risk;
+  late double punctuation;
+  late String kinship;
+  late String name;
+
 
   AnswerModal({
     required this.id,
     required this.fkchildren,
     required this.dateregister,
-    required this.kinship,
-    required this.name,
     required this.risk,
     required this.punctuation,
+    required this.kinship,
+    required this.name,
   });
 
   Map<String, dynamic> toMap() {
@@ -25,10 +26,10 @@ class AnswerModal extends HiveObject {
       'id': id,
       'fkchildren': fkchildren,
       'dateregister': dateregister,
+      'risk': risk,
+      'punctuation': punctuation,
       'kinship': kinship,
       'name': name,
-      'risk': risk,
-      'punctuation': punctuation
     };
   }
 
