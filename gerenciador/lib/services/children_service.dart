@@ -4,13 +4,13 @@ import 'package:hive/hive.dart';
 
 class ChildrenService {
 
-  Future<List<ChildrenModal>> getAll() async{
+  Future<List<ChildrenModel>> getAll() async{
     late Box boxChildren;
-    List<ChildrenModal> childrensList = [];
+    List<ChildrenModel> childrensList = [];
 
     try{
       boxChildren = await Hive.openBox('childrens');
-      childrensList = boxChildren.values.toList().cast<ChildrenModal>();
+      childrensList = boxChildren.values.toList().cast<ChildrenModel>();
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');
     }finally{

@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
 @HiveType(typeId: 0)
-class ChildrenModal extends HiveObject {
-  late String id;
+class ChildrenModel extends HiveObject {
+  late String? id;
   late String name;
   late int age;
   late String sex;
@@ -10,8 +10,8 @@ class ChildrenModal extends HiveObject {
   late String risk;
   late double punctuation;
 
-  ChildrenModal({
-    required this.id,
+  ChildrenModel({
+    this.id,
     required this.name,
     required this.age,
     required this.sex,

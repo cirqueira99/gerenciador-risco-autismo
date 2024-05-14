@@ -2,14 +2,13 @@ import 'package:hive/hive.dart';
 
 import '../models/answer_model.dart';
 
-class AnswersAdapter extends TypeAdapter<AnswerModal> {
+class AnswersAdapter extends TypeAdapter<AnswerModel> {
   @override
   final int typeId = 1; // Identificador único para a classe
 
   @override
-  AnswerModal read(BinaryReader reader) {
-    return AnswerModal(
-      id: reader.readString(),
+  AnswerModel read(BinaryReader reader) {
+    return AnswerModel(
       fkchildren: reader.readString(),
       dateregister: reader.readString(),
       kinship: reader.readString(),
@@ -20,8 +19,7 @@ class AnswersAdapter extends TypeAdapter<AnswerModal> {
   }
 
   @override
-  void write(BinaryWriter writer, AnswerModal obj) {
-    writer.writeString(obj.id);
+  void write(BinaryWriter writer, AnswerModel obj) {
     writer.writeString(obj.fkchildren);
     writer.writeString(obj.dateregister);
     writer.writeString(obj.kinship);

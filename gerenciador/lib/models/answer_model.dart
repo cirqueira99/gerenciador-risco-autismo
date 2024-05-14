@@ -1,18 +1,21 @@
 
 import 'package:hive/hive.dart';
 
-class AnswerModal extends HiveObject {
-  late String id;
-  late String fkchildren;
-  late String dateregister;
-  late String risk;
-  late double punctuation;
-  late String kinship;
-  late String name;
+class AnswerModel extends HiveObject {
+  @HiveField(0)
+  String fkchildren;
+  @HiveField(1)
+  String dateregister;
+  @HiveField(2)
+  String risk;
+  @HiveField(3)
+  double punctuation;
+  @HiveField(4)
+  String kinship;
+  @HiveField(5)
+  String name;
 
-
-  AnswerModal({
-    required this.id,
+  AnswerModel({
     required this.fkchildren,
     required this.dateregister,
     required this.risk,
@@ -23,7 +26,6 @@ class AnswerModal extends HiveObject {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'fkchildren': fkchildren,
       'dateregister': dateregister,
       'risk': risk,

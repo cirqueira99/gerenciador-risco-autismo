@@ -9,9 +9,9 @@ import 'package:gerenciador/models/answer_model.dart';
 class AnswerAdd extends StatefulWidget {
   bool edit;
   Map<String, dynamic> qrCodeInfo = {};
-  AnswerModal answerModal;
+  AnswerModel answerModel;
 
-  AnswerAdd({super.key, required this.edit, required this.qrCodeInfo, required this.answerModal});
+  AnswerAdd({super.key, required this.edit, required this.qrCodeInfo, required this.answerModel});
 
   @override
   State<AnswerAdd> createState() => _AnswersAddState();
@@ -30,13 +30,15 @@ class _AnswersAddState extends State<AnswerAdd> {
   _getValuesAnswer() {
     if(!widget.edit){
       setState(() {
-        widget.answerModal.id = '5';
-        widget.answerModal.dateregister = DateFormat('dd/MM/yyyy').format(DateTime.now());
-        widget.answerModal.risk = 'Baixo';
-        widget.answerModal.punctuation = 0.2;
+        widget.answerModel.dateregister = DateFormat('dd/MM/yyyy').format(DateTime.now());
+        //calculaRisco()
+        widget.answerModel.risk = 'Baixo';
+        widget.answerModel.punctuation = 0.2;
       });
     }
   }
+
+  //calculaRisco(){}
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +53,13 @@ class _AnswersAddState extends State<AnswerAdd> {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () async {
+              bool? response = false;
               Map<String, dynamic> message = {};
-              bool response = false;
-              bool option = false;
 
               try {
-                
+                response = await answerService.delete(widget.answerModel.key);
               } catch (error) {
-                
+                message = {"message": "Não foi possível excluir a resposta!", "type": "error"};
                 throw Exception(error);
               } finally {
                 Navigator.pop(context, message);
@@ -85,8 +86,6 @@ class _AnswersAddState extends State<AnswerAdd> {
       ),
     );
   }
-
-
 
   Widget infos(num screenH, num screenW){
     return  Container(
@@ -137,7 +136,7 @@ class _AnswersAddState extends State<AnswerAdd> {
                         const Text("Data de registro", style: TextStyle(fontSize: 12)),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(widget.answerModal.dateregister, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Text(widget.answerModel.dateregister, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     )),
@@ -173,7 +172,7 @@ class _AnswersAddState extends State<AnswerAdd> {
                         const Text("Resultado do questionário:", style: TextStyle(fontSize: 12)),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(widget.answerModal.risk, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Text(widget.answerModel.risk, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     )),
@@ -209,7 +208,7 @@ class _AnswersAddState extends State<AnswerAdd> {
                         const Text("Pontuação:", style: TextStyle(fontSize: 12)),
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(widget.answerModal.punctuation.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: Text(widget.answerModel.punctuation.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     )),
@@ -277,7 +276,7 @@ class _AnswersAddState extends State<AnswerAdd> {
       width: 320,
       margin: const EdgeInsets.only(top: 8),
       child: TextFormField(
-        initialValue: widget.answerModal.kinship,
+        initialValue: widget.answerModel.kinship,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(width: 1, color: Colors.grey),
@@ -294,7 +293,7 @@ class _AnswersAddState extends State<AnswerAdd> {
         onChanged: (String? kinship) => setState(() {
           if(kinship != null){
             setState(() {
-              widget.answerModal.kinship = kinship;
+              widget.answerModel.kinship = kinship;
             });
           }
         }),
@@ -308,7 +307,7 @@ class _AnswersAddState extends State<AnswerAdd> {
       width: 320,
       margin: const EdgeInsets.only(top: 8),
       child: TextFormField(
-        initialValue: widget.answerModal.name ,
+        initialValue: widget.answerModel.name ,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(width: 1, color: Colors.grey),
@@ -325,7 +324,7 @@ class _AnswersAddState extends State<AnswerAdd> {
         onChanged: (String? name) => setState(() {
           if(name != null){
             setState(() {
-              widget.answerModal.name = name;
+              widget.answerModel.name = name;
             });
           }
         }),
@@ -356,11 +355,19 @@ class _AnswersAddState extends State<AnswerAdd> {
 
             if(_formkey.currentState!.validate()){
               try{
-                response = await answerService.create(widget.answerModal);
-                message = {"message": "Resposta cadastrada!", "type": "success"};
+                if(widget.edit){
+                  response = await answerService.update(widget.answerModel);
+                  message = {"message": "Resposta atualizada!", "type": "success"};
+                }else{
+                  response = await answerService.create(widget.answerModel);
+                  message = {"message": "Resposta cadastrada!", "type": "success"};
+                }
               }catch(error){
-                print('>>>> Erro: $error');
-                message = {"message": "Não foi possível realizar o cadastro!", "type": "error"};
+                widget.edit?
+                message = {"message": "Não foi possível atualizar a resposta!", "type": "error"}
+                    :
+                message = {"message": "Não foi possível cadastrar a resposta!", "type": "error"};
+
               }finally {
                 if(response == true){
                   Navigator.pop(context, message);

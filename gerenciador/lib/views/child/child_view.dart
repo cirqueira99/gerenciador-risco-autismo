@@ -9,7 +9,7 @@ import '../../models/child_model.dart';
 import '../../shared/snackbar_notify.dart';
 
 class ChildrenPage extends StatefulWidget {
-  final ChildrenModal children;
+  final ChildrenModel children;
 
   ChildrenPage({super.key, required this.children});
 
@@ -20,7 +20,7 @@ class ChildrenPage extends StatefulWidget {
 class _ChildrenPageState extends State<ChildrenPage> {
   AnswerService answerService = AnswerService();
   QrCodeScanner qrCodeScanner = QrCodeScanner();
-  List<AnswerModal> answersList = [];
+  List<AnswerModel> answersList = [];
 
   @override
   void initState(){
@@ -31,7 +31,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   Future<void> _getInfosPage() async {
     try{
-      List<AnswerModal> listResponse = await answerService.getAll(widget.children.id);
+      List<AnswerModel> listResponse = await answerService.getAll(widget.children.id!);
       setState(() {
         answersList = listResponse;
       });
@@ -81,7 +81,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                         AnswerAdd(
                           edit: false,
                           qrCodeInfo: qrCodeInfo,
-                          answerModal: AnswerModal(id: '', fkchildren: widget.children.id, dateregister: '', risk: '', punctuation: 0, kinship: '', name: ''),
+                          answerModel: AnswerModel(fkchildren: widget.children.id!, dateregister: '', risk: '', punctuation: 0, kinship: '', name: ''),
                         )
                     )
                 );
@@ -92,7 +92,6 @@ class _ChildrenPageState extends State<ChildrenPage> {
                 }
             }
           }catch(error){
-
             SnackBarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
           }
         },
@@ -194,73 +193,88 @@ class _ChildrenPageState extends State<ChildrenPage> {
           scrollDirection: Axis.vertical,
           itemCount: answersList.length,
           itemBuilder: (_, index) {
-            final AnswerModal item = answersList[index];
+            final AnswerModel item = answersList[index];
             return card(item);
           }
       ),
     );
   }
 
-  Widget card(AnswerModal answer){
-    return Container(
-      height: 90,
-      padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
-      margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF6FFFE),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade400.withOpacity(0.3),
-            spreadRadius: 0.5,
-            blurRadius: 2,
-            offset: const Offset(2, 1),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 300,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Text('Parentesco: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                    Text(answer.kinship, style: const TextStyle(fontSize: 12))
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('Nome: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                    Text(answer.name, style: const TextStyle(fontSize: 12))
-                  ],
-                ),
-                Row(
-                  children: [
-                    const Text('Resultado: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                    Text('Risco ${answer.risk}', style: const TextStyle(fontSize: 12))
-                  ],
-                )
-              ],
+  Widget card(AnswerModel answer){
+    return GestureDetector(
+      onTap: () async{
+        Map<String, dynamic>? resultUpdateAnswer = {};
+        try{
+          resultUpdateAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: true, qrCodeInfo: {}, answerModel: answer)));
+        }catch(error){
+          throw Exception(error);
+        }finally{
+          if(resultUpdateAnswer != null){
+            SnackBarNotify.createSnackBar(context, resultUpdateAnswer);
+            _getInfosPage();
+          }
+        }
+      },
+      child: Container(
+        height: 90,
+        padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
+        margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF6FFFE),
+          borderRadius: BorderRadius.circular(10.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.shade400.withOpacity(0.3),
+              spreadRadius: 0.5,
+              blurRadius: 2,
+              offset: const Offset(2, 1),
             ),
-          ),
-          Container(
-            height: 100,
-            width: 30,
-            child: Column(
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: 300,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Text('Parentesco: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
+                      Text(answer.kinship, style: const TextStyle(fontSize: 12))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('Nome: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
+                      Text(answer.name, style: const TextStyle(fontSize: 12))
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text('Resultado: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
+                      Text('Risco ${answer.risk}', style: const TextStyle(fontSize: 12))
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              height: 100,
+              width: 30,
+              child: Column(
 
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert, size: 25)),
-              ],
-            ),
-          )
-        ],
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert, size: 25)),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ChildrenService childrenService = ChildrenService();
-  List<ChildrenModal> childrensList = [];
+  List<ChildrenModel> childrensList = [];
 
   @override
   void initState(){
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _openBox() async {
     try{
-      List<ChildrenModal> listResponse = await childrenService.getAll();
+      List<ChildrenModel> listResponse = await childrenService.getAll();
       setState(() {
         childrensList = listResponse;
       });
@@ -184,14 +184,14 @@ class _HomePageState extends State<HomePage> {
           scrollDirection: Axis.vertical,
           itemCount: childrensList.length,
           itemBuilder: (_, index) {
-            final ChildrenModal item = childrensList[index];
+            final ChildrenModel item = childrensList[index];
             return card(item);
           }
       ),
     );
   }
 
-  Widget card(ChildrenModal children){
+  Widget card(ChildrenModel children){
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? result = {};
