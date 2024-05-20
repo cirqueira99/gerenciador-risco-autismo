@@ -24,12 +24,12 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   @override
   void initState(){
-    _getInfosPage();
+    _updatePage();
 
     super.initState();
   }
 
-  Future<void> _getInfosPage() async {
+  Future<void> _updatePage() async {
     try{
       List<AnswerModel> listResponse = await answerService.getAll(widget.children.id!);
       setState(() {
@@ -87,12 +87,12 @@ class _ChildrenPageState extends State<ChildrenPage> {
                 );
 
                 if(resultAddAnswer != null){
-                  SnackBarNotify.createSnackBar(context, resultAddAnswer);
-                  _getInfosPage();
+                  SnackbarNotify.createSnackBar(context, resultAddAnswer);
+                  _updatePage();
                 }
             }
           }catch(error){
-            SnackBarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
+            SnackbarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
           }
         },
       ),
@@ -210,8 +210,8 @@ class _ChildrenPageState extends State<ChildrenPage> {
           throw Exception(error);
         }finally{
           if(resultUpdateAnswer != null){
-            SnackBarNotify.createSnackBar(context, resultUpdateAnswer);
-            _getInfosPage();
+            SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
+            _updatePage();
           }
         }
       },

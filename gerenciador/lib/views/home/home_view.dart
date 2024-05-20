@@ -16,11 +16,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState(){
-    _openBox();
+    _updatePage();
     super.initState();
   }
 
-  Future<void> _openBox() async {
+  Future<void> _updatePage() async {
     try{
       List<ChildrenModel> listResponse = await childrenService.getAll();
       setState(() {
@@ -195,6 +195,7 @@ class _HomePageState extends State<HomePage> {
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? result = {};
+
         try{
           result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children,)));
         }catch(error){

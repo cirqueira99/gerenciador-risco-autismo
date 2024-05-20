@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:another_flushbar/flushbar.dart';
 
-class SnackBarNotify{
+class SnackbarNotify{
   static Future createSnackBar(BuildContext context, Map<String, dynamic> message) {
     switch(message["type"]){
       case "success":

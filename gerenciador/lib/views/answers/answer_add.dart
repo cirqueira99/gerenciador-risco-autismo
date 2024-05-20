@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerenciador/services/answer_service.dart';
+import 'package:gerenciador/shared/snackbar_dialog_yes_no.dart';
 import 'package:gerenciador/shared/snackbar_notify.dart';
 import 'package:intl/intl.dart';
 
@@ -50,21 +51,34 @@ class _AnswersAddState extends State<AnswerAdd> {
         backgroundColor: const Color(0xFF148174),
         title: Text(widget.edit? "Editar resposta": 'Cadastrar resposta', style: const TextStyle(fontSize: 20, color: Colors.white)),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () async {
-              bool? response = false;
-              Map<String, dynamic> message = {};
+          Container(
+            width: 50,
+            margin: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.white,),
+              onPressed: () async {
+                bool resultOptions = false;
+                bool? response = false;
+                Map<String, dynamic> message = {};
 
-              try {
-                response = await answerService.delete(widget.answerModel.key);
-              } catch (error) {
-                message = {"message": "Não foi possível excluir a resposta!", "type": "error"};
-                throw Exception(error);
-              } finally {
-                Navigator.pop(context, message);
-              }
-            },
+                try {
+                  resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão?', '');
+
+                  if(resultOptions){
+                    response = await answerService.delete(widget.answerModel.key);
+                    message = {"message": "Resposta deletada!", "type": "success"};
+                  }
+
+                } catch (error) {
+                  message = {"message": "Não foi possível excluir a resposta!", "type": "error"};
+                  throw Exception(error);
+                } finally {
+                  if(resultOptions){
+                    Navigator.pop(context, message);
+                  }
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -372,7 +386,7 @@ class _AnswersAddState extends State<AnswerAdd> {
                 if(response == true){
                   Navigator.pop(context, message);
                 }else {
-                  SnackBarNotify.createSnackBar(context, message);
+                  SnackbarNotify.createSnackBar(context, message);
                 }
               }
             }
