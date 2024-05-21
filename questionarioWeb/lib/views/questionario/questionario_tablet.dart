@@ -148,7 +148,7 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
           onPressed:  () async{
             String option = "";
 
-            if(widget.infos['answer']['answers'].contains("")){
+            if(widget.infos['result']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
@@ -183,10 +183,10 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
 
   void updateAnswers(int index, String answer){
     setState(() {
-      if(widget.infos['answer']['answers'][index] == ""){
+      if(widget.infos['result']['answers'][index] == ""){
         answeredTotal += 1;
       }
-      widget.infos['answer']['answers'][index] = answer;
+      widget.infos['result']['answers'][index] = answer;
     });
   }
 }

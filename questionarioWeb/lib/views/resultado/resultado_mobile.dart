@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:html' as html;
 import 'dart:typed_data';
@@ -39,31 +38,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          top(screenWidth),
           body(screenHeight, screenWidth),
-        ],
-      ),
-    );
-  }
-
-  Widget top(num screenWidth){
-    return Container(
-      width: screenWidth * 0.8,
-      margin: const EdgeInsets.all(20),
-      child: const Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          SizedBox(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("O que é o código?", style: TextStyle(fontSize: 12)),
-                Icon(Icons.account_circle_rounded, size: 20, color: Colors.deepPurple,)
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -86,26 +61,26 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     );
   }
 
-  Future<void> _gerarArquivo() async {
-    try {
-      RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage();
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  // Future<void> _gerarArquivo() async {
+  //   try {
+  //     RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+  //     ui.Image image = await boundary.toImage();
+  //     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  //
+  //     if (byteData != null) {
+  //       Uint8List pngBytes = byteData.buffer.asUint8List();
+  //       final directory = await getApplicationDocumentsDirectory();
+  //       final imagePath = '${directory.path}/qrcode.png';
+  //       File(imagePath).writeAsBytesSync(pngBytes);
+  //       final XFile xFile = XFile(imagePath);
+  //       await Share.shareXFiles([xFile], text: 'Download do QR Code');
+  //     }
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
 
-      if (byteData != null) {
-        Uint8List pngBytes = byteData.buffer.asUint8List();
-        final directory = await getApplicationDocumentsDirectory();
-        final imagePath = '${directory.path}/qrcode.png';
-        File(imagePath).writeAsBytesSync(pngBytes);
-        final XFile xFile = XFile(imagePath);
-        await Share.shareXFiles([xFile], text: 'Download do QR Code');
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  void downloadFile() async{
+  downloadFile() async{
     try{
       RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage();
@@ -116,7 +91,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
         final blob = html.Blob([pngBytes]);
         final url = html.Url.createObjectUrlFromBlob(blob);
         final anchor = html.AnchorElement(href: url)
-          ..setAttribute("download", "qrcode.jpg")
+          ..setAttribute("download", "qrcode.png")
           ..click();
         html.Url.revokeObjectUrl(url);
       }
@@ -136,8 +111,8 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
           Container(
             width: 250,
             padding: const EdgeInsets.only(top: 20, bottom: 50),
-            child: const Text("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaadataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-              style: TextStyle(fontSize: 12),
+            child:  Text(widget.text,
+              style: const TextStyle(fontSize: 12),
               textAlign: TextAlign.center,
             ),
           ),
@@ -168,7 +143,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
                       onPressed: () async{
                         try{
                           //await _gerarArquivo();
-                          downloadFile();
+                          await downloadFile();
                         }catch(e){
                           print(e);
                         }

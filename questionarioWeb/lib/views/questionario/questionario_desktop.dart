@@ -157,7 +157,6 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
 
                 if(option == "Yes" || option == "No" ){
                   widget.infos['viewQrcode'] = option;
-
                   Navigator.pushReplacementNamed(context, '/resultado', arguments: widget.infos);
                 }
               }catch(e){
@@ -184,10 +183,10 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
 
   void updateAnswers(int index, String answer){
     setState(() {
-      if(widget.infos['answer']['answers'][index] == ""){
+      if(widget.infos['result']['answers'][index] == ""){
         answeredTotal += 1;
       }
-      widget.infos['answer']['answers'][index] = answer;
+      widget.infos['result']['answers'][index] = answer;
     });
   }
 }

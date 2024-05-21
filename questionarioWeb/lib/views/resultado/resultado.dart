@@ -86,16 +86,13 @@ class _ResultPageState extends State<ResultPage> {
 
     // Verifica a pontuação e imprime o resultado
     if (punctuation >= 0 && punctuation <= 2) {
-      print('BAIXO RISCO');
       infos['result']['risk'] = 'Risco Baixo';
       text = 'O risco de TEA é baixo. No entanto, é importante continuar monitorando o desenvolvimento da criança e realizar avaliações periódicas com um pediatra.';
     } else if (punctuation >= 3 && punctuation <= 7) {
-      print('RISCO MÉDIO');
       infos['result']['risk'] = 'Risco Médio';
       text = 'Há um risco moderado de TEA. É recomendado agendar uma consulta com um especialista em desenvolvimento infantil ou um psicólogo para uma segunda reslização do questionário para '
              'obter informações adicionais sobre as respostas de risco.';
     } else if (punctuation >= 8 && punctuation <= 20) {
-      print('RISCO ELEVADO');
       infos['result']['risk'] = 'Risco Alto';
       text = 'O risco de TEA é alto. Recomendamos que você procure imediatamente um especialista em desenvolvimento infantil ou um neuropediatra para uma avaliação completa e para discutir possíveis intervenções.';
     } else {

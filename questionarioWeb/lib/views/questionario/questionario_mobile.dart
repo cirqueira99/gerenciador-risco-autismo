@@ -15,13 +15,6 @@ class QuizPageMobile extends StatefulWidget {
 
 class _QuizPageMobileState extends State<QuizPageMobile> {
   Map<String, dynamic> message = {};
-  Map<String, dynamic> infos = {
-    'viewQrcode': false,
-    'answer': {
-      'result': '',
-      'answers': ['Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
-    }
-  };
   num answeredTotal = 0;
 
   @override
@@ -129,7 +122,7 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
           onPressed:  () async{
             String option = "";
 
-            if(infos['answer']['answers'].contains("")){
+            if(widget.infos['result']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
@@ -137,8 +130,8 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
                 option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
 
                 if(option == "Yes" || option == "No" ){
-                  infos['viewQrcode'] = option;
-                  Navigator.pushReplacementNamed(context, '/resultado', arguments: infos);
+                  widget.infos['viewQrcode'] = option;
+                  Navigator.pushReplacementNamed(context, '/resultado', arguments: widget.infos);
                 }
               }catch(e){
                 print(e.toString());
@@ -164,10 +157,10 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 
   void updateAnswers(int index, String answer){
     setState(() {
-      if(infos['answer']['answers'][index] == ""){
+      if(widget.infos['result']['answers'][index] == ""){
         answeredTotal += 1;
       }
-      infos['answer']['answers'][index] = answer;
+      widget.infos['result']['answers'][index] = answer;
     });
   }
 }
