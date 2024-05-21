@@ -11,9 +11,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ResultPageDesktop extends StatefulWidget {
-  final Map<String, dynamic> dados;
+  final Map<String, dynamic> infos;
+  final String text;
 
-  const ResultPageDesktop({super.key, required this.dados});
+  const ResultPageDesktop({super.key, required this.infos, required this.text});
 
   @override
   State<ResultPageDesktop> createState() => _ResultPageDesktopState();
@@ -28,7 +29,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    jsonData = jsonEncode(widget.dados['result']);
+    jsonData = jsonEncode(widget.infos['result']);
 
     return Container(
       height: screenHeight,
@@ -130,17 +131,17 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
         children: [
           Container(
             padding: const EdgeInsets.only(top: 20),
-            child: const Text("data", style: TextStyle(fontSize: 26, color: Colors.indigo)),
+            child: Text(widget.infos['result']['risk'], style: const TextStyle(fontSize: 26, color: Colors.indigo)),
           ),
           Container(
             width: 450,
             padding: const EdgeInsets.only(top: 20, bottom: 50),
-            child: const Text("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\ndataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-              style: TextStyle(fontSize: 14),
+            child: Text(widget.text,
+              style: const TextStyle(fontSize: 14),
               textAlign: TextAlign.center,
             ),
           ),
-          widget.dados['viewQrcode'] == "Yes"?
+          widget.infos['viewQrcode'] == "Yes"?
           SizedBox(
             child: Column(
               children: [
@@ -154,7 +155,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
                         )
                     ),
                     child: QrImageView(
-                      data: jsonData, // Usando a string JSON como dados
+                      data: jsonData, // Usando a string JSON como infos
                       version: QrVersions.auto,
                       size: 150.0,
                     ),

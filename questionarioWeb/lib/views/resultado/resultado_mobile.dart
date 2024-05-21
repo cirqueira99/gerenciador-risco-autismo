@@ -11,9 +11,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ResultPageMobile extends StatefulWidget {
-  final Map<String, dynamic> dados;
+  final Map<String, dynamic> infos;
+  final String text;
 
-  const ResultPageMobile({super.key, required this.dados});
+  const ResultPageMobile({super.key, required this.infos, required this.text});
 
   @override
   State<ResultPageMobile> createState() => _ResultPageMobileState();
@@ -28,7 +29,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    jsonData = jsonEncode(widget.dados['answer']);
+    jsonData = jsonEncode(widget.infos['answer']);
 
     return Container(
       height: screenHeight,
@@ -130,7 +131,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
         children: [
           Container(
             padding: const EdgeInsets.only(top: 20),
-            child: const Text("data", style: TextStyle(fontSize: 22, color: Colors.indigo)),
+            child: Text(widget.infos['result']['risk'], style: const TextStyle(fontSize: 22, color: Colors.indigo)),
           ),
           Container(
             width: 250,
@@ -140,7 +141,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
               textAlign: TextAlign.center,
             ),
           ),
-          widget.dados['viewQrcode'] == "Yes"?
+          widget.infos['viewQrcode'] == "Yes"?
           SizedBox(
             child: Column(
               children: [
@@ -154,7 +155,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
                         )
                     ),
                     child: QrImageView(
-                      data: jsonData, // Usando a string JSON como dados
+                      data: jsonData, // Usando a string JSON como infos
                       version: QrVersions.auto,
                       size: 100.0,
                     ),

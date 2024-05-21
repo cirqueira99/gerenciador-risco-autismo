@@ -4,84 +4,53 @@ import 'package:flutter/material.dart';
 
 class ShowDialogYesNo{
   static Future<String> exibirModalDialog(BuildContext context, String title, String content)async{
-    String option = "";
 
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          titlePadding: const EdgeInsets.all(5),
-          contentPadding: const EdgeInsets.all(5),
-          actionsPadding: const EdgeInsets.all(15),
-          title: SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const SizedBox(width: 30),
-                Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    width: 180,
-                    child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center)
-                ),
-                SizedBox(
-                  width: 40,
-                  child: IconButton(
-                    icon: const Icon(Icons.close, size: 15,),
-                    onPressed: ()=>{
-                        Navigator.pop(context)
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          content: Text(content, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center),
+          title: Text(title, style: const TextStyle(fontSize: 18, color: Colors.deepPurple), textAlign: TextAlign.center,),
+          content: Text(content, style: const TextStyle(fontSize: 14, color: Colors.black54),),
           actions: <Widget>[
-            SizedBox(
+            Container(
+              width: double.infinity,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.deepPurple.shade400,
-                        borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    height: 30,
-                    width: 50,
-                    child: TextButton(
-                      child: const Text('Não', style: TextStyle(fontSize: 12, color: Colors.white)),
-                      onPressed: () {
-                        option = "No";
-                        Navigator.pop(context);
-                      },
-                    ),
+                  // Botão NÃO
+                  SizedBox(
+                      height: 30,
+                      width: 100,
+                      child: OutlinedButton.icon(
+                        onPressed: (){
+                          Navigator.pop(context, "No");
+                        },
+                        icon: const Icon(Icons.check, size: 20, color: Colors.deepPurple),
+                        label: const Text("Não", style: TextStyle(fontSize: 12, color: Colors.deepPurple)),
+                      )
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.deepPurple.shade400,
-                        borderRadius: BorderRadius.circular(20.0)
-                    ),
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    height: 30,
-                    width: 50,
-                    child: TextButton(
-                      child: const Text('Sim', style: TextStyle(fontSize: 12, color: Colors.white)),
-                      onPressed: () {
-                        option = "Yes";
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                  // Botão SIM
+                  SizedBox(
+                      height: 30,
+                      width: 100,
+                      child: OutlinedButton.icon(
+                        onPressed: (){
+                          Navigator.pop(context, "Yes");
+                        },
+                        icon: const Icon(Icons.cancel_outlined, size: 20, color: Colors.white),
+                        label: const Text("Sim", style: TextStyle(fontSize: 12, color: Colors.white)),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+                      )
+                  )
                 ],
               ),
-            ),
+            )
           ],
         );
       },
     );
 
-    return option;
+    return result;
   }
 
 }

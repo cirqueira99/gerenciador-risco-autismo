@@ -5,9 +5,10 @@ import '../../shared/showdialog_modal_yes_no.dart';
 
 class QuizPageTablet extends StatefulWidget {
   final List<Map<String, dynamic>> questions;
+  final Map<String, dynamic> infos;
   final num maxWith;
 
-  const QuizPageTablet({super.key, required this.questions, required this.maxWith});
+  const QuizPageTablet({super.key, required this.questions, required this.infos, required this.maxWith});
 
   @override
   State<QuizPageTablet> createState() => _QuizPageTabletState();
@@ -15,13 +16,6 @@ class QuizPageTablet extends StatefulWidget {
 
 class _QuizPageTabletState extends State<QuizPageTablet> {
   Map<String, dynamic> message = {};
-  Map<String, dynamic> data = {
-    'viewQrcode': false,
-    'answer': {
-      'result': '',
-      'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
-    }
-  };
   num answeredTotal = 0;
 
   @override
@@ -98,7 +92,7 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
     );
   }
 
-  Widget cardQuestion(Map<String, dynamic> info, int index){
+  Widget cardQuestion(Map<String, dynamic> question, int index){
     int q = index+1;
     return Container(
       color: index%2==0? Colors.deepPurple.shade50: Colors.white,
@@ -126,9 +120,9 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(info['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0XFF535353))),
-                      info['second'] != ''?
-                      Text(info['second'], style: const TextStyle(fontSize: 12, color: Color(0XFF535353))):
+                      Text(question['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0XFF535353))),
+                      question['second'] != ''?
+                      Text(question['second'], style: const TextStyle(fontSize: 12, color: Color(0XFF535353))):
                       const SizedBox(height: 1)
                     ],
                   ),
@@ -154,15 +148,16 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
           onPressed:  () async{
             String option = "";
 
-            if(data['answer']['answers'].contains("")){
+            if(widget.infos['answer']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
               try{
                 option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
+
                 if(option == "Yes" || option == "No" ){
-                  data['viewQrcode'] = option;
-                  Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+                  widget.infos['viewQrcode'] = option;
+                  Navigator.pushReplacementNamed(context, '/resultado', arguments: widget.infos);
                 }
               }catch(e){
                 print(e.toString());
@@ -188,10 +183,10 @@ class _QuizPageTabletState extends State<QuizPageTablet> {
 
   void updateAnswers(int index, String answer){
     setState(() {
-      if(data['answer']['answers'][index] == ""){
+      if(widget.infos['answer']['answers'][index] == ""){
         answeredTotal += 1;
       }
-      data['answer']['answers'][index] = answer;
+      widget.infos['answer']['answers'][index] = answer;
     });
   }
 }

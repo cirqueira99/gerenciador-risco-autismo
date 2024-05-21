@@ -5,8 +5,9 @@ import '../../shared/showdialog_modal_yes_no.dart';
 
 class QuizPageDesktop extends StatefulWidget {
   final List<Map<String, dynamic>> questions;
+  final Map<String, dynamic> infos;
 
-  const QuizPageDesktop({super.key, required this.questions});
+  const QuizPageDesktop({super.key, required this.questions, required this.infos});
 
   @override
   State<QuizPageDesktop> createState() => _QuizPageDesktopState();
@@ -14,14 +15,6 @@ class QuizPageDesktop extends StatefulWidget {
 
 class _QuizPageDesktopState extends State<QuizPageDesktop> {
   Map<String, dynamic> message = {};
-  Map<String, dynamic> data = {
-    'viewQrcode': false,
-    'result': {
-      'risk': 'Médio',
-      'answers': ['Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
-    }
-  };
-  //'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
   num answeredTotal = 0;
 
   @override
@@ -153,17 +146,19 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
       padding: const EdgeInsets.only(top: 30),
       child: ElevatedButton(
           onPressed:  () async{
-            String option = "";
+            String? option = "";
 
-            if(data['answer']['answers'].contains("")){
+            if(widget.infos['result']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
               try{
                 option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
+
                 if(option == "Yes" || option == "No" ){
-                  data['viewQrcode'] = option;
-                  Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+                  widget.infos['viewQrcode'] = option;
+
+                  Navigator.pushReplacementNamed(context, '/resultado', arguments: widget.infos);
                 }
               }catch(e){
                 print(e.toString());
@@ -189,10 +184,10 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
 
   void updateAnswers(int index, String answer){
     setState(() {
-      if(data['answer']['answers'][index] == ""){
+      if(widget.infos['answer']['answers'][index] == ""){
         answeredTotal += 1;
       }
-      data['answer']['answers'][index] = answer;
+      widget.infos['answer']['answers'][index] = answer;
     });
   }
 }

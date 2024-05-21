@@ -5,8 +5,9 @@ import '../../shared/showdialog_modal_yes_no.dart';
 
 class QuizPageMobile extends StatefulWidget {
   final List<Map<String, dynamic>> questions;
+  final Map<String, dynamic> infos;
 
-  QuizPageMobile({super.key, required this.questions});
+  QuizPageMobile({super.key, required this.questions, required this.infos});
 
   @override
   State<QuizPageMobile> createState() => _QuizPageMobileState();
@@ -14,7 +15,7 @@ class QuizPageMobile extends StatefulWidget {
 
 class _QuizPageMobileState extends State<QuizPageMobile> {
   Map<String, dynamic> message = {};
-  Map<String, dynamic> data = {
+  Map<String, dynamic> infos = {
     'viewQrcode': false,
     'answer': {
       'result': '',
@@ -128,15 +129,16 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
           onPressed:  () async{
             String option = "";
 
-            if(data['answer']['answers'].contains("")){
+            if(infos['answer']['answers'].contains("")){
               message = {"message": "Responda todas as perguntas!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
             }else{
               try{
                 option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
+
                 if(option == "Yes" || option == "No" ){
-                  data['viewQrcode'] = option;
-                  Navigator.pushReplacementNamed(context, '/resultado', arguments: data);
+                  infos['viewQrcode'] = option;
+                  Navigator.pushReplacementNamed(context, '/resultado', arguments: infos);
                 }
               }catch(e){
                 print(e.toString());
@@ -162,10 +164,10 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 
   void updateAnswers(int index, String answer){
     setState(() {
-      if(data['answer']['answers'][index] == ""){
+      if(infos['answer']['answers'][index] == ""){
         answeredTotal += 1;
       }
-      data['answer']['answers'][index] = answer;
+      infos['answer']['answers'][index] = answer;
     });
   }
 }
