@@ -96,6 +96,15 @@ class _QuizPageState extends State<QuizPage> {
     },
   ];
   Map<String, dynamic> message = {};
+  Map<String, dynamic> infos = {
+    'viewQrcode': '',
+    'result': {
+      'risk': '',
+      'punctuation': 0,
+      'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
+    }
+  };
+  //'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +117,11 @@ class _QuizPageState extends State<QuizPage> {
       body: Center(
           child: LayoutBuilder(builder: (context, constraints) {
             if(constraints.maxWidth < 730){
-              return QuizPageMobile(questions: questions);
+              return QuizPageMobile(questions: questions, infos: infos,);
             }else if(constraints.maxWidth < 1250){
-              return QuizPageTablet(questions: questions, maxWith: constraints.maxWidth);
+              return QuizPageTablet(questions: questions, infos: infos, maxWith: constraints.maxWidth);
             }else {
-              return QuizPageDesktop(questions: questions);
+              return QuizPageDesktop(questions: questions, infos: infos);
             }
           }),
       ),

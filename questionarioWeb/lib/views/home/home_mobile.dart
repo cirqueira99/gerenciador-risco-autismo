@@ -23,8 +23,15 @@ class _HomePageMobileState extends State<HomePageMobile> {
         children: [
           const SizedBox(
             width: 200,
-            child: Text("datadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadatadata",
-              textAlign: TextAlign.center, style: TextStyle(fontSize: 14)
+            child: Column(
+              children: [
+                Text('Escala M-CHAT: a principal escala de rastreio para autismo\n A M-CHAT é uma escala de rastreio que pode ser utilizada em todas as crianças com idade entre 16 e 30 meses com objetivo de identificar precocemente riscos para autismo.',
+                    textAlign: TextAlign.center, style: TextStyle(fontSize: 14)
+                ),
+                Text('IMPORTANTE: a aplicação da M-CHAT não substitui uma avaliação diagnóstica feita por um médico e por uma equipe multidisciplinar especializada. Seu uso deve ser feito somente para confirmar algumas suspeitas e a partir dai procurar ajuda profissional.',
+                    textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: Colors.black54)
+                ),
+              ],
             ),
           ),
           SizedBox(child: Image.asset('lib/assets/imagem_inicial.jpg', width: 250,)),
