@@ -33,8 +33,6 @@ class _AnswersAddState extends State<AnswerAdd> {
       setState(() {
         widget.answerModel.dateregister = DateFormat('dd/MM/yyyy').format(DateTime.now());
         //calculaRisco()
-        widget.answerModel.risk = 'Baixo';
-        widget.answerModel.punctuation = 0.2;
       });
     }
   }

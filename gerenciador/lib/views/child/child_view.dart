@@ -81,7 +81,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                         AnswerAdd(
                           edit: false,
                           qrCodeInfo: qrCodeInfo,
-                          answerModel: AnswerModel(fkchildren: widget.children.id!, dateregister: '', risk: '', punctuation: 0, kinship: '', name: ''),
+                          answerModel: AnswerModel(fkchildren: widget.children.id!, dateregister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),
                         )
                     )
                 );

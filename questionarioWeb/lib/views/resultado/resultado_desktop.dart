@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+
 class ResultPageDesktop extends StatefulWidget {
   final Map<String, dynamic> infos;
   final String text;

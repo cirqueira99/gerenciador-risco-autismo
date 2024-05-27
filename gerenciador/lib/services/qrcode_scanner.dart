@@ -15,7 +15,11 @@ class QrCodeScanner{
 
     code != '-1'? qrCodeInfo = json.decode(code) : qrCodeInfo = {'answers': 'Não validado'};
 
-    qrCodeInfo = {'answers': ['Sim', 'Não', 'Sim', 'Não', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Não', 'Sim', 'Sim']};
+    qrCodeInfo = {
+      'risk': '',
+      'punctuation': 0.0,
+      'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
+    };
 
     return qrCodeInfo;
   }
