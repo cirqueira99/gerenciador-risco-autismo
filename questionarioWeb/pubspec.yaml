@@ -38,8 +38,9 @@ dependencies:
   flutter_flushbar: ^0.0.2
   share_plus: ^7.2.2
   path_provider: ^2.1.2
-  esys_flutter_share_plus: ^2.2.0
+  #esys_flutter_share_plus: ^2.2.0
   universal_html: ^2.2.4
+  #dio: ^5.4.3+1
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:html' as html;
 import 'dart:typed_data';
@@ -61,42 +62,22 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     );
   }
 
-  // Future<void> _gerarArquivo() async {
-  //   try {
-  //     RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-  //     ui.Image image = await boundary.toImage();
-  //     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-  //
-  //     if (byteData != null) {
-  //       Uint8List pngBytes = byteData.buffer.asUint8List();
-  //       final directory = await getApplicationDocumentsDirectory();
-  //       final imagePath = '${directory.path}/qrcode.png';
-  //       File(imagePath).writeAsBytesSync(pngBytes);
-  //       final XFile xFile = XFile(imagePath);
-  //       await Share.shareXFiles([xFile], text: 'Download do QR Code');
-  //     }
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
-
-  downloadFile() async{
-    try{
+  Future<void> _gerarArquivo() async {
+    try {
       RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage();
       ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
 
       if (byteData != null) {
         Uint8List pngBytes = byteData.buffer.asUint8List();
-        final blob = html.Blob([pngBytes]);
-        final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
-          ..setAttribute("download", "qrcode.png")
-          ..click();
-        html.Url.revokeObjectUrl(url);
+        final directory = await getApplicationDocumentsDirectory();
+        final imagePath = '${directory.path}/qrcode.png';
+        File(imagePath).writeAsBytesSync(pngBytes);
+        final XFile xFile = XFile(imagePath);
+        await Share.shareXFiles([xFile], text: 'Download do QR Code');
       }
-    }catch(e){
-      print(e);
+    } catch (e) {
+      print(e.toString());
     }
   }
 
@@ -142,8 +123,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
                   child: ElevatedButton(
                       onPressed: () async{
                         try{
-                          //await _gerarArquivo();
-                          await downloadFile();
+                          await _gerarArquivo();
                         }catch(e){
                           print(e);
                         }
