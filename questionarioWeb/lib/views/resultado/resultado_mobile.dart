@@ -81,6 +81,26 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     }
   }
 
+  downloadFile() async{
+    try{
+      RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage();
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+
+      if (byteData != null) {
+        Uint8List pngBytes = byteData.buffer.asUint8List();
+        final blob = html.Blob([pngBytes]);
+        final url = html.Url.createObjectUrlFromBlob(blob);
+        final anchor = html.AnchorElement(href: url)
+          ..setAttribute("download", "qrcode.jpg")
+          ..click();
+        html.Url.revokeObjectUrl(url);
+      }
+    }catch(e){
+      print(e);
+    }
+  }
+
   Widget result(){
     return SizedBox(
       child: Column(
@@ -123,7 +143,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
                   child: ElevatedButton(
                       onPressed: () async{
                         try{
-                          await _gerarArquivo();
+                          await downloadFile();
                         }catch(e){
                           print(e);
                         }
