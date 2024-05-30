@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:questionario/shared/showdialog_notify.dart';
 
 
 class ResultPageDesktop extends StatefulWidget {
@@ -61,6 +62,8 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
   }
 
   downloadFile() async{
+    Map<String, dynamic> message = {};
+
     try{
       RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage();
@@ -76,6 +79,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
         html.Url.revokeObjectUrl(url);
       }
     }catch(e){
+      SnackBarNotify.createSnackBar(context, {"message": e, "type": "error"});
       print(e);
     }
   }
