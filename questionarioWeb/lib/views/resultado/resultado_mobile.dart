@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:questionario/shared/showdialog_notify.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ResultPageMobile extends StatefulWidget {
@@ -82,6 +83,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
   }
 
   downloadFile() async{
+    Map<String, dynamic> message = {};
     try{
       RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage();
@@ -97,6 +99,8 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
         html.Url.revokeObjectUrl(url);
       }
     }catch(e){
+      //message = {"message": "Não foi possível baixar a imagem!", "type": "error"};
+      SnackBarNotify.createSnackBar(context, {"message": e, "type": "error"});
       print(e);
     }
   }
