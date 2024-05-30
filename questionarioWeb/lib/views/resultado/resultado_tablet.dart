@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:html' as html;
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:questionario/shared/showdialog_notify.dart';
 
 class ResultPageTablet extends StatefulWidget {
   final Map<String, dynamic> infos;
@@ -60,22 +62,48 @@ class _ResultPageTabletState extends State<ResultPageTablet> {
   }
 
   downloadFile() async{
-    try{
-      RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage();
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    Map<String, dynamic> message = {};
 
-      if (byteData != null) {
-        Uint8List pngBytes = byteData.buffer.asUint8List();
-        final blob = html.Blob([pngBytes]);
-        final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
-          ..setAttribute("download", "qrcode.png")
-          ..click();
-        html.Url.revokeObjectUrl(url);
-      }
+    try{
+      // Usamos o QrValidator.validate para validar os dados que queremos codificar no QR. Ele retorna um objeto QrValidationResult que contém o QrCode gerado.
+      final qrValidationResult = QrValidator.validate(
+        data: jsonData,
+        version: QrVersions.auto,
+        errorCorrectionLevel: QrErrorCorrectLevel.L,
+      );
+      final qrCode = qrValidationResult.qrCode;
+
+      // Usamos o QrPainter.withQr para criar um QrPainter a partir do QrCode validado. Esse pintor (painter) é configurado com as cores e o estilo do código QR.
+      final painter = QrPainter.withQr(
+        qr: qrCode!,
+        color: const Color(0xFF000000),
+        emptyColor: const Color(0xFFFFFFFF),
+        gapless: true,
+      );
+
+      // Chamamos o método toImageData no QrPainter para converter o QR code em dados de imagem. Especificamos a resolução da imagem (neste caso, 2048 pixels) e o formato da imagem (PNG).
+      final picData = await painter.toImageData(2048, format: ImageByteFormat.png);
+      final pngBytes = picData!.buffer.asUint8List();
+
+      // Convertendo os bytes da imagem PNG em um Blob HTML, que é um objeto que representa dados binários em forma de arquivo.
+      // Criamos uma URL temporária para esse Blob usando html.Url.createObjectUrlFromBlob.
+      // Criamos um elemento AnchorElement (tag <a> do HTML) e configuramos o atributo href com a URL do Blob, e o atributo download com o nome do arquivo.
+      // Simulamos um clique nesse AnchorElement para iniciar o download.
+      // Finalmente, revogamos a URL temporária para liberar os recursos.
+      final blob = html.Blob([pngBytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.AnchorElement(href: url)
+        ..setAttribute("download", "qrcode.png")
+        ..click();
+      html.Url.revokeObjectUrl(url);
+
+      message = {"message": "Download realizado!", "type": "success"};
     }catch(e){
+      //message = {"message": "Não foi possível baixar a imagem!", "type": "error"};
+      message = {"message": e, "type": "error"};
       print(e);
+    }finally{
+      SnackBarNotify.createSnackBar(context, message);
     }
   }
 
