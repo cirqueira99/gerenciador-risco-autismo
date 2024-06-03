@@ -26,19 +26,18 @@ class SnackBarNotify{
     }
 
     return Flushbar(
-      messageText: Text(message['message'], textAlign: TextAlign.center, style: const TextStyle(color: Colors.black),),
-      duration: const Duration(seconds: 3),
       flushbarPosition: FlushbarPosition.TOP,
+      messageText: SizedBox( height: 30,child:Text(message['message'], textAlign: TextAlign.center)),
+      messageColor: message["txtColor"],
       backgroundColor: message["backColor"],
-      titleColor: message["txtColor"],
       messageSize: 14.0,
-      maxWidth: 350,
-      margin: const EdgeInsets.only(top: 20),
-      padding: const EdgeInsets.only(right: 20, left: 20, bottom: 30),
-      borderRadius: BorderRadius.circular(20.0),
-      icon: const Padding(
-        padding: EdgeInsets.only(left: 20.0, bottom: 30.0), // Define o preenchimento do ícone
-        child: Icon(Icons.info_outline, color: Colors.black),
+      maxWidth: 250,
+      //margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(left: 5, right: 5, bottom: 30),
+      borderRadius: BorderRadius.circular(5.0),
+      icon: Padding(
+        padding: const EdgeInsets.only(bottom: 40.0), // Define o preenchimento do ícone
+        child: Icon(message["icon"], color: Colors.black),
       ),
       reverseAnimationCurve: Curves.linearToEaseOut,
     ).show(context);

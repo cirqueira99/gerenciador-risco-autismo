@@ -25,7 +25,7 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    jsonData = jsonEncode(widget.infos['answer']);
+    jsonData = jsonEncode(widget.infos['result']);
 
     return Container(
       height: screenHeight,
