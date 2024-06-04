@@ -7,8 +7,8 @@ class SnackBarNotify{
   static Future createSnackBar(BuildContext context, Map<String, dynamic> message) {
     switch(message["type"]){
       case "success":
-        message["backColor"] = Colors.green.shade500;
-        message["txtColor"] = Colors.white60;
+        message["backColor"] = Colors.green.shade400;
+        message["txtColor"] = Colors.black87;
         message["icon"] = Icons.check;
         break;
       case "warning":
@@ -27,8 +27,8 @@ class SnackBarNotify{
 
     return Flushbar(
       flushbarPosition: FlushbarPosition.TOP,
-      messageText: SizedBox( height: 30,child:Text(message['message'], textAlign: TextAlign.center)),
-      messageColor: message["txtColor"],
+      duration: const Duration(seconds: 3),
+      messageText: SizedBox( height: 30,child:Text(message['message'], style: TextStyle(color: message["txtColor"]), textAlign: TextAlign.center)),
       backgroundColor: message["backColor"],
       messageSize: 14.0,
       maxWidth: 250,
@@ -37,7 +37,7 @@ class SnackBarNotify{
       borderRadius: BorderRadius.circular(5.0),
       icon: Padding(
         padding: const EdgeInsets.only(bottom: 40.0), // Define o preenchimento do ícone
-        child: Icon(message["icon"], color: Colors.black),
+        child: Icon(message["icon"], color: message["txtColor"]),
       ),
       reverseAnimationCurve: Curves.linearToEaseOut,
     ).show(context);

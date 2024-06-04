@@ -29,7 +29,7 @@ class _ResultPageState extends State<ResultPage> {
         child: LayoutBuilder(builder: (context, constraints) {
           if(constraints.maxWidth < 510){
             return ResultPageMobile(infos: infos, text: text);
-          }else if(constraints.maxWidth < 750){
+          }else if(constraints.maxWidth < 800){
             return ResultPageTablet(infos: infos, text: text);
           }else {
             return ResultPageDesktop(infos: infos, text: text);

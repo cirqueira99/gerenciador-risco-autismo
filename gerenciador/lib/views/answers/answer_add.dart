@@ -9,10 +9,9 @@ import 'package:gerenciador/models/answer_model.dart';
 
 class AnswerAdd extends StatefulWidget {
   bool edit;
-  Map<String, dynamic> qrCodeInfo = {};
   AnswerModel answerModel;
 
-  AnswerAdd({super.key, required this.edit, required this.qrCodeInfo, required this.answerModel});
+  AnswerAdd({super.key, required this.edit, required this.answerModel});
 
   @override
   State<AnswerAdd> createState() => _AnswersAddState();
@@ -32,7 +31,6 @@ class _AnswersAddState extends State<AnswerAdd> {
     if(!widget.edit){
       setState(() {
         widget.answerModel.dateregister = DateFormat('dd/MM/yyyy').format(DateTime.now());
-        //calculaRisco()
       });
     }
   }

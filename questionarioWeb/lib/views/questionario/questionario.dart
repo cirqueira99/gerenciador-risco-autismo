@@ -100,7 +100,7 @@ class _QuizPageState extends State<QuizPage> {
     'viewQrcode': '',
     'result': {
       'risk': '',
-      'punctuation': 0,
+      'punctuation': 0.0,
       'answers': ['', 'Não', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
     }
   };

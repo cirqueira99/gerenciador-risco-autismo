@@ -73,14 +73,13 @@ class _ChildrenPageState extends State<ChildrenPage> {
           try{
             qrCodeInfo = await qrCodeScanner.readQRcode();
 
-            if(qrCodeInfo['answers'] != 'Não validado'){
+            if(qrCodeInfo['result'] != 'Não validado'){
                 print(qrCodeInfo);
                 resultAddAnswer = await Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) =>
                         AnswerAdd(
                           edit: false,
-                          qrCodeInfo: qrCodeInfo,
                           answerModel: AnswerModel(fkchildren: widget.children.id!, dateregister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),
                         )
                     )
@@ -205,7 +204,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
       onTap: () async{
         Map<String, dynamic>? resultUpdateAnswer = {};
         try{
-          resultUpdateAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: true, qrCodeInfo: {}, answerModel: answer)));
+          resultUpdateAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: true, answerModel: answer)));
         }catch(error){
           throw Exception(error);
         }finally{
