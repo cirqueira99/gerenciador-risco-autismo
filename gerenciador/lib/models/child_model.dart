@@ -2,18 +2,16 @@ import 'package:hive/hive.dart';
 
 @HiveType(typeId: 0)
 class ChildrenModel extends HiveObject {
-  late String? id;
   late String name;
-  late int age;
+  late String dataNasc;
   late String sex;
   late String responsible;
   late String risk;
   late double punctuation;
 
   ChildrenModel({
-    this.id,
     required this.name,
-    required this.age,
+    required this.dataNasc,
     required this.sex,
     required this.responsible,
     required this.risk,
@@ -23,9 +21,8 @@ class ChildrenModel extends HiveObject {
   // Método para converter um objeto Children em um mapa
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
-      'age': age,
+      'dataNasc': dataNasc,
       'sex': sex,
       'responsible': responsible,
       'risk': risk,

@@ -13,11 +13,15 @@ class QrCodeScanner{
       ScanMode.QR,
     );
 
-    code != '-1'? qrCodeInfo = json.decode(code) : qrCodeInfo = {'result': 'Não validado'};
+    if(code != '-1') {
+      qrCodeInfo = json.decode(code);
+      qrCodeInfo['punctuation'] = qrCodeInfo['punctuation'].toDouble();
+    }else{
+      qrCodeInfo = {'result': 'Não validado'};
+    }
 
-    qrCodeInfo['punctuation'] = qrCodeInfo['punctuation'].toDouble();
     // qrCodeInfo = {
-    //   'risk': '',
+    //   'risk': 'Risco Alto',
     //   'punctuation': 0.0,
     //   'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
     // };

@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/services/qrcode_scanner.dart';
 import 'package:gerenciador/views/answers/answer_add.dart';
 
@@ -18,6 +20,7 @@ class ChildrenPage extends StatefulWidget {
 }
 
 class _ChildrenPageState extends State<ChildrenPage> {
+  ChildrenService childrenService = ChildrenService();
   AnswerService answerService = AnswerService();
   QrCodeScanner qrCodeScanner = QrCodeScanner();
   List<AnswerModel> answersList = [];
@@ -31,7 +34,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   Future<void> _updatePage() async {
     try{
-      List<AnswerModel> listResponse = await answerService.getAll(widget.children.id!);
+      List<AnswerModel> listResponse = await answerService.getAll(widget.children.key.toString());
       setState(() {
         answersList = listResponse;
       });
@@ -68,30 +71,32 @@ class _ChildrenPageState extends State<ChildrenPage> {
         child: const Icon(Icons.qr_code),
         onPressed: () async {
           Map<String, dynamic> qrCodeInfo = {};
-          Map<String, dynamic>? resultAddAnswer = {};
+          Map<String, dynamic>? responseAddAnswer = {};
+          bool? responseUpdatePunctuation = false;
 
           try{
             qrCodeInfo = await qrCodeScanner.readQRcode();
 
             if(qrCodeInfo['result'] != 'Não validado'){
-                print(qrCodeInfo);
-                resultAddAnswer = await Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>
-                        AnswerAdd(
-                          edit: false,
-                          answerModel: AnswerModel(fkchildren: widget.children.id!, dateregister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),
-                        )
-                    )
-                );
+              responseAddAnswer = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>
+                      AnswerAdd(edit: false, answerModel: AnswerModel(fkchildren: widget.children.key.toString(), dateregister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),)
+                  )
+              );
 
-                if(resultAddAnswer != null){
-                  SnackbarNotify.createSnackBar(context, resultAddAnswer);
-                  _updatePage();
-                }
+              if(responseAddAnswer != null && responseAddAnswer.isNotEmpty){
+                SnackbarNotify.createSnackBar(context, responseAddAnswer);
+                responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
+                await Future.delayed(const Duration(seconds: 2));
+                SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
+                _updatePage();
+              }
+            }else {
+              SnackbarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
             }
           }catch(error){
-            SnackbarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
+            SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a média de risco!", "type": "error"});
           }
         },
       ),
@@ -137,7 +142,22 @@ class _ChildrenPageState extends State<ChildrenPage> {
         color: const Color(0xFFFCF9FF),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: Text("infos", style: TextStyle(fontSize: 12)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+          Text("Data de Nascimento: ${widget.children.dataNasc}", style: const TextStyle(fontSize: 12)),
+          Text("Responsável: ${widget.children.responsible}", style: const TextStyle(fontSize: 12)),
+          SizedBox(
+              child: Row(
+                children: [
+                  const Text("Média do Risco:", style: TextStyle(fontSize: 12)),
+                  Text(widget.children.risk, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold))
+                ],
+              )
+          ),
+        ],
+      ),
     );
   }
 
@@ -208,7 +228,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
         }catch(error){
           throw Exception(error);
         }finally{
-          if(resultUpdateAnswer != null){
+          if(resultUpdateAnswer!.isNotEmpty){
             SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
             _updatePage();
           }
@@ -255,7 +275,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                   Row(
                     children: [
                       const Text('Resultado: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text('Risco ${answer.risk}', style: const TextStyle(fontSize: 12))
+                      Text(answer.risk, style: const TextStyle(fontSize: 12))
                     ],
                   )
                 ],

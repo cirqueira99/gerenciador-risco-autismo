@@ -9,9 +9,8 @@ class ChildrenAdapter extends TypeAdapter<ChildrenModel> {
   @override
   ChildrenModel read(BinaryReader reader) {
     return ChildrenModel(
-      id: reader.readString(),
       name: reader.readString(),
-      age: reader.readInt(),
+      dataNasc: reader.readString(),
       sex: reader.readString(),
       responsible: reader.readString(),
       risk: reader.readString(),
@@ -21,9 +20,8 @@ class ChildrenAdapter extends TypeAdapter<ChildrenModel> {
 
   @override
   void write(BinaryWriter writer, ChildrenModel obj) {
-    writer.writeString(obj.id ?? '');
     writer.writeString(obj.name);
-    writer.writeInt(obj.age);
+    writer.writeString(obj.dataNasc);
     writer.writeString(obj.sex);
     writer.writeString(obj.responsible);
     writer.writeString(obj.risk);
