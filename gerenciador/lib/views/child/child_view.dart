@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gerenciador/services/children_service.dart';
@@ -249,11 +250,11 @@ class _ChildrenPageState extends State<ChildrenPage> {
         }
       },
       child: Container(
-        height: 90,
+        height: 110,
         padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
         margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6FFFE),
+          color: const Color(0xFFFAFAFA),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
@@ -264,52 +265,72 @@ class _ChildrenPageState extends State<ChildrenPage> {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             SizedBox(
-              width: 300,
+                height: 20,
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(answer.dateregister, style: const TextStyle(fontSize: 12, color: Colors.black)),
+                  ],
+                )
+            ),
+            SizedBox(
+              height: 70,
+              width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      const Text('Parentesco: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text(answer.kinship, style: const TextStyle(fontSize: 12))
+                      const Text('Resultado: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(answer.risk, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: getColor(answer.risk))),
+                      )
                     ],
                   ),
                   Row(
                     children: [
-                      const Text('Nome: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text(answer.name, style: const TextStyle(fontSize: 12))
+                      const Text('Parentesco: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(answer.kinship, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                      )
                     ],
                   ),
                   Row(
                     children: [
-                      const Text('Resultado: ', style: TextStyle(fontSize: 12, color: Colors.black45)),
-                      Text(answer.risk, style: const TextStyle(fontSize: 12))
+                      const Text('Respondido por: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(answer.name, style: const TextStyle(fontSize: 14, color: Colors.black87)),
+                      )
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
-            Container(
-              height: 100,
-              width: 30,
-              child: Column(
-
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert, size: 25)),
-                ],
-              ),
-            )
           ],
         ),
       ),
     );
+  }
+
+  Color getColor(String risk){
+    if(risk == 'Risco Baixo'){
+      return const Color(0xFF047E02);
+    } else
+    if(risk == 'Risco Médio'){
+      return const Color(0xFFDDD400);
+    }else{
+      return const Color(0xFFFF0000);
+    }
   }
 }
 

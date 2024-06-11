@@ -192,6 +192,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget card(ChildrenModel children){
+
+
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? result = {};
@@ -211,7 +213,7 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(10),
         margin:  const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6FFFE),
+          color: const Color(0xFFFAFAFA),
           borderRadius: BorderRadius.circular(10.0),
           boxShadow: [
             BoxShadow(
@@ -224,6 +226,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               child: Column(
@@ -231,7 +234,7 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const Text('Nome da criança: ', style: TextStyle(fontSize: 12)),
                   const SizedBox(height: 5,),
-                  Text(children.name, style: const TextStyle(fontSize: 14)),
+                  Text(children.name, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -239,7 +242,7 @@ class _HomePageState extends State<HomePage> {
               height: 50,
               width: 100,
               decoration: BoxDecoration(
-                color: Colors.white70,
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(10.0)
               ),
               child: Column(
@@ -247,7 +250,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Risco', style: TextStyle(fontSize: 12), textAlign: TextAlign.center,),
-                  Text(children.risk, style: const TextStyle(fontSize: 16), textAlign: TextAlign.center,),
+                  Text(children.risk.split(' ')[1], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: getColor(children.risk)), textAlign: TextAlign.center,),
                 ],
               ),
             )
@@ -255,6 +258,17 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Color getColor(String risk){
+    if(risk == 'Risco Baixo'){
+      return const Color(0xFF047E02);
+    } else
+    if(risk == 'Risco Médio'){
+      return const Color(0xFFDDD400);
+    }else{
+      return const Color(0xFFFF0000);
+    }
   }
 }
 
