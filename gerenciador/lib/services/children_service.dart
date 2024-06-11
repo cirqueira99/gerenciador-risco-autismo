@@ -62,9 +62,9 @@ class ChildrenService {
       children.punctuation =  soma / list.length;
 
       // Verifica a pontuação e imprime o resultado
-      if (children.punctuation >= 0 && children.punctuation <= 2) {
+      if (children.punctuation >= 0 && children.punctuation < 3) {
         children.risk = 'Risco Baixo';
-      } else if (children.punctuation >= 3 && children.punctuation <= 7) {
+      } else if (children.punctuation >= 3 && children.punctuation < 8) {
         children.risk = 'Risco Médio';
       } else if (children.punctuation >= 8 && children.punctuation <= 20) {
         children.risk = 'Risco Alto';

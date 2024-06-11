@@ -27,8 +27,8 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   @override
   void initState(){
+    print("Pontuação>>>>>> ${widget.children.punctuation}");
     _updatePage();
-
     super.initState();
   }
 
@@ -63,7 +63,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
         child: Column(
           children: [
             topInfos(),
-            listAnswers(screenH, screenW)
+            listAnswers(context, screenH, screenW)
           ],
         ),
       ),
@@ -78,8 +78,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
             qrCodeInfo = await qrCodeScanner.readQRcode();
 
             if(qrCodeInfo['result'] != 'Não validado'){
-              responseAddAnswer = await Navigator.push(
-                  context,
+              responseAddAnswer = await Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>
                       AnswerAdd(edit: false, answerModel: AnswerModel(fkchildren: widget.children.key.toString(), dateregister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),)
                   )
@@ -87,16 +86,20 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
               if(responseAddAnswer != null && responseAddAnswer.isNotEmpty){
                 SnackbarNotify.createSnackBar(context, responseAddAnswer);
-                responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
                 await Future.delayed(const Duration(seconds: 2));
+                responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
                 SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
-                _updatePage();
               }
             }else {
               SnackbarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
             }
           }catch(error){
             SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a média de risco!", "type": "error"});
+            throw Exception(error);
+          }finally{
+            if(responseAddAnswer != null){
+              _updatePage();
+            }
           }
         },
       ),
@@ -161,14 +164,14 @@ class _ChildrenPageState extends State<ChildrenPage> {
     );
   }
 
-  Widget listAnswers(num sH, num sW){
+  Widget listAnswers(BuildContext context, num sH, num sW){
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(left: 20, right: 20),
       child: Column(
         children: [
           filter(),
-          list(sH)
+          list(context, sH)
         ],
       ),
     );
@@ -204,7 +207,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
     );
   }
 
-  Widget list(num sH){
+  Widget list(BuildContext context, num sH){
     return SizedBox(
       height: sH * 0.55,
       child: ListView.builder(
@@ -213,23 +216,34 @@ class _ChildrenPageState extends State<ChildrenPage> {
           itemCount: answersList.length,
           itemBuilder: (_, index) {
             final AnswerModel item = answersList[index];
-            return card(item);
+            return card(context, item);
           }
       ),
     );
   }
 
-  Widget card(AnswerModel answer){
+  Widget card(BuildContext context, AnswerModel answer){
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? resultUpdateAnswer = {};
+        bool? responseUpdatePunctuation = false;
+
         try{
           resultUpdateAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: true, answerModel: answer)));
+
+          if(resultUpdateAnswer != null && resultUpdateAnswer.isNotEmpty){
+            SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
+            await Future.delayed(const Duration(seconds: 2));
+            if(resultUpdateAnswer['message'] == 'Resposta deletada!'){
+              responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
+              SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
+            }
+          }
         }catch(error){
+          SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a média de risco!", "type": "error"});
           throw Exception(error);
         }finally{
-          if(resultUpdateAnswer!.isNotEmpty){
-            SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
+          if(resultUpdateAnswer != null){
             _updatePage();
           }
         }

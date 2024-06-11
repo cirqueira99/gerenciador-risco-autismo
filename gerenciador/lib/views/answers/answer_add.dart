@@ -35,8 +35,6 @@ class _AnswersAddState extends State<AnswerAdd> {
     }
   }
 
-  //calculaRisco(){}
-
   @override
   Widget build(BuildContext context) {
     double screenW = MediaQuery.of(context).size.width;
@@ -47,6 +45,7 @@ class _AnswersAddState extends State<AnswerAdd> {
         backgroundColor: const Color(0xFF148174),
         title: Text(widget.edit? "Editar resposta": 'Cadastrar resposta', style: const TextStyle(fontSize: 20, color: Colors.white)),
         actions: [
+          widget.edit?
           Container(
             width: 50,
             margin: const EdgeInsets.only(right: 10),
@@ -62,20 +61,16 @@ class _AnswersAddState extends State<AnswerAdd> {
 
                   if(resultOptions){
                     response = await answerService.delete(widget.answerModel.key);
-                    message = {"message": "Resposta deletada!", "type": "success"};
+                    Navigator.pop(context, {"message": "Resposta deletada!", "type": "success"});
                   }
-
                 } catch (error) {
-                  message = {"message": "Não foi possível excluir a resposta!", "type": "error"};
+                  SnackbarNotify.createSnackBar(context, {"message": "Não foi possível excluir a resposta!", "type": "error"});
                   throw Exception(error);
-                } finally {
-                  if(resultOptions){
-                    Navigator.pop(context, message);
-                  }
                 }
               },
             ),
-          ),
+          ):
+          const SizedBox(width: 30,),
         ],
       ),
       body: SingleChildScrollView(
@@ -372,18 +367,13 @@ class _AnswersAddState extends State<AnswerAdd> {
                   response = await answerService.create(widget.answerModel);
                   message = {"message": "Resposta cadastrada!", "type": "success"};
                 }
+                Navigator.pop(context, message);
               }catch(error){
                 widget.edit?
-                message = {"message": "Não foi possível atualizar a resposta!", "type": "error"}
-                    :
-                message = {"message": "Não foi possível cadastrar a resposta!", "type": "error"};
-
-              }finally {
-                if(response == true){
-                  Navigator.pop(context, message);
-                }else {
-                  SnackbarNotify.createSnackBar(context, message);
-                }
+                SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a resposta!", "type": "error"})
+                :
+                SnackbarNotify.createSnackBar(context, {"message": "Não foi possível cadastrar a resposta!", "type": "error"});
+                throw Exception(error);
               }
             }
           },

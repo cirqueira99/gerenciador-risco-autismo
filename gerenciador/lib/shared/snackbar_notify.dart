@@ -4,23 +4,30 @@ import 'package:another_flushbar/flushbar.dart';
 
 class SnackbarNotify{
   static Future createSnackBar(BuildContext context, Map<String, dynamic> message) {
+    Color backColor;
+    Color txtColor;
+    IconData icon;
+
     switch(message["type"]){
       case "success":
-        message["backColor"] = Colors.green.shade500;
-        message["txtColor"] = Colors.white60;
-        message["icon"] = Icons.check;
+        backColor = Colors.green.shade500;
+        txtColor = Colors.white60;
+        icon = Icons.check;
         break;
       case "warning":
-        message["backColor"] = Colors.red.shade500;
-        message["txtColor"] = Colors.black54;
-        message["icon"] = Icons.info_outline;
+        backColor = Colors.red.shade500;
+        txtColor = Colors.black54;
+        icon = Icons.info_outline;
         break;
       case "error":
-        message["backColor"] = Colors.red.shade500;
-        message["txtColor"] = Colors.white60;
-        message["icon"] = Icons.cancel_outlined;
+        backColor = Colors.red.shade500;
+        txtColor = Colors.white60;
+        icon = Icons.cancel_outlined;
         break;
       default:
+        backColor = Colors.green.shade500;
+        txtColor = Colors.white60;
+        icon = Icons.check;
         break;
     }
 
@@ -28,9 +35,9 @@ class SnackbarNotify{
       message: message['message'],
       duration: const Duration(seconds: 5),
       flushbarPosition: FlushbarPosition.TOP,
-      backgroundColor: message["backColor"],
-      titleColor: message["txtColor"],
-      icon: Icon(message["icon"],color: Colors.white,),
+      backgroundColor: backColor,
+      titleColor: txtColor,
+      icon: Icon(icon,color: Colors.white,),
       reverseAnimationCurve: Curves.decelerate,
     ).show(context);
   }
