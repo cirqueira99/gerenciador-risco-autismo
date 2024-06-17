@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenciador/services/answer_service.dart';
 import 'package:gerenciador/shared/snackbar_dialog_yes_no.dart';
@@ -107,169 +108,17 @@ class _AnswersAddState extends State<AnswerAdd> {
   }
 
   Widget forms(){
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.only(top: 25),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  margin: const EdgeInsets.only(right: 20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF26877B),
-                      borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: const Icon(Icons.calendar_month, size: 20, color: Colors.white),
-                ),
-                Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Colors.grey.shade300, width: 2.0
-                            )
-                        )
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Data de registro", style: TextStyle(fontSize: 12)),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(widget.answerModel.dateregister, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  margin: const EdgeInsets.only(right: 20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF26877B),
-                      borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: const Icon(Icons.check_box, size: 20, color: Colors.white),
-                ),
-                Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Colors.grey.shade300, width: 2.0
-                            )
-                        )
-                    ),
-                    child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Resultado do questionário:", style: TextStyle(fontSize: 12)),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(widget.answerModel.risk, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  margin: const EdgeInsets.only(right: 20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF26877B),
-                      borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: const Icon(Icons.list, size: 20, color: Colors.white),
-                ),
-                Container(
-                    width: 320,
-                    decoration: BoxDecoration(
-                        border: Border(
-                            bottom: BorderSide(
-                                color: Colors.grey.shade300, width: 2.0
-                            )
-                        )
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Pontuação:", style: TextStyle(fontSize: 12)),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(widget.answerModel.punctuation.toString(), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  margin: const EdgeInsets.only(right: 20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF26877B),
-                      borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: const Icon(Icons.perm_identity, size: 20, color: Colors.white),
-                ),
-                Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Parentesco", style: TextStyle(fontSize: 12)),
-                        kinship()
-                      ],
-                    )),
-              ],
-            ),
-          ),
-          Container(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  margin: const EdgeInsets.only(right: 20),
-                  decoration: BoxDecoration(
-                      color: const Color(0xFF26877B),
-                      borderRadius: BorderRadius.circular(50)
-                  ),
-                  child: const Icon(Icons.person, size: 20, color: Colors.white),
-                ),
-                Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("Respondido por:", style: TextStyle(fontSize: 12)),
-                        name()
-                      ],
-                    )),
-              ],
-            ),
-          ),
+          getInputs("Data de registro", const Icon(Icons.calendar_month, size: 20, color: Colors.white), widget.answerModel.dateregister),
+          getInputs("Resultado do questionário", const Icon(Icons.spellcheck, size: 20, color: Colors.white), widget.answerModel.risk),
+          getInputs("Pontuação", const Icon(Icons.assessment_outlined, size: 20, color: Colors.white), widget.answerModel.punctuation.toString()),
+          getInputs("Parentesco:", const Icon(Icons.supervisor_account, size: 20, color: Colors.white), "", name()),
+          getInputs("Nome do responsável:", const Icon(Icons.assignment_ind, size: 20, color: Colors.white), "", kinship()),
         ],
       ),
     );
@@ -279,16 +128,17 @@ class _AnswersAddState extends State<AnswerAdd> {
     return Container(
       height: 40,
       width: 320,
-      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(right: 8, bottom: 10),
       child: TextFormField(
         initialValue: widget.answerModel.kinship,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 1, color: Colors.grey),
+              borderSide: const BorderSide(width: 0, color: Colors.white),
               borderRadius: BorderRadius.circular(10.0)
           ),
         ),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+        textAlign: TextAlign.center,
         validator: (String? value){
           if(value == null || value.isEmpty){
             return "Preencha o campo parentesco!";
@@ -310,16 +160,17 @@ class _AnswersAddState extends State<AnswerAdd> {
     return Container(
       height: 40,
       width: 320,
-      margin: const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.only(right: 8, bottom: 10),
       child: TextFormField(
         initialValue: widget.answerModel.name ,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 1, color: Colors.grey),
+              borderSide: const BorderSide(width: 0, color: Colors.white),
               borderRadius: BorderRadius.circular(10.0)
           ),
         ),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+        textAlign: TextAlign.center,
         validator: (String? value){
           if(value == null || value.isEmpty){
             return "Preencha o campo nome!";
@@ -333,6 +184,48 @@ class _AnswersAddState extends State<AnswerAdd> {
             });
           }
         }),
+      ),
+    );
+  }
+
+  Widget getInputs(String title, Icon icon, String text, [Widget? textFormField]){
+
+    return Container(
+      height: 100,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 14)),
+          Container(
+            height: 40,
+            margin: const EdgeInsets.only(top: 10, bottom: 10),
+            padding: const EdgeInsets.only(left: 5, right: 5),
+            decoration: BoxDecoration(
+              color: textFormField != null? Colors.white: Colors.grey.shade100,
+              border: Border.all(color: Colors.grey.shade500),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  height: 30,
+                  width: 30,
+                  margin: const EdgeInsets.only(right: 5),
+                  decoration: BoxDecoration(
+                      color: const Color(0xFF26877B),
+                      borderRadius: BorderRadius.circular(50)
+                  ),
+                  child: icon,
+                ),
+                textFormField ??
+                Container(
+                  width: 300,
+                  child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87))
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
