@@ -73,12 +73,12 @@ class _ResultPageState extends State<ResultPage> {
     for (int i = 0; i < answers.length; i++) {
       if (indicesEspeciais.contains(i)) {
         // Para os itens 2, 5 e 12, "SIM" indica risco de TEA
-        if (answers[i].toLowerCase() == 'sim') {
+        if (answers[i] == 'sim') {
           punctuation++;
         }
       } else {
         // Para os demais itens, "NÃO" indica risco de TEA
-        if (answers[i].toLowerCase() == 'não') {
+        if (answers[i] == 'não') {
           punctuation++;
         }
       }

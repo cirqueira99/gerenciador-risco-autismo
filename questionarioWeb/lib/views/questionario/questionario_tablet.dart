@@ -210,7 +210,7 @@ class _RadioWidgetState extends State<RadioWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Radio<String>(
-          value: 'Sim',
+          value: 'sim',
           groupValue: selectedOption,
           onChanged: (value) {
             setState(() {
@@ -220,7 +220,7 @@ class _RadioWidgetState extends State<RadioWidget> {
           },
         ),
         Radio<String>(
-          value: 'Não',
+          value: 'não',
           groupValue: selectedOption,
           onChanged: (value) {
             setState(() {

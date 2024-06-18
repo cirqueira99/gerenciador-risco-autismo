@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:questionario/shared/showdialog_notify.dart';
@@ -46,13 +47,35 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
       height: screenHeight * 0.8,
       width: screenWidth * 0.8,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-              padding: const EdgeInsets.only(bottom: 30),
-              child: const Text("Resultado:",  style: TextStyle(fontSize: 14))
+          resultArea(),
+          qrCodeArea(widget.infos['viewQrcode']),
+          btnRepeat()
+        ],
+      ),
+    );
+  }
+
+  Widget resultArea(){
+    return Container(
+      margin: const EdgeInsets.only(top: 30),
+      child: Column(
+        children: [
+          const SizedBox(
+              child: Text("Resultado:",  style: TextStyle(fontSize: 14))
           ),
-          result()
+          Container(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(widget.infos['result']['risk'], style: const TextStyle(fontSize: 22, color: Colors.indigo)),
+          ),
+          Container(
+            width: 250,
+            padding: const EdgeInsets.only(top: 20, bottom: 50),
+            child:  Text(widget.text,
+              style: const TextStyle(fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          )
         ],
       ),
     );
@@ -96,96 +119,82 @@ class _ResultPageMobileState extends State<ResultPageMobile> {
     }
   }
 
-  Widget result(){
-    return SizedBox(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 20),
-            child: Text(widget.infos['result']['risk'], style: const TextStyle(fontSize: 22, color: Colors.indigo)),
-          ),
-          Container(
-            width: 250,
-            padding: const EdgeInsets.only(top: 20, bottom: 50),
-            child:  Text(widget.text,
-              style: const TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          widget.infos['viewQrcode'] == "Yes"?
-          SizedBox(
-            child: Column(
-              children: [
-                RepaintBoundary(
-                  key: _qrImageKey,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 2.0,
-                            color: Colors.grey
-                        )
-                    ),
-                    child: QrImageView(
-                      data: jsonData, // Usando a string JSON como infos
-                      version: QrVersions.auto,
-                      size: 100.0,
-                    ),
-                  ),
+  Widget qrCodeArea(String viewQRcode){
+    if(viewQRcode == "Yes"){
+      return SizedBox(
+        child: Column(
+          children: [
+            RepaintBoundary(
+              key: _qrImageKey,
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        width: 2.0,
+                        color: Colors.grey
+                    )
                 ),
-                Container(
-                  width: 210,
-                  padding: const EdgeInsets.only(top: 30),
-                  child: ElevatedButton(
-                      onPressed: () async{
-                        try{
-                          await downloadFile();
-                        }catch(e){
-                          print(e);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple
+                child: QrImageView(
+                  data: jsonData, // Usando a string JSON como infos
+                  version: QrVersions.auto,
+                  size: 100.0,
+                ),
+              ),
+            ),
+            Container(
+              width: 210,
+              padding: const EdgeInsets.only(top: 30),
+              child: ElevatedButton(
+                  onPressed: () async{
+                    try{
+                      await downloadFile();
+                    }catch(e){
+                      print(e);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepPurple
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          margin: const EdgeInsets.only(right: 15),
+                          child: const Icon(Icons.download, size: 16, color: Colors.white)
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                              margin: const EdgeInsets.only(right: 15),
-                              child: const Icon(Icons.download, size: 16, color: Colors.white)
-                          ),
-                          const Text("Download da Imagem", style: TextStyle(fontSize: 12, color: Colors.white))
-                        ],
-                      )
-                  ),
-                )
-              ],
-            ),
+                      const Text("Download da Imagem", style: TextStyle(fontSize: 12, color: Colors.white))
+                    ],
+                  )
+              ),
+            )
+          ],
+        ),
+      );
+    }else{
+      return const SizedBox(height: 30);
+    }
+  }
+
+  Widget btnRepeat(){
+    return Container(
+      width: 150,
+      padding: const EdgeInsets.only(top: 50),
+      child: ElevatedButton(
+          onPressed: ()=>{
+            Navigator.popAndPushNamed(context, '/questionario')
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: const Icon(Icons.replay, size: 16, color: Colors.white)
+              ),
+              const Text("Refazer teste", style: TextStyle(fontSize: 12, color: Colors.white))
+            ],
           )
-              :
-          const SizedBox(height: 30,),
-          Container(
-            width: 150,
-            padding: const EdgeInsets.only(top: 50),
-            child: ElevatedButton(
-                onPressed: ()=>{
-                  Navigator.popAndPushNamed(context, '/questionario')
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: const Icon(Icons.replay, size: 16, color: Colors.white)
-                    ),
-                    const Text("Refazer teste", style: TextStyle(fontSize: 12, color: Colors.white))
-                  ],
-                )
-            ),
-          )
-        ],
       ),
     );
   }

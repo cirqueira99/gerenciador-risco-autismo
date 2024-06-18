@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:questionario/shared/showdialog_notify.dart';
 
@@ -50,13 +51,35 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
       height: screenHeight * 0.8,
       width: screenWidth * 0.8,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
+          resultArea(),
+          qrCodeArea(widget.infos['viewQrcode']),
+          btnRepeat()
+        ],
+      ),
+    );
+  }
 
-              child: const Text("Resultado:", style: TextStyle(fontSize: 16))
+  Widget resultArea(){
+    return Container(
+      margin: const EdgeInsets.only(top: 30),
+      child: Column(
+        children: [
+          const SizedBox(
+              child:  Text("Resultado:", style: TextStyle(fontSize: 16))
           ),
-          result()
+          Container(
+            padding: const EdgeInsets.only(top: 20),
+            child: Text(widget.infos['result']['risk'], style: const TextStyle(fontSize: 26, color: Colors.indigo)),
+          ),
+          Container(
+            width: 450,
+            padding: const EdgeInsets.only(top: 20, bottom: 50),
+            child: Text(widget.text,
+              style: const TextStyle(fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+          )
         ],
       ),
     );
@@ -92,6 +115,7 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
       // Criamos um elemento AnchorElement (tag <a> do HTML) e configuramos o atributo href com a URL do Blob, e o atributo download com o nome do arquivo.
       // Simulamos um clique nesse AnchorElement para iniciar o download.
       // Finalmente, revogamos a URL temporária para liberar os recursos.
+
       final blob = html.Blob([pngBytes]);
       final url = html.Url.createObjectUrlFromBlob(blob);
       final anchor = html.AnchorElement(href: url)
@@ -109,117 +133,84 @@ class _ResultPageDesktopState extends State<ResultPageDesktop> {
     }
   }
 
-  down() async{
-    try{
-      RenderRepaintBoundary boundary = _qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage();
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-
-      if (byteData != null) {
-        Uint8List pngBytes = byteData.buffer.asUint8List();
-        final blob = html.Blob([pngBytes]);
-        final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
-          ..setAttribute("download", "qrcode.jpg")
-          ..click();
-        html.Url.revokeObjectUrl(url);
-      }
-    }catch(e){
-      print(e);
-    }
+  Widget qrCodeArea(String viewQRcode){
+   if(viewQRcode == "Yes"){
+     return SizedBox(
+       child: Column(
+         children: [
+           RepaintBoundary(
+             key: _qrImageKey,
+             child: Container(
+               decoration: BoxDecoration(
+                   border: Border.all(
+                       width: 2.0,
+                       color: Colors.grey
+                   )
+               ),
+               child: QrImageView(
+                 data: jsonData, // Usando a string JSON como infos
+                 version: QrVersions.auto,
+                 size: 150.0,
+               ),
+             ),
+           ),
+           Container(
+             width: 240,
+             padding: const EdgeInsets.only(top: 30),
+             child: ElevatedButton(
+                 onPressed: () async{
+                   try{
+                     await downloadFile();
+                   }catch(e){
+                     print(e);
+                   }
+                 },
+                 style: ElevatedButton.styleFrom(
+                     backgroundColor: Colors.deepPurple
+                 ),
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Container(
+                         margin: const EdgeInsets.only(right: 15),
+                         child: const Icon(Icons.download, size: 16, color: Colors.white)
+                     ),
+                     const Text("Download da Imagem", style: TextStyle(fontSize: 16, color: Colors.white))
+                   ],
+                 )
+             ),
+           )
+         ],
+       ),
+     );
+   }else{
+     return const SizedBox(height: 30);
+   }
   }
 
-  Widget result(){
-    return SizedBox(
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 20),
-            child: Text(widget.infos['result']['risk'], style: const TextStyle(fontSize: 26, color: Colors.indigo)),
+  Widget btnRepeat(){
+    return Container(
+      width: 180,
+      padding: const EdgeInsets.only(top: 50),
+      child: ElevatedButton(
+          onPressed: ()=>{
+            Navigator.popAndPushNamed(context, '/questionario')
+          },
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple
           ),
-          Container(
-            width: 450,
-            padding: const EdgeInsets.only(top: 20, bottom: 50),
-            child: Text(widget.text,
-              style: const TextStyle(fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          widget.infos['viewQrcode'] == "Yes"?
-          SizedBox(
-            child: Column(
-              children: [
-                RepaintBoundary(
-                  key: _qrImageKey,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 2.0,
-                            color: Colors.grey
-                        )
-                    ),
-                    child: QrImageView(
-                      data: jsonData, // Usando a string JSON como infos
-                      version: QrVersions.auto,
-                      size: 150.0,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 240,
-                  padding: const EdgeInsets.only(top: 30),
-                  child: ElevatedButton(
-                      onPressed: () async{
-                        try{
-                          await down();
-                        }catch(e){
-                          print(e);
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.deepPurple
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                              margin: const EdgeInsets.only(right: 15),
-                              child: const Icon(Icons.download, size: 16, color: Colors.white)
-                          ),
-                          const Text("Download da Imagem", style: TextStyle(fontSize: 16, color: Colors.white))
-                        ],
-                      )
-                  ),
-                )
-              ],
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: const Icon(Icons.replay, size: 16, color: Colors.white)
+              ),
+              const Text("Refazer teste", style: TextStyle(fontSize: 16, color: Colors.white))
+            ],
           )
-              :
-          const SizedBox(height: 30,),
-          Container(
-            width: 180,
-            padding: const EdgeInsets.only(top: 50),
-            child: ElevatedButton(
-                onPressed: ()=>{
-                  Navigator.popAndPushNamed(context, '/questionario')
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurple
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        child: const Icon(Icons.replay, size: 16, color: Colors.white)
-                    ),
-                    const Text("Refazer teste", style: TextStyle(fontSize: 16, color: Colors.white))
-                  ],
-                )
-            ),
-          )
-        ],
       ),
     );
   }
+
 }
