@@ -55,19 +55,24 @@ class ChildrenService {
     try{
       List<AnswerModel> list = await answerService.getAll(children.key.toString());
 
-      for (AnswerModel answer in list) {
-        soma += answer.punctuation;
-      }
+      if(list.isEmpty){
+        children.risk = '';
 
-      children.punctuation =  soma / list.length;
+      }else {
+        for (AnswerModel answer in list) {
+          soma += answer.punctuation;
+        }
 
-      // Verifica a pontuação e imprime o resultado
-      if (children.punctuation >= 0 && children.punctuation < 3) {
-        children.risk = 'Risco Baixo';
-      } else if (children.punctuation >= 3 && children.punctuation < 8) {
-        children.risk = 'Risco Médio';
-      } else if (children.punctuation >= 8 && children.punctuation <= 20) {
-        children.risk = 'Risco Alto';
+        children.punctuation = soma / list.length;
+
+        // Verifica a pontuação e imprime o resultado
+        if (children.punctuation >= 0 && children.punctuation < 3) {
+          children.risk = 'Risco Baixo';
+        } else if (children.punctuation >= 3 && children.punctuation < 8) {
+          children.risk = 'Risco Médio';
+        } else if (children.punctuation >= 8 && children.punctuation <= 20) {
+          children.risk = 'Risco Alto';
+        }
       }
 
       bool? response = await update(children);

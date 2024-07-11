@@ -148,14 +148,15 @@ class _ChildrenPageState extends State<ChildrenPage> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
           Text("Data de Nascimento: ${widget.children.dataNasc}", style: const TextStyle(fontSize: 12)),
+          SizedBox(height: 20,),
           Text("Responsável: ${widget.children.responsible}", style: const TextStyle(fontSize: 12)),
+          SizedBox(height: 20,),
           SizedBox(
               child: Row(
                 children: [
-                  const Text("Média do Risco:", style: TextStyle(fontSize: 12)),
+                  const Text("Média do Risco: ", style: TextStyle(fontSize: 12)),
                   Text(widget.children.risk, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold))
                 ],
               )
@@ -172,7 +173,23 @@ class _ChildrenPageState extends State<ChildrenPage> {
       child: Column(
         children: [
           filter(),
-          list(context, sH)
+          answersList.isNotEmpty?
+          list(context, sH) :
+          Container(
+              height: 40,
+              width: sW * 0.9,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              margin: const EdgeInsets.only(top: 80, bottom: 30),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Não existem respostas cadastradas!", style: TextStyle(fontSize: 14), textAlign: TextAlign.center,),
+                ],
+              )
+          )
         ],
       ),
     );

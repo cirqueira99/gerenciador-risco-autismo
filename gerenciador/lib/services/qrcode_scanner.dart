@@ -20,11 +20,11 @@ class QrCodeScanner{
       qrCodeInfo = {'result': 'Não validado'};
     }
 
-    qrCodeInfo = {
-      'risk': 'Risco Baixo',
-      'punctuation': 2.0,
-      'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
-    };
+    // qrCodeInfo = {
+    //   'risk': 'Risco Baixo',
+    //   'punctuation': 2.0,
+    //   'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
+    // };
 
     return qrCodeInfo;
   }

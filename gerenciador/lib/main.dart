@@ -54,17 +54,17 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _initHiveBox() async {
     try {
-      //boxChildrens = await Hive.openBox('childrens');
+      boxChildrens = await Hive.openBox('childrens');
       //boxChildrens.clear();
 
       var children1 = ChildrenModel(name: 'Pedro Henrique da Silva', dataNasc: '01/02/2015', sex: 'masculino', responsible: 'Roberta de Oliveira Juliano da Silva', risk: '', punctuation: 0.0,);
       var children2 = ChildrenModel(name: 'Maria Henrique da Silva', dataNasc: '01/02/2016', sex: 'masculino', responsible: 'Roberta de Oliveira Juliano da Silva', risk: '', punctuation: 0.0);
       var children3 = ChildrenModel(name: 'João Henrique', dataNasc: '01/02/2017', sex: 'masculino', responsible: 'Roberta de Oliveira Juliano da Silva', risk: '', punctuation: 0.0);
 
-       await boxChildrens.addAll([children1, children2, children3]);
+       //await boxChildrens.addAll([children1, children2, children3]);
 
-      // boxAnswers = await Hive.openBox('answers');
-      // boxAnswers.clear();
+       boxAnswers = await Hive.openBox('answers');
+       boxAnswers.clear();
       // var answer1 = AnswerModel(fkchildren: '1', dateregister: '10/10/2020', kinship: 'Pai', name: 'Roberto Gomes Aparecido Da Silva', risk: 'Médio', punctuation: 0.35);
       // var answer2 = AnswerModel(fkchildren: '1', dateregister: '10/09/2020', kinship: 'Pai', name: 'Alice Da Silva', risk: 'Médio', punctuation: 0.25);
       // var answer3 = AnswerModel(fkchildren: '2', dateregister: '10/10/2020', kinship: 'Mãe', name: 'Juliana Oliveira', risk: 'Médio', punctuation: 0.35);

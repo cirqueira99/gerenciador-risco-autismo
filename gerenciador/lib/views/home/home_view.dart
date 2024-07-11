@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 2.0),
+                    padding: EdgeInsets.only(bottom: 10.0),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Pesquisar paciente...',
@@ -193,7 +193,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget card(ChildrenModel children){
 
-
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? result = {};
@@ -250,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Risco', style: TextStyle(fontSize: 12), textAlign: TextAlign.center,),
-                  Text(children.risk.split(' ')[1], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: getColor(children.risk)), textAlign: TextAlign.center,),
+                  Text(children.risk == ''? '---': children.risk.split(' ')[1], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: getColor(children.risk)), textAlign: TextAlign.center,),
                 ],
               ),
             )
