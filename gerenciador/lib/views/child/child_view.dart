@@ -1,7 +1,4 @@
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/services/qrcode_scanner.dart';
 import 'package:gerenciador/views/answers/answer_add.dart';
@@ -9,7 +6,9 @@ import 'package:gerenciador/views/answers/answer_add.dart';
 import '../../services/answer_service.dart';
 import '../../models/answer_model.dart';
 import '../../models/child_model.dart';
+import '../../shared/snackbar_dialog_yes_no.dart';
 import '../../shared/snackbar_notify.dart';
+import 'child_add.dart';
 
 class ChildrenPage extends StatefulWidget {
   final ChildrenModel children;
@@ -28,12 +27,11 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   @override
   void initState(){
-    print("Pontuação>>>>>> ${widget.children.punctuation}");
-    _updatePage();
+    _refreshPage();
     super.initState();
   }
 
-  Future<void> _updatePage() async {
+  Future<void> _refreshPage() async {
     try{
       List<AnswerModel> listResponse = await answerService.getAll(widget.children.key.toString());
       setState(() {
@@ -59,6 +57,32 @@ class _ChildrenPageState extends State<ChildrenPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF148174),
         title: const Text("Perfil da criança", style: TextStyle(fontSize: 20, color: Colors.white)),
+        actions: [
+          Container(
+            width: 50,
+            margin: const EdgeInsets.only(right: 10),
+            child: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.white,),
+              onPressed: () async {
+                // bool resultOptions = false;
+                // bool? response = false;
+                // Map<String, dynamic> message = {};
+                //
+                // try {
+                //   resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão?', '');
+                //
+                //   if(resultOptions){
+                //     response = await answerService.delete(widget.answerModel.key);
+                //     Navigator.pop(context, {"message": "Resposta deletada!", "type": "success"});
+                //   }
+                // } catch (error) {
+                //   SnackbarNotify.createSnackBar(context, {"message": "Não foi possível excluir a resposta!", "type": "error"});
+                //   throw Exception(error);
+                // }
+              },
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -99,7 +123,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
             throw Exception(error);
           }finally{
             if(responseAddAnswer != null){
-              _updatePage();
+              _refreshPage();
             }
           }
         },
@@ -125,8 +149,25 @@ class _ChildrenPageState extends State<ChildrenPage> {
               children: [
                 Text(widget.children.name, style: const TextStyle(fontSize: 18, color: Colors.white),),
                 IconButton(
-                    onPressed: (){},
-                    icon: const Icon(Icons.more_vert, size: 30, color: Colors.white70,)
+                    onPressed: () async{
+                      Map<String, dynamic>? resultChildrenPage = {};
+
+                      try{
+                        resultChildrenPage = await Navigator.push(context,
+                            MaterialPageRoute(builder: (context) =>
+                                ChildrenAdd(edit: true, childrenModel: widget.children)
+                            )
+                        );
+                        if(resultChildrenPage != null && resultChildrenPage.isNotEmpty){
+                          SnackbarNotify.createSnackBar(context, resultChildrenPage);
+                        }
+                      }catch(error){
+                        throw Exception(error);
+                      }finally{
+                        _refreshPage();
+                      }
+                    },
+                    icon: const Icon(Icons.edit, size: 25, color: Colors.white70,)
                 ),
               ],
             ),
@@ -262,7 +303,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
           throw Exception(error);
         }finally{
           if(resultUpdateAnswer != null){
-            _updatePage();
+            _refreshPage();
           }
         }
       },

@@ -3,6 +3,9 @@ import 'package:gerenciador/models/child_model.dart';
 import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/views/child/child_view.dart';
 
+import '../../shared/snackbar_notify.dart';
+import '../child/child_add.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -16,11 +19,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState(){
-    _updatePage();
+    _refreshPage();
     super.initState();
   }
 
-  Future<void> _updatePage() async {
+  Future<void> _refreshPage() async {
     try{
       List<ChildrenModel> listResponse = await childrenService.getAll();
       setState(() {
@@ -161,7 +164,27 @@ class _HomePageState extends State<HomePage> {
         children: [
           Row(
             children: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.person_add, size: 25, color: Colors.black54,)),
+              IconButton(
+                  onPressed: () async{
+                    Map<String, dynamic>? resultChildrenPage = {};
+
+                    try{
+                      resultChildrenPage = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) =>
+                              ChildrenAdd(edit: false, childrenModel: ChildrenModel(name: "", dataNasc: "00/00/0000", sex: "", responsible: "", risk: "", punctuation: 0.0)),
+                          )
+                      );
+                      if(resultChildrenPage != null && resultChildrenPage.isNotEmpty){
+                        SnackbarNotify.createSnackBar(context, resultChildrenPage);
+                      }
+                    }catch(error){
+                      throw Exception(error);
+                    }finally{
+                      _refreshPage();
+                    }
+                  },
+                  icon: const Icon(Icons.person_add, size: 25, color: Colors.black54,)
+              ),
             ],
           ),
           Row(
@@ -198,7 +221,7 @@ class _HomePageState extends State<HomePage> {
         Map<String, dynamic>? result = {};
 
         try{
-          result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children,)));
+          result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children)));
         }catch(error){
           throw Exception(error);
         }finally{

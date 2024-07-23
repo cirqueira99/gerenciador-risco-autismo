@@ -24,11 +24,11 @@ class _AnswersAddState extends State<AnswerAdd> {
 
   @override
   void initState(){
-    _getValuesAnswer();
+    _initValuesAnswer();
     super.initState();
   }
 
-  _getValuesAnswer() {
+  _initValuesAnswer() {
     if(!widget.edit){
       setState(() {
         widget.answerModel.dateregister = DateFormat('dd/MM/yyyy').format(DateTime.now());
@@ -128,7 +128,6 @@ class _AnswersAddState extends State<AnswerAdd> {
     return Container(
       height: 40,
       width: 320,
-      padding: const EdgeInsets.only(right: 8, bottom: 10),
       child: TextFormField(
         initialValue: widget.answerModel.kinship,
         decoration: InputDecoration(
@@ -160,7 +159,6 @@ class _AnswersAddState extends State<AnswerAdd> {
     return Container(
       height: 40,
       width: 320,
-      padding: const EdgeInsets.only(right: 8, bottom: 10),
       child: TextFormField(
         initialValue: widget.answerModel.name ,
         decoration: InputDecoration(
@@ -197,7 +195,7 @@ class _AnswersAddState extends State<AnswerAdd> {
         children: [
           Text(title, style: const TextStyle(fontSize: 14)),
           Container(
-            height: 40,
+            height: 45,
             margin: const EdgeInsets.only(top: 10, bottom: 10),
             padding: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(

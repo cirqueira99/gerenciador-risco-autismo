@@ -7,6 +7,23 @@ import 'answer_service.dart';
 
 class ChildrenService {
 
+  Future<bool> create(ChildrenModel children) async{
+    late Box boxChildrens;
+
+    try{
+      boxChildrens = await Hive.openBox<ChildrenModel>('childrens');
+      await boxChildrens.add(children);
+
+      return true;
+    }on HiveError catch (error) {
+      print('>>> Erro Hive: $error');
+
+      throw Exception(error);
+    } finally{
+      await boxChildrens.close();
+    }
+  }
+
   Future<List<ChildrenModel>> getAll() async{
     late Box boxChildren;
     List<ChildrenModel> childrensList = [];
@@ -80,6 +97,23 @@ class ChildrenService {
       return true;
     }catch(error){
       throw Exception(error);
+    }
+  }
+
+  Future<bool> delete(num key) async {
+    late Box boxChildren;
+
+    try {
+      boxChildren = await Hive.openBox('childrens');
+      await boxChildren.delete(key);
+
+      return true;
+    } on HiveError catch (error) {
+      print('>>> Erro Hive: $error');
+
+      throw Exception(error);
+    }finally{
+      await boxChildren.close();
     }
   }
 }
