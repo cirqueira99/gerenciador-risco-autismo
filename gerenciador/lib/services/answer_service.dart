@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../models/answer_model.dart';
+import '../models/child_model.dart';
 
 class AnswerService {
   Future<bool> create(AnswerModel answer) async{
@@ -68,6 +69,23 @@ class AnswerService {
     try {
       boxAnswers = await Hive.openBox('answers');
       await boxAnswers.delete(key);
+
+      return true;
+    } on HiveError catch (error) {
+      print('>>> Erro Hive: $error');
+
+      throw Exception(error);
+    }finally{
+      await boxAnswers.close();
+    }
+  }
+
+  Future<bool> deleteList(List<AnswerModel> answers) async {
+    late Box boxAnswers;
+
+    try {
+      boxAnswers = await Hive.openBox('answers');
+      await boxAnswers.deleteAll(answers);
 
       return true;
     } on HiveError catch (error) {

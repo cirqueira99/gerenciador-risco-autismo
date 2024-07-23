@@ -58,7 +58,7 @@ class _AnswersAddState extends State<AnswerAdd> {
                 Map<String, dynamic> message = {};
 
                 try {
-                  resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão?', '');
+                  resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão?', 'Isso irá mudar a média dos resultados de risco');
 
                   if(resultOptions){
                     response = await answerService.delete(widget.answerModel.key);

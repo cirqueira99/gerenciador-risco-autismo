@@ -218,16 +218,18 @@ class _HomePageState extends State<HomePage> {
 
     return GestureDetector(
       onTap: () async{
-        Map<String, dynamic>? result = {};
+        Map<String, dynamic>? resultChidrenPage = {};
 
         try{
-          result = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children)));
+          resultChidrenPage = await Navigator.push(context, MaterialPageRoute(builder: (context) => ChildrenPage(children: children)));
+
+          if(resultChidrenPage != null && resultChidrenPage.isNotEmpty){
+            SnackbarNotify.createSnackBar(context, resultChidrenPage);
+          }
         }catch(error){
           throw Exception(error);
         }finally{
-          //if(result.isNotEmpty) SnackBarNotify.createSnackBar(context, result);
-
-          //widget.refresh(DateFormat('dd/MM/yyyy').format(widget.dateToday));
+          _refreshPage();
         }
       },
       child: Container(

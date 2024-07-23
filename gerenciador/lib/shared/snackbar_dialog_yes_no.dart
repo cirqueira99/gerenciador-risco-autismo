@@ -26,8 +26,11 @@ class SnackbarDialogYesNo{
                         onPressed: (){
                           Navigator.pop(context);
                         },
-                        icon: const Icon(Icons.cancel_outlined, size: 20, color: Color(0xFF26877B)),
-                        label: const Text("Não", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
+                        icon: const Icon(Icons.cancel_outlined, size: 20, color: Colors.white),
+                        label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Colors.white)),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF26877B)
+                        ),
                       )
                   ),
                   // Botão SIM
@@ -39,11 +42,8 @@ class SnackbarDialogYesNo{
                           option = true;
                           Navigator.pop(context);
                         },
-                        icon: const Icon(Icons.check, size: 20, color: Colors.white),
-                        label: const Text("Sim", style: TextStyle(fontSize: 12, color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF26877B)
-                        ),
+                        icon: const Icon(Icons.check, size: 20, color: Color(0xFF26877B)),
+                        label: const Text("Confirmar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
                       )
                   )
                 ],

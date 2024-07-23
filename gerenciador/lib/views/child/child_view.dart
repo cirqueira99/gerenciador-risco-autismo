@@ -64,21 +64,29 @@ class _ChildrenPageState extends State<ChildrenPage> {
             child: IconButton(
               icon: const Icon(Icons.delete, color: Colors.white,),
               onPressed: () async {
-                // bool resultOptions = false;
-                // bool? response = false;
-                // Map<String, dynamic> message = {};
-                //
-                // try {
-                //   resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão?', '');
-                //
-                //   if(resultOptions){
-                //     response = await answerService.delete(widget.answerModel.key);
-                //     Navigator.pop(context, {"message": "Resposta deletada!", "type": "success"});
-                //   }
-                // } catch (error) {
-                //   SnackbarNotify.createSnackBar(context, {"message": "Não foi possível excluir a resposta!", "type": "error"});
-                //   throw Exception(error);
-                // }
+                bool resultOptions = false;
+                bool? responseChildrenDelete = false;
+                bool? responseAnswersListDelete = false;
+                Map<String, dynamic> message = {};
+
+                try {
+                  resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão do perfil da criança?', 'Isso irá apagar todas as respostas cadastradas junto ao perfil!');
+
+                  if(resultOptions){
+                    responseChildrenDelete = await childrenService.delete(widget.children.key);
+                    responseAnswersListDelete = await answerService.deleteList(answersList);
+
+                    Navigator.pop(context, {"message": "Perfil deletado com sucesso!", "type": "success"});
+                  }
+                } catch (error) {
+                  if(responseChildrenDelete == null){
+                    SnackbarNotify.createSnackBar(context, {"message": "Não foi possível excluir a criança!", "type": "error"});
+                  }else
+                  if(responseAnswersListDelete == null){
+                    SnackbarNotify.createSnackBar(context, {"message": "Não foi possível excluir as respostas!", "type": "error"});
+                  }
+                  throw Exception(error);
+                }
               },
             ),
           ),
@@ -292,7 +300,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
           if(resultUpdateAnswer != null && resultUpdateAnswer.isNotEmpty){
             SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
-            await Future.delayed(const Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 1));
             if(resultUpdateAnswer['message'] == 'Resposta deletada!'){
               responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
               SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
