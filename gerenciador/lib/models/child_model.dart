@@ -29,15 +29,4 @@ class ChildrenModel extends HiveObject {
       'punctuation': punctuation,
     };
   }
-
-  // Map<String, dynamic> fromMap() {
-  //   return {
-  //     'id': id,
-  //     'nome': nome,
-  //     'idade': idade,
-  //     'sexo': sexo,
-  //     'responsavel': responsavel,
-  //     'medresults': medresults,
-  //   };
-  // }
 }

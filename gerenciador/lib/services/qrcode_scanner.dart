@@ -21,8 +21,8 @@ class QrCodeScanner{
     }
 
     qrCodeInfo = {
-      'risk': 'Risco Baixo',
-      'punctuation': 2.0,
+      'risk': 'Risco Médio',
+      'punctuation': 7.0,
       'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
     };
 

@@ -5,6 +5,8 @@ import 'package:gerenciador/views/child/child_view.dart';
 
 import '../../shared/snackbar_notify.dart';
 import '../child/child_add.dart';
+import '../child/filter_childrens.dart';
+import '../child/order_childrens.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +17,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   ChildrenService childrenService = ChildrenService();
-  List<ChildrenModel> childrensList = [];
+  List<ChildrenModel> childrenList = [];
+  List<ChildrenModel> childrenListAux = [];
+  OrderChildrens orderChildrens = OrderChildrens();
+  FilterChildrens filterChildrens = FilterChildrens();
+  String orderCurrent = '1';
+  Map<String, dynamic> optionsFilter = {
+    'checkedOptions': {
+      'checkedResetFilters': true,
+      'checkedEmpty': false,
+      'checkedSmall': false,
+      'checkedMedium': false,
+      'checkedTall': false
+    }
+  };
 
   @override
   void initState(){
@@ -26,8 +41,10 @@ class _HomePageState extends State<HomePage> {
   Future<void> _refreshPage() async {
     try{
       List<ChildrenModel> listResponse = await childrenService.getAll();
+
       setState(() {
-        childrensList = listResponse;
+        childrenList = listResponse;
+        childrenListAux = orderChildrens.executeOrder(childrenList, '1');
       });
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');
@@ -66,23 +83,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   backgroundColor: Colors.deepPurple,
-      //   items: const <BottomNavigationBarItem>[
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.clear, color: Colors.transparent),
-      //       label: 'Tab 1',
-      //       backgroundColor: Colors.grey, // Cor de fundo do item
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.clear, color: Colors.transparent),
-      //       label: 'Tab 1',
-      //       backgroundColor: Colors.grey, // Cor de fundo do item
-      //     ),
-      //   ],
-      //   currentIndex: _selectedIndex,
-      //   onTap: _onItemTapped,
-      // ),
     );
   }
 
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
+                    padding: EdgeInsets.only(bottom: 2.0),
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Pesquisar paciente...',
@@ -151,7 +151,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget filter(){
     return Container(
-      height: 50,
+      height: 60,
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -165,6 +166,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               IconButton(
+                  style: IconButton.styleFrom(backgroundColor: const Color(0xFF66A49C)),
                   onPressed: () async{
                     Map<String, dynamic>? resultChildrenPage = {};
 
@@ -183,15 +185,60 @@ class _HomePageState extends State<HomePage> {
                       _refreshPage();
                     }
                   },
-                  icon: const Icon(Icons.person_add, size: 25, color: Colors.black54,)
+                  icon: const Icon(Icons.person_add, size: 20, color: Colors.white,)
               ),
             ],
           ),
           Row(
             children: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt, size: 25, color: Colors.black54)),
+              IconButton(
+                style: orderCurrent == '1'? IconButton.styleFrom(backgroundColor: const Color(0xFF66A49C)) : IconButton.styleFrom(backgroundColor: const Color(0xFF23645D)),
+                onPressed: () async {
+                  Map<String, dynamic> optionOrderResponse = { };
+
+                  try{
+                    optionOrderResponse = await orderChildrens.exibirModalDialog(context, childrenListAux, orderCurrent);
+
+                    if(optionOrderResponse['execute'] == true){
+                      setState(() {
+                        childrenListAux = optionOrderResponse['newChildrenList'];
+                        orderCurrent = optionOrderResponse['optionOrder'];
+                      });
+                    }
+                  }catch(error){
+                    throw Exception(error);
+                  }
+                },
+                icon: const Icon(Icons.swap_vert, size: 25, color: Colors.white)
+              ),
               const SizedBox(width: 20,),
-              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_downward, size: 25, color: Colors.black54))
+              IconButton(
+                  style: IconButton.styleFrom(backgroundColor: optionsFilter['checkedOptions']['checkedResetFilters']?  const Color(0xFF66A49C): const Color(0xFF23645D)),
+                  onPressed: () async {
+                    Map<String, dynamic> optionsFilterResponse = {};
+
+                    try{
+                      optionsFilterResponse = await filterChildrens.exibirModalDialog(context, childrenList, optionsFilter);
+
+                      if(optionsFilterResponse['execute'] == true){
+                        if(optionsFilterResponse['checkedOptions']['checkedResetFilters']){
+                          setState(() {
+                            childrenListAux = childrenList;
+                            optionsFilter['checkedOptions'] =  { 'checkedResetFilters': true, 'checkedEmpty': false, 'checkedSmall': false, 'checkedMedium': false,'checkedTall': false };
+                          });
+                        }else{
+                          setState(() {
+                            childrenListAux = optionsFilterResponse['newChildrenList'];
+                            optionsFilter['checkedOptions'] = optionsFilterResponse['checkedOptions'];
+                          });
+                        }
+                      }
+                    }catch(error){
+                      throw Exception(error);
+                    }
+                  },
+                  icon: optionsFilter['checkedOptions']['checkedResetFilters']? const Icon(Icons.filter_alt, size: 20, color: Colors.white) : const Icon(Icons.filter_alt, size: 20, color: Colors.white)
+              ),
             ],
           )
         ],
@@ -205,9 +252,9 @@ class _HomePageState extends State<HomePage> {
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
-          itemCount: childrensList.length,
+          itemCount: childrenListAux.length,
           itemBuilder: (_, index) {
-            final ChildrenModel item = childrensList[index];
+            final ChildrenModel item = childrenListAux[index];
             return card(item);
           }
       ),
@@ -289,7 +336,7 @@ class _HomePageState extends State<HomePage> {
       return const Color(0xFF047E02);
     } else
     if(risk == 'Risco Médio'){
-      return const Color(0xFFDDD400);
+      return const Color(0xFF9D9702);
     }else{
       return const Color(0xFFFF0000);
     }

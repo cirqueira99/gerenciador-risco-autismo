@@ -11,7 +11,7 @@ class SnackbarDialogYesNo{
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title, style: const TextStyle(fontSize: 18), textAlign: TextAlign.center,),
-          content: Text(content),
+          content: Text(content, style: const TextStyle(fontSize: 14), textAlign: TextAlign.center,),
           actions: <Widget>[
             Container(
               width: double.infinity,
@@ -21,7 +21,7 @@ class SnackbarDialogYesNo{
                   // Botão NÃO
                   SizedBox(
                       height: 30,
-                      width: 100,
+                      width: 130,
                       child: OutlinedButton.icon(
                         onPressed: (){
                           Navigator.pop(context);
@@ -36,7 +36,7 @@ class SnackbarDialogYesNo{
                   // Botão SIM
                   SizedBox(
                       height: 30,
-                      width: 100,
+                      width: 130,
                       child: OutlinedButton.icon(
                         onPressed: (){
                           option = true;
