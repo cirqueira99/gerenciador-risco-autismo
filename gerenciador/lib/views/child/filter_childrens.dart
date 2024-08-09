@@ -53,14 +53,13 @@ class FilterChildrens{
           // Botão Cancelar
           SizedBox(
               height: 30,
-              width: 130,
+              width: 100,
               child: OutlinedButton.icon(
                 onPressed: (){
                   optionsFilter['execute'] = false;
                   //optionsFilter['newChildrenList'] = childrenList;
                   Navigator.pop(context);
                 },
-                icon: const Icon(Icons.cancel_outlined, size: 20, color: Colors.white),
                 label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Colors.white)),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF26877B)
@@ -70,7 +69,7 @@ class FilterChildrens{
           // Botão Ordenar
           SizedBox(
               height: 30,
-              width: 130,
+              width: 100,
               child: OutlinedButton.icon(
                 onPressed: (){
                   optionsFilter['execute'] = true;
@@ -78,7 +77,6 @@ class FilterChildrens{
 
                   Navigator.pop(context);
                 },
-                icon: const Icon(Icons.check, size: 20, color: Color(0xFF26877B)),
                 label: const Text("Filtrar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
               )
           )
@@ -125,15 +123,15 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
 
     return Container(
       height: 220,
-      width: 270,
+      width: 220,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           checkBoxContainer("Remover filtros", widget.optionsFilter['checkedOptions']['checkedResetFilters']),
           checkBoxContainer("Crianças sem Média", widget.optionsFilter['checkedOptions']['checkedEmpty']),
-          checkBoxContainer("Crianças com Risco Baixo", widget.optionsFilter['checkedOptions']['checkedSmall']),
-          checkBoxContainer("Crianças com Risco Médio", widget.optionsFilter['checkedOptions']['checkedMedium']),
-          checkBoxContainer("Crianças com Risco Alto ", widget.optionsFilter['checkedOptions']['checkedTall'])
+          checkBoxContainer("Risco Baixo", widget.optionsFilter['checkedOptions']['checkedSmall']),
+          checkBoxContainer("Risco Médio", widget.optionsFilter['checkedOptions']['checkedMedium']),
+          checkBoxContainer("Risco Alto ", widget.optionsFilter['checkedOptions']['checkedTall'])
         ],
       ),
     );
@@ -164,11 +162,11 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
                   widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
                   widget.optionsFilter['checkedOptions']['checkedEmpty'] = value!;
                 }else
-                if(txtChecked == "Crianças com Risco Baixo"){
+                if(txtChecked == "Risco Baixo"){
                   widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
                   widget.optionsFilter['checkedOptions']['checkedSmall'] = value!;
                 }else
-                if(txtChecked == "Crianças com Risco Médio"){
+                if(txtChecked == "Risco Médio"){
                   widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
                   widget.optionsFilter['checkedOptions']['checkedMedium'] = value!;
                 }else {
@@ -180,10 +178,28 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
               });
             },
           ),
-          Text(txtChecked,  style: const TextStyle(fontSize: 14), textAlign: TextAlign.start)
+          txtChecked == 'Remover filtros' || txtChecked == 'Crianças sem Média'?
+            Text(txtChecked,  style: const TextStyle(fontSize: 14), textAlign: TextAlign.start):
+            Row(
+              children: [
+                const Text('Crianças com ',  style:  TextStyle(fontSize: 14), textAlign: TextAlign.start),
+                Text(txtChecked,  style: TextStyle(fontSize: 14, color: getColorMedia(txtChecked)), textAlign: TextAlign.start),
+              ],
+            )
         ],
       ),
     );
+  }
+
+  Color getColorMedia(String risk){
+    if(risk == 'Risco Baixo'){
+      return const Color(0xFF047E02);
+    } else
+    if(risk == 'Risco Médio'){
+      return const Color(0xFF9D9702);
+    }else{
+      return const Color(0xFFFF0000);
+    }
   }
 
 }

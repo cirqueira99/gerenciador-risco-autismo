@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   List<ChildrenModel> childrenListAux = [];
   OrderChildrens orderChildrens = OrderChildrens();
   FilterChildrens filterChildrens = FilterChildrens();
-  String orderCurrent = '1';
+  int orderCurrent = 1;
   Map<String, dynamic> optionsFilter = {
     'checkedOptions': {
       'checkedResetFilters': true,
@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
 
       setState(() {
         childrenList = listResponse;
-        childrenListAux = orderChildrens.executeOrder(childrenList, '1');
+        childrenListAux = orderChildrens.executeOrder(childrenList, 1);
       });
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               IconButton(
-                  style: IconButton.styleFrom(backgroundColor: const Color(0xFF66A49C)),
+                  style: IconButton.styleFrom(backgroundColor: const Color(0xFF5ABAAF)),
                   onPressed: () async{
                     Map<String, dynamic>? resultChildrenPage = {};
 
@@ -192,19 +192,27 @@ class _HomePageState extends State<HomePage> {
           Row(
             children: [
               IconButton(
-                style: orderCurrent == '1'? IconButton.styleFrom(backgroundColor: const Color(0xFF66A49C)) : IconButton.styleFrom(backgroundColor: const Color(0xFF23645D)),
+                style: IconButton.styleFrom(backgroundColor:
+                  orderCurrent != 3? orderCurrent != 2?
+                    const Color(0xFF5ABAAF) : const Color(0xFF179384):
+                    const Color(0xFF23645D)),
                 onPressed: () async {
                   Map<String, dynamic> optionOrderResponse = { };
 
                   try{
-                    optionOrderResponse = await orderChildrens.exibirModalDialog(context, childrenListAux, orderCurrent);
+                    //optionOrderResponse = await orderChildrens.exibirModalDialog(context, childrenListAux, orderCurrent);
 
-                    if(optionOrderResponse['execute'] == true){
-                      setState(() {
-                        childrenListAux = optionOrderResponse['newChildrenList'];
-                        orderCurrent = optionOrderResponse['optionOrder'];
-                      });
-                    }
+                    // if(optionOrderResponse['execute'] == true){
+                    //   setState(() {
+                    //     childrenListAux = optionOrderResponse['newChildrenList'];
+                    //     orderCurrent = optionOrderResponse['optionOrder'];
+                    //   });
+                    // }
+                    setState(() {
+                      orderCurrent+1 < 4? orderCurrent += 1 : orderCurrent = 1;
+                      childrenListAux = orderChildrens.executeOrder(childrenListAux, orderCurrent);
+                    });
+
                   }catch(error){
                     throw Exception(error);
                   }
@@ -213,7 +221,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(width: 20,),
               IconButton(
-                  style: IconButton.styleFrom(backgroundColor: optionsFilter['checkedOptions']['checkedResetFilters']?  const Color(0xFF66A49C): const Color(0xFF23645D)),
+                  style: IconButton.styleFrom(backgroundColor: optionsFilter['checkedOptions']['checkedResetFilters']?  const Color(0xFF5ABAAF): const Color(0xFF23645D)),
                   onPressed: () async {
                     Map<String, dynamic> optionsFilterResponse = {};
 
@@ -321,7 +329,7 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Risco', style: TextStyle(fontSize: 12), textAlign: TextAlign.center,),
-                  Text(children.risk == ''? '---': children.risk.split(' ')[1], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: getColor(children.risk)), textAlign: TextAlign.center,),
+                  Text(children.risk == ''? '---': children.risk.split(' ')[1], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: getColorMedia(children.risk)), textAlign: TextAlign.center,),
                 ],
               ),
             )
@@ -331,7 +339,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Color getColor(String risk){
+  Color getColorMedia(String risk){
     if(risk == 'Risco Baixo'){
       return const Color(0xFF047E02);
     } else

@@ -40,7 +40,6 @@ class OrderChildrens{
               child: OutlinedButton.icon(
                 onPressed: (){
                   option['execute'] = false;
-                  //option['newChildrenList'] = childrenList;
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.cancel_outlined, size: 20, color: Colors.white),
@@ -57,7 +56,7 @@ class OrderChildrens{
               child: OutlinedButton.icon(
                 onPressed: (){
                   option['execute'] = true;
-                  option['newChildrenList'] = executeOrder(childrenList, option['optionOrder']);
+                  //option['newChildrenList'] = executeOrder(childrenList, option['optionOrder']);
                   Navigator.pop(context);
                 },
                 icon: const Icon(Icons.check, size: 20, color: Color(0xFF26877B)),
@@ -69,16 +68,16 @@ class OrderChildrens{
     );
   }
 
-  List<ChildrenModel> executeOrder(List<ChildrenModel> listCurrent, String orderOption){
+  List<ChildrenModel> executeOrder(List<ChildrenModel> listCurrent, int orderOption){
 
     switch(orderOption){
-      case '1':
+      case 1:
         listCurrent.sort((r1, r2) => r1.name.compareTo(r2.name));
         break;
-      case '2':
+      case 2:
         listCurrent.sort((r1, r2) => _compareRisk(r1.risk, r2.risk)); // ordena crescente
         break;
-      case '3':
+      case 3:
         listCurrent.sort((r1, r2) => _compareRisk(r2.risk, r1.risk)); // ordena decrescente
         break;
       default:
