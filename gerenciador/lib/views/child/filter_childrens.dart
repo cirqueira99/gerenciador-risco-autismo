@@ -24,9 +24,14 @@ class FilterChildrens{
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Filtrar lista por:", style: TextStyle(fontSize: 18), textAlign: TextAlign.center,),
+          title: txtTitlte(),
+          titlePadding: const EdgeInsets.only(top: 15, bottom: 10, right: 5, left: 5),
           content: CheckboxOptions(updateOptionFilter, optionsFilter),
+          contentPadding: const EdgeInsets.only(top: 5, bottom: 5, right: 0, left:0),
           actions: <Widget>[ buttonsActions(context, childrenList) ],
+          actionsPadding: const EdgeInsets.only(top: 10, bottom: 10, right: 25, left: 25),
+
+          backgroundColor: Colors.white,
         );
       },
     );
@@ -44,9 +49,24 @@ class FilterChildrens{
     };
   }
 
+  Widget txtTitlte(){
+    return Container(
+      height: 30,
+      decoration: BoxDecoration(
+        border: Border(
+            bottom: BorderSide(
+                color: Colors.grey.shade300, width: 2.0
+            )
+        )
+      ),
+      child: const Text("Filtrar lista por:", style: TextStyle(fontSize: 16), textAlign: TextAlign.center,)
+    );
+  }
+
   Widget buttonsActions(BuildContext context, List<ChildrenModel> childrenList){
     return Container(
-      width: double.infinity,
+      height: 40,
+      //color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -57,13 +77,10 @@ class FilterChildrens{
               child: OutlinedButton.icon(
                 onPressed: (){
                   optionsFilter['execute'] = false;
-                  //optionsFilter['newChildrenList'] = childrenList;
                   Navigator.pop(context);
                 },
                 label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Colors.white)),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF26877B)
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF26877B)),
               )
           ),
           // Botão Ordenar
@@ -78,6 +95,7 @@ class FilterChildrens{
                   Navigator.pop(context);
                 },
                 label: const Text("Filtrar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFCFEFE))
               )
           )
         ],
@@ -122,8 +140,8 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
   Widget build(BuildContext context) {
 
     return Container(
-      height: 220,
-      width: 220,
+      height: 200,
+      width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -140,43 +158,47 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
   Widget checkBoxContainer(String txtChecked, bool isChecked){
     return Container(
       height: 40,
+      width: 220,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Checkbox(
-            tristate: false,
-            value: isChecked,
-            onChanged: (bool? value) {
-              setState(() {
-                if(txtChecked == "Remover filtros"){
-                  widget.optionsFilter['checkedOptions']['checkedResetFilters'] = value!;
-                  if(widget.optionsFilter['checkedOptions']['checkedResetFilters']){
-                    widget.optionsFilter['checkedOptions']['checkedEmpty'] = false;
-                    widget.optionsFilter['checkedOptions']['checkedSmall'] = false;
-                    widget.optionsFilter['checkedOptions']['checkedMedium'] = false;
-                    widget.optionsFilter['checkedOptions']['checkedTall'] = false;
+          SizedBox(
+            width:30,
+            child: Checkbox(
+              tristate: false,
+              value: isChecked,
+              onChanged: (bool? value) {
+                setState(() {
+                  if(txtChecked == "Remover filtros"){
+                    widget.optionsFilter['checkedOptions']['checkedResetFilters'] = value!;
+                    if(widget.optionsFilter['checkedOptions']['checkedResetFilters']){
+                      widget.optionsFilter['checkedOptions']['checkedEmpty'] = false;
+                      widget.optionsFilter['checkedOptions']['checkedSmall'] = false;
+                      widget.optionsFilter['checkedOptions']['checkedMedium'] = false;
+                      widget.optionsFilter['checkedOptions']['checkedTall'] = false;
+                    }
+                  }else
+                  if(txtChecked == "Crianças sem Média"){
+                    widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
+                    widget.optionsFilter['checkedOptions']['checkedEmpty'] = value!;
+                  }else
+                  if(txtChecked == "Risco Baixo"){
+                    widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
+                    widget.optionsFilter['checkedOptions']['checkedSmall'] = value!;
+                  }else
+                  if(txtChecked == "Risco Médio"){
+                    widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
+                    widget.optionsFilter['checkedOptions']['checkedMedium'] = value!;
+                  }else {
+                    widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
+                    widget.optionsFilter['checkedOptions']['checkedTall'] = value!;
                   }
-                }else
-                if(txtChecked == "Crianças sem Média"){
-                  widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
-                  widget.optionsFilter['checkedOptions']['checkedEmpty'] = value!;
-                }else
-                if(txtChecked == "Risco Baixo"){
-                  widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
-                  widget.optionsFilter['checkedOptions']['checkedSmall'] = value!;
-                }else
-                if(txtChecked == "Risco Médio"){
-                  widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
-                  widget.optionsFilter['checkedOptions']['checkedMedium'] = value!;
-                }else {
-                  widget.optionsFilter['checkedOptions']['checkedResetFilters'] = false;
-                  widget.optionsFilter['checkedOptions']['checkedTall'] = value!;
-                }
 
-                widget.updateOptionFilter(widget.optionsFilter);
-              });
-            },
+                  widget.updateOptionFilter(widget.optionsFilter);
+                });
+              },
+            ),
           ),
           txtChecked == 'Remover filtros' || txtChecked == 'Crianças sem Média'?
             Text(txtChecked,  style: const TextStyle(fontSize: 14), textAlign: TextAlign.start):

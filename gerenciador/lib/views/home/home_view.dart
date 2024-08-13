@@ -43,8 +43,8 @@ class _HomePageState extends State<HomePage> {
       List<ChildrenModel> listResponse = await childrenService.getAll();
 
       setState(() {
-        childrenList = listResponse;
-        childrenListAux = orderChildrens.executeOrder(childrenList, 1);
+        childrenList = orderChildrens.executeOrder(listResponse, 1);
+        childrenListAux = orderChildrens.executeOrder(listResponse, 1);
       });
     } catch (e) {
       print('Erro ao inicializar a caixa Hive: $e');
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF148174),
+        backgroundColor: const Color(0xFF184F49),
         title: const Text("Lista de Pacientes", style: TextStyle(fontSize: 18, color: Colors.white),),
       ),
       body: Center(
@@ -107,24 +107,41 @@ class _HomePageState extends State<HomePage> {
               border: Border.all(color: Colors.grey.shade100),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
+                const Padding(
                   padding: EdgeInsets.only(left: 8.0, top: 5),
                   child: Icon(Icons.search),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 2.0),
+                    padding: const EdgeInsets.only(bottom: 2.0),
                     child: TextField(
+                      keyboardType: TextInputType.text,
+                      maxLines: 1,
                       decoration: InputDecoration(
                         hintText: 'Pesquisar paciente...',
-                        counterStyle: TextStyle(fontSize: 10),
+                        hintStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.grey.shade700),
+                        counterStyle: const TextStyle(fontSize: 10),
                         border: InputBorder.none
                       ),
+                      onSubmitted: (String value) async {
+                        List<ChildrenModel> childrenListResponse = [];
+                        try{
+                          childrenListResponse = await childrenService.getByNames(value.toString());
+
+                          setState(() {
+                            childrenList = childrenListResponse;
+                            childrenListAux = childrenListResponse;
+                          });
+                        }catch(error){
+                          SnackbarNotify.createSnackBar(context, {"message": "Não foi possível realizar a pesquisa!", "type": "error"});
+                          throw Exception(error);
+                        }
+                      },
                     ),
                   ),
                 ),

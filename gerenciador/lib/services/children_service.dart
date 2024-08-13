@@ -40,6 +40,22 @@ class ChildrenService {
     return childrensList;
   }
 
+  Future<List<ChildrenModel>> getByNames(String name) async{
+    late Box boxChildren;
+    List<ChildrenModel> childrensList = [];
+
+    try{
+      boxChildren = await Hive.openBox('childrens');
+      childrensList = boxChildren.values.where((c) => c.name.toLowerCase().startsWith(name.toLowerCase())).toList().cast<ChildrenModel>();
+    } catch (e) {
+      print('Erro ao inicializar a caixa Hive: $e');
+    }finally{
+      await boxChildren.close();
+    }
+
+    return childrensList;
+  }
+
   Future<bool> update(ChildrenModel childrenModel) async {
     late Box boxChildren;
     ChildrenModel childrenModelUpdate = ChildrenModel(
