@@ -112,8 +112,8 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Padding(
-                  padding: EdgeInsets.only(left: 8.0, top: 5),
-                  child: Icon(Icons.search),
+                  padding: EdgeInsets.only(left: 8.0, ),
+                  child: Icon(Icons.search, color: Colors.grey,),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -122,6 +122,7 @@ class _HomePageState extends State<HomePage> {
                     child: TextField(
                       keyboardType: TextInputType.text,
                       maxLines: 1,
+                      textAlign: TextAlign.start,
                       decoration: InputDecoration(
                         hintText: 'Pesquisar paciente...',
                         hintStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.grey.shade700),
@@ -154,9 +155,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget listPacients(num sH, num sW){
-    return SizedBox(
-      height: sH * 0.78,
+    return Container(
+      height: sH * 0.8,
       width: sW * 0.9,
+      color: Colors.white,
       child: Column(
         children: [
           filter(),
@@ -236,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 icon: const Icon(Icons.swap_vert, size: 25, color: Colors.white)
               ),
-              const SizedBox(width: 20,),
+              const SizedBox(width: 20),
               IconButton(
                   style: IconButton.styleFrom(backgroundColor: optionsFilter['checkedOptions']['checkedResetFilters']?  const Color(0xFF5ABAAF): const Color(0xFF23645D)),
                   onPressed: () async {
@@ -264,6 +266,27 @@ class _HomePageState extends State<HomePage> {
                   },
                   icon: optionsFilter['checkedOptions']['checkedResetFilters']? const Icon(Icons.filter_alt, size: 20, color: Colors.white) : const Icon(Icons.filter_alt, size: 20, color: Colors.white)
               ),
+              const SizedBox(width: 20),
+              IconButton(
+                  style: IconButton.styleFrom(backgroundColor: const Color(0xFF23645D)),
+
+                  onPressed: () {
+                    setState(() {
+                      orderCurrent = 1;
+                      optionsFilter = {
+                        'checkedOptions': {
+                          'checkedResetFilters': true,
+                          'checkedEmpty': false,
+                          'checkedSmall': false,
+                          'checkedMedium': false,
+                          'checkedTall': false
+                        }
+                      };
+                    });
+                    _refreshPage();
+                  },
+                  icon: const Icon(Icons.restore, size: 25, color: Colors.white,)
+              )
             ],
           )
         ],
@@ -272,8 +295,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget list(num sH){
-    return SizedBox(
+    return Container(
       height: sH * 0.70,
+      padding: const EdgeInsets.only(top: 10),
       child: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,

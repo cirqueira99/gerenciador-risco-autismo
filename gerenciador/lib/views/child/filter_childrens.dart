@@ -24,10 +24,10 @@ class FilterChildrens{
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: txtTitlte(),
+          title: txtTitle(),
           titlePadding: const EdgeInsets.only(top: 15, bottom: 10, right: 5, left: 5),
           content: CheckboxOptions(updateOptionFilter, optionsFilter),
-          contentPadding: const EdgeInsets.only(top: 5, bottom: 5, right: 0, left:0),
+          contentPadding: const EdgeInsets.only(top: 5, bottom: 10, right: 0, left:0),
           actions: <Widget>[ buttonsActions(context, childrenList) ],
           actionsPadding: const EdgeInsets.only(top: 10, bottom: 10, right: 25, left: 25),
 
@@ -49,7 +49,7 @@ class FilterChildrens{
     };
   }
 
-  Widget txtTitlte(){
+  Widget txtTitle(){
     return Container(
       height: 30,
       decoration: BoxDecoration(
@@ -72,31 +72,31 @@ class FilterChildrens{
         children: [
           // Botão Cancelar
           SizedBox(
-              height: 30,
-              width: 100,
-              child: OutlinedButton.icon(
-                onPressed: (){
-                  optionsFilter['execute'] = false;
-                  Navigator.pop(context);
-                },
-                label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Colors.white)),
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF26877B)),
-              )
+            height: 30,
+            width: 100,
+            child: OutlinedButton.icon(
+              onPressed: (){
+                optionsFilter['execute'] = false;
+                Navigator.pop(context);
+              },
+              label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Colors.white)),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF26877B), side: const BorderSide(width: 1.0, color:  Color(0xFF26877B))),
+            )
           ),
           // Botão Ordenar
           SizedBox(
-              height: 30,
-              width: 100,
-              child: OutlinedButton.icon(
-                onPressed: (){
-                  optionsFilter['execute'] = true;
-                  optionsFilter['newChildrenList'] = executeFilter(childrenList, optionsFilter['checkedOptions']);
+            height: 30,
+            width: 100,
+            child: OutlinedButton.icon(
+              onPressed: (){
+                optionsFilter['execute'] = true;
+                optionsFilter['newChildrenList'] = executeFilter(childrenList, optionsFilter['checkedOptions']);
 
-                  Navigator.pop(context);
-                },
-                label: const Text("Filtrar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
-                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFCFEFE))
-              )
+                Navigator.pop(context);
+              },
+              label: const Text("Filtrar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
+              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFCFEFE), side: const BorderSide(width: 1.0, color:  Color(0xFF26877B))),
+            )
           )
         ],
       ),
