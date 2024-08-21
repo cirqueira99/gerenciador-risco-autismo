@@ -30,7 +30,6 @@ class FilterChildrens{
           contentPadding: const EdgeInsets.only(top: 5, bottom: 10, right: 0, left:0),
           actions: <Widget>[ buttonsActions(context, childrenList) ],
           actionsPadding: const EdgeInsets.only(top: 10, bottom: 10, right: 25, left: 25),
-
           backgroundColor: Colors.white,
         );
       },
@@ -52,6 +51,7 @@ class FilterChildrens{
   Widget txtTitle(){
     return Container(
       height: 30,
+      width: 180,
       decoration: BoxDecoration(
         border: Border(
             bottom: BorderSide(
@@ -59,14 +59,13 @@ class FilterChildrens{
             )
         )
       ),
-      child: const Text("Filtrar lista por:", style: TextStyle(fontSize: 16), textAlign: TextAlign.center,)
+      child: const Text("Filtrar lista por:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold), textAlign: TextAlign.center,)
     );
   }
 
   Widget buttonsActions(BuildContext context, List<ChildrenModel> childrenList){
     return Container(
       height: 40,
-      //color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -79,8 +78,13 @@ class FilterChildrens{
                 optionsFilter['execute'] = false;
                 Navigator.pop(context);
               },
+              icon: const Icon(Icons.cancel_outlined, size: 15, color: Colors.white),
               label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Colors.white)),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF26877B), side: const BorderSide(width: 1.0, color:  Color(0xFF26877B))),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF26877B),
+                  side: const BorderSide(width: 1.0, color:  Color(0xFF26877B)),
+                  padding: const EdgeInsets.all(2)
+              ),
             )
           ),
           // Botão Ordenar
@@ -94,9 +98,14 @@ class FilterChildrens{
 
                 Navigator.pop(context);
               },
+              icon: const Icon(Icons.check, size: 15, color: Color(0xFF26877B)),
               label: const Text("Filtrar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFCFEFE), side: const BorderSide(width: 1.0, color:  Color(0xFF26877B))),
-            )
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFCFEFE),
+                  side: const BorderSide(width: 1.0, color:  Color(0xFF26877B)),
+                  padding: const EdgeInsets.all(2)
+              )
+            ),
           )
         ],
       ),
@@ -158,13 +167,13 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
   Widget checkBoxContainer(String txtChecked, bool isChecked){
     return Container(
       height: 40,
-      width: 220,
+      width: 180,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width:30,
+            width: 30,
             child: Checkbox(
               tristate: false,
               value: isChecked,
@@ -201,10 +210,10 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
             ),
           ),
           txtChecked == 'Remover filtros' || txtChecked == 'Crianças sem Média'?
-            Text(txtChecked,  style: const TextStyle(fontSize: 14), textAlign: TextAlign.start):
+            Text(txtChecked,  style: const TextStyle(fontSize: 14, color: Color(0xFF2D2C2C)), textAlign: TextAlign.start):
             Row(
               children: [
-                const Text('Crianças com ',  style:  TextStyle(fontSize: 14), textAlign: TextAlign.start),
+                const Text('Crianças com ',  style:  TextStyle(fontSize: 14, color: Color(0xFF2D2C2C)), textAlign: TextAlign.start),
                 Text(txtChecked,  style: TextStyle(fontSize: 14, color: getColorMedia(txtChecked)), textAlign: TextAlign.start),
               ],
             )

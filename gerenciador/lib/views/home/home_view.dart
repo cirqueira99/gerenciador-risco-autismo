@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 10),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 2.0),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: TextField(
                       keyboardType: TextInputType.text,
                       maxLines: 1,
@@ -156,7 +156,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget listPacients(num sH, num sW){
     return Container(
-      height: sH * 0.8,
+      height: sH * 0.78,
       width: sW * 0.9,
       color: Colors.white,
       child: Column(

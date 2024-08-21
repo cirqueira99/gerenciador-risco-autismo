@@ -29,6 +29,8 @@ class AnswerService {
       boxAnswers = await Hive.openBox('answers');
       answers = boxAnswers.values.where((a) => a.fkchildren == fkChildren).toList().cast<AnswerModel>();
 
+      answers = executeOrder(answers);
+
     }on HiveError catch (error) {
       print('Erro ao inicializar a caixa Hive: $error');
     }finally{
@@ -36,6 +38,12 @@ class AnswerService {
     }
 
     return answers;
+  }
+
+  List<AnswerModel> executeOrder(List<AnswerModel> answersList){
+    answersList.sort((a1, a2) => a1.dateregister.compareTo(a2.dateregister));
+
+    return answersList;
   }
 
   Future<bool> update(AnswerModel answerModel) async {
@@ -96,5 +104,4 @@ class AnswerService {
       await boxAnswers.close();
     }
   }
-
 }

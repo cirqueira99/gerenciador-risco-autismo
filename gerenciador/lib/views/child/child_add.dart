@@ -45,7 +45,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF148174),
+        backgroundColor: const Color(0xFF184F49),
         title: Text(widget.edit? "Editar criança": 'Cadastrar criança', style: const TextStyle(fontSize: 20, color: Colors.white))
       ),
       body: SingleChildScrollView(
@@ -262,6 +262,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   Widget buttons(){
     return Container(
       width: 300,
+      margin: const EdgeInsets.all(30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

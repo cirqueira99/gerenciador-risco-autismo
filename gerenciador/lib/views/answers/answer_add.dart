@@ -43,7 +43,7 @@ class _AnswersAddState extends State<AnswerAdd> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF148174),
+        backgroundColor: const Color(0xFF184F49),
         title: Text(widget.edit? "Editar resposta": 'Cadastrar resposta', style: const TextStyle(fontSize: 20, color: Colors.white)),
         actions: [
           widget.edit?
@@ -231,6 +231,7 @@ class _AnswersAddState extends State<AnswerAdd> {
   Widget buttons(){
     return Container(
       width: 300,
+      margin: const EdgeInsets.all(30),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [

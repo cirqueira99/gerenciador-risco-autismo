@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/services/qrcode_scanner.dart';
 import 'package:gerenciador/views/answers/answer_add.dart';
@@ -55,7 +57,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFF148174),
+        backgroundColor: const Color(0xFF184F49),
         title: const Text("Perfil da criança", style: TextStyle(fontSize: 20, color: Colors.white)),
         actions: [
           Container(
@@ -93,11 +95,14 @@ class _ChildrenPageState extends State<ChildrenPage> {
         ],
       ),
       body: Center(
-        child: Column(
-          children: [
-            topInfos(),
-            listAnswers(context, screenH, screenW)
-          ],
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              topInfos(),
+              listAnswers(context, screenH, screenW)
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -141,7 +146,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   Widget topInfos(){
     return Container(
-      height: 220,
+      height: 200,
       width: double.infinity,
       color: const Color(0xFF23645D),
       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -155,7 +160,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.children.name, style: const TextStyle(fontSize: 18, color: Colors.white),),
+                Text(widget.children.name, style: const TextStyle(fontSize: 20, color: Colors.white),),
                 IconButton(
                     onPressed: () async{
                       Map<String, dynamic>? resultChildrenPage = {};
@@ -188,31 +193,98 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
   Widget infosChildren(){
     return Container(
-      height: 150,
+      height: 130,
       width: double.infinity,
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.only(top: 5, bottom: 5, right: 10, left: 10),
       decoration: BoxDecoration(
         color: const Color(0xFFFCF9FF),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text("Data de Nascimento: ${widget.children.dataNasc}", style: const TextStyle(fontSize: 12)),
-          SizedBox(height: 20,),
-          Text("Responsável: ${widget.children.responsible}", style: const TextStyle(fontSize: 12)),
-          SizedBox(height: 20,),
+          SizedBox(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Data de Nasc:", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                        Text(widget.children.dataNasc, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Idade:", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                        Text("${calcAge(widget.children.dataNasc)} anos", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Sexo:", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                        Text(widget.children.sex, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("Média:", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                        Text(widget.children.risk, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: getColor(widget.children.risk)))
+                      ],
+                    ),
+                  )
+                ],
+              )
+          ),
           SizedBox(
               child: Row(
                 children: [
-                  const Text("Média do Risco: ", style: TextStyle(fontSize: 12)),
-                  Text(widget.children.risk, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold))
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Responsável: ", style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Text(widget.children.responsible, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
+                    ],
+                  ),
                 ],
               )
           ),
         ],
       ),
     );
+  }
+
+  String calcAge(String dateNasc) {
+    int age = 0;
+    List<String> partes = dateNasc.split('/');
+    int dia = int.parse(partes[0]);
+    int mes = int.parse(partes[1]);
+    int ano = int.parse(partes[2]);
+
+    DateTime dataNasc = DateTime(ano, mes, dia);
+    DateTime dataAtual = DateTime.now();
+
+    age = dataAtual.year - dataNasc.year;
+
+    if (dataAtual.month < dataNasc.month || (dataAtual.month == dataNasc.month && dataAtual.day < dataNasc.day)) {
+      age--;
+    }
+
+    return age.toString();
   }
 
   Widget listAnswers(BuildContext context, num sH, num sW){
@@ -225,19 +297,19 @@ class _ChildrenPageState extends State<ChildrenPage> {
           answersList.isNotEmpty?
           list(context, sH) :
           Container(
-              height: 40,
-              width: sW * 0.9,
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              margin: const EdgeInsets.only(top: 80, bottom: 30),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Não existem respostas cadastradas!", style: TextStyle(fontSize: 14), textAlign: TextAlign.center,),
-                ],
-              )
+            height: 40,
+            width: sW * 0.9,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            margin: const EdgeInsets.only(top: 80, bottom: 30),
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Não existem respostas cadastradas!", style: TextStyle(fontSize: 14), textAlign: TextAlign.center,),
+              ],
+            )
           )
         ],
       ),
@@ -254,19 +326,12 @@ class _ChildrenPageState extends State<ChildrenPage> {
               )
           )
       ),
-      child: Row(
+      child: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Row(
+           Row(
             children: [
               Text("Resultado dos questionários", style: TextStyle(fontSize: 14),),
-            ],
-          ),
-          Row(
-            children: [
-              IconButton(onPressed: (){}, icon: const Icon(Icons.filter_alt, size: 25, color: Colors.black54)),
-              const SizedBox(width: 10),
-              IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_downward, size: 25, color: Colors.black54))
             ],
           )
         ],
@@ -317,7 +382,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
       },
       child: Container(
         height: 110,
-        padding: const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 15),
+        padding: const EdgeInsets.only(top: 10, bottom: 10, right: 15, left: 15),
         margin:  const EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 5),
         decoration: BoxDecoration(
           color: const Color(0xFFFAFAFA),
@@ -355,28 +420,19 @@ class _ChildrenPageState extends State<ChildrenPage> {
                   Row(
                     children: [
                       const Text('Resultado: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(answer.risk, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: getColor(answer.risk))),
-                      )
+                      Text(answer.risk, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: getColor(answer.risk)))
                     ],
                   ),
                   Row(
                     children: [
                       const Text('Parentesco: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(answer.kinship, style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                      )
+                      Text(answer.kinship, style: const TextStyle(fontSize: 14, color: Colors.black87))
                     ],
                   ),
                   Row(
                     children: [
-                      const Text('Respondido por: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(answer.name, style: const TextStyle(fontSize: 14, color: Colors.black87)),
-                      )
+                      const Text('Nome: ', style: TextStyle(fontSize: 14, color: Colors.black54)),
+                      Text(answer.name, style: const TextStyle(fontSize: 14, color: Colors.black87))
                     ],
                   ),
                 ],
@@ -393,7 +449,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
       return const Color(0xFF047E02);
     } else
     if(risk == 'Risco Médio'){
-      return const Color(0xFFDDD400);
+      return const Color(0xFF9D9702);
     }else{
       return const Color(0xFFFF0000);
     }

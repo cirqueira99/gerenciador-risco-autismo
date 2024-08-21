@@ -72,13 +72,13 @@ class OrderChildrens{
 
     switch(orderOption){
       case 1:
-        listCurrent.sort((r1, r2) => r1.name.compareTo(r2.name));
+        listCurrent.sort((c1, c2) => c1.name.compareTo(c2.name));
         break;
       case 2:
-        listCurrent.sort((r1, r2) => _compareRisk(r1.risk, r2.risk)); // ordena crescente
+        listCurrent.sort((c1, c2) => _compareRisk(c1.risk, c2.risk)); // ordena crescente
         break;
       case 3:
-        listCurrent.sort((r1, r2) => _compareRisk(r2.risk, r1.risk)); // ordena decrescente
+        listCurrent.sort((c1, c2) => _compareRisk(c2.risk, c1.risk)); // ordena decrescente
         break;
       default:
         break;

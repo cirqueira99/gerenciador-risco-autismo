@@ -57,22 +57,25 @@ class _MyAppState extends State<MyApp> {
       boxChildrens = await Hive.openBox('childrens');
       //boxChildrens.clear();
 
-      var children1 = ChildrenModel(name: 'Criança A', dataNasc: '01/02/2015', sex: 'masculino', responsible: 'Responsável A', risk: 'Risco Médio', punctuation: 7.0,);
-      var children2 = ChildrenModel(name: 'Criança E', dataNasc: '01/02/2017', sex: 'masculino', responsible: 'Responsável E', risk: 'Risco Alto', punctuation: 18.0);
-      var children3 = ChildrenModel(name: 'Criança B', dataNasc: '01/02/2016', sex: 'masculino', responsible: 'Responsável B', risk: '', punctuation: 0.0);
-      var children4 = ChildrenModel(name: 'Criança D', dataNasc: '01/02/2017', sex: 'masculino', responsible: 'Responsável D', risk: 'Risco Baixo', punctuation: 2.0);
-      var children5 = ChildrenModel(name: 'Criança C', dataNasc: '01/02/2017', sex: 'masculino', responsible: 'Responsável C', risk: 'Risco Alto', punctuation: 16.0);
+      //var children1 = ChildrenModel(name: 'Criança A', dataNasc: '01/02/2015', sex: 'Masculino', responsible: 'Responsável A', risk: 'Risco Médio', punctuation: 7.0,);
+      //var children2 = ChildrenModel(name: 'Criança E', dataNasc: '01/02/2017', sex: 'Masculino', responsible: 'Responsável E', risk: 'Risco Alto', punctuation: 18.0);
+      //var children3 = ChildrenModel(name: 'Criança B', dataNasc: '01/02/2016', sex: 'Masculino', responsible: 'Responsável B', risk: '', punctuation: 0.0);
+      //var children4 = ChildrenModel(name: 'Criança D', dataNasc: '01/02/2017', sex: 'Masculino', responsible: 'Responsável D', risk: 'Risco Baixo', punctuation: 2.0);
+      //var children5 = ChildrenModel(name: 'Criança C', dataNasc: '01/02/2017', sex: 'Masculino', responsible: 'Responsável C', risk: 'Risco Alto', punctuation: 16.0);
 
 
-       await boxChildrens.addAll([children1, children2, children3, children4, children5]);
+       //await boxChildrens.addAll([children1, children2, children3, children4, children5]);
 
        boxAnswers = await Hive.openBox('answers');
-      // boxAnswers.clear();
-      // var answer1 = AnswerModel(fkchildren: '1', dateregister: '10/10/2020', kinship: 'Pai', name: 'Roberto Gomes Aparecido Da Silva', risk: 'Médio', punctuation: 0.35);
-      // var answer2 = AnswerModel(fkchildren: '1', dateregister: '10/09/2020', kinship: 'Pai', name: 'Alice Da Silva', risk: 'Médio', punctuation: 0.25);
-      // var answer3 = AnswerModel(fkchildren: '2', dateregister: '10/10/2020', kinship: 'Mãe', name: 'Juliana Oliveira', risk: 'Médio', punctuation: 0.35);
+       //boxAnswers.clear();
+      // var answer1 = AnswerModel(fkchildren: '1', dateregister: '10/03/2024', kinship: 'Pai', name: 'Roberto Gomes Aparecido Da Silva', risk: 'Risco Médio', punctuation: 7.0);
+      // var answer2 = AnswerModel(fkchildren: '1', dateregister: '10/04/2024', kinship: 'Mãe', name: 'Alice Da Silva', risk: 'Risco Alto', punctuation: 18.0);
+      // var answer3 = AnswerModel(fkchildren: '2', dateregister: '10/08/2024', kinship: 'Mãe', name: 'Juliana Oliveira', risk: 'Risco Baixo', punctuation: 2.0);
+      // var answer4 = AnswerModel(fkchildren: '3', dateregister: '10/05/2024', kinship: 'Pai', name: 'Roberto Gomes Aparecido Da Silva', risk: 'Risco Médio', punctuation: 8.0);
+      // var answer5 = AnswerModel(fkchildren: '3', dateregister: '10/06/2024', kinship: 'Mãe', name: 'Alice Da Silva', risk: 'Risco Baixo', punctuation: 1.0);
+      // var answer6 = AnswerModel(fkchildren: '1', dateregister: '10/02/2024', kinship: 'Tia', name: 'Juliana Oliveira', risk: 'Risco Alto', punctuation: 17.0);
       //
-      // await boxAnswers.addAll([answer1, answer2, answer3]);
+      //  await boxAnswers.addAll([answer1, answer2, answer3, answer4, answer5, answer6]);
       //
       // childrenList = boxChildrens.values.toList().cast<Children>();
       // answerList = boxAnswers.values.toList().cast<Answer>();
