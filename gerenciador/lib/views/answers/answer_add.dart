@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gerenciador/services/answer_service.dart';
 import 'package:gerenciador/shared/snackbar_dialog_yes_no.dart';
@@ -9,7 +8,7 @@ import 'package:gerenciador/models/answer_model.dart';
 
 
 class AnswerAdd extends StatefulWidget {
-  bool edit;
+  final bool edit;
   AnswerModel answerModel;
 
   AnswerAdd({super.key, required this.edit, required this.answerModel});
@@ -54,14 +53,12 @@ class _AnswersAddState extends State<AnswerAdd> {
               icon: const Icon(Icons.delete, color: Colors.white,),
               onPressed: () async {
                 bool resultOptions = false;
-                bool? response = false;
-                Map<String, dynamic> message = {};
 
                 try {
                   resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão?', 'Isso irá mudar a média dos resultados de risco');
 
                   if(resultOptions){
-                    response = await answerService.delete(widget.answerModel.key);
+                    await answerService.delete(widget.answerModel.key);
                     Navigator.pop(context, {"message": "Resposta deletada!", "type": "success"});
                   }
                 } catch (error) {
@@ -125,7 +122,7 @@ class _AnswersAddState extends State<AnswerAdd> {
   }
 
   Widget kinship(){
-    return Container(
+    return SizedBox(
       height: 40,
       width: 320,
       child: TextFormField(
@@ -156,7 +153,7 @@ class _AnswersAddState extends State<AnswerAdd> {
   }
 
   Widget name(){
-    return Container(
+    return SizedBox(
       height: 40,
       width: 320,
       child: TextFormField(
@@ -188,7 +185,7 @@ class _AnswersAddState extends State<AnswerAdd> {
 
   Widget getInputs(String title, Icon icon, String text, [Widget? textFormField]){
 
-    return Container(
+    return SizedBox(
       height: 100,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -216,7 +213,7 @@ class _AnswersAddState extends State<AnswerAdd> {
                   child: icon,
                 ),
                 textFormField ??
-                Container(
+                SizedBox(
                   width: 300,
                   child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87))
                 )
@@ -243,20 +240,19 @@ class _AnswersAddState extends State<AnswerAdd> {
   }
 
   Widget btnSave(){
-    return Container(
+    return SizedBox(
         width: 120,
         child: ElevatedButton.icon(
           onPressed: () async {
-            bool? response = false;
             Map<String, dynamic> message = {};
 
             if(_formkey.currentState!.validate()){
               try{
                 if(widget.edit){
-                  response = await answerService.update(widget.answerModel);
+                  await answerService.update(widget.answerModel);
                   message = {"message": "Resposta atualizada!", "type": "success"};
                 }else{
-                  response = await answerService.create(widget.answerModel);
+                  await answerService.create(widget.answerModel);
                   message = {"message": "Resposta cadastrada!", "type": "success"};
                 }
                 Navigator.pop(context, message);
@@ -279,7 +275,7 @@ class _AnswersAddState extends State<AnswerAdd> {
   }
 
   Widget btnCancel(){
-    return Container(
+    return SizedBox(
         width: 120,
         child: OutlinedButton.icon(
             onPressed: (){

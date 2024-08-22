@@ -64,7 +64,7 @@ class FilterChildrens{
   }
 
   Widget buttonsActions(BuildContext context, List<ChildrenModel> childrenList){
-    return Container(
+    return SizedBox(
       height: 40,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,7 +148,7 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
+    return SizedBox(
       height: 200,
       width: double.infinity,
       child: Column(
@@ -165,7 +165,7 @@ class _CheckboxOptionsState extends State<CheckboxOptions> {
   }
 
   Widget checkBoxContainer(String txtChecked, bool isChecked){
-    return Container(
+    return SizedBox(
       height: 40,
       width: 180,
       child: Row(

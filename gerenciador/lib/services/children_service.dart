@@ -16,8 +16,6 @@ class ChildrenService {
 
       return true;
     }on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     } finally{
       await boxChildrens.close();
@@ -31,8 +29,8 @@ class ChildrenService {
     try{
       boxChildren = await Hive.openBox('childrens');
       childrensList = boxChildren.values.toList().cast<ChildrenModel>();
-    } catch (e) {
-      print('Erro ao inicializar a caixa Hive: $e');
+    } catch (error) {
+      throw Exception(error);
     }finally{
       await boxChildren.close();
     }
@@ -47,8 +45,8 @@ class ChildrenService {
     try{
       boxChildren = await Hive.openBox('childrens');
       childrensList = boxChildren.values.where((c) => c.name.toLowerCase().startsWith(name.toLowerCase())).toList().cast<ChildrenModel>();
-    } catch (e) {
-      print('Erro ao inicializar a caixa Hive: $e');
+    } catch (error) {
+      throw Exception(error);
     }finally{
       await boxChildren.close();
     }
@@ -73,8 +71,6 @@ class ChildrenService {
 
       return true;
     } on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     }finally{
       await boxChildren.close();
@@ -108,7 +104,7 @@ class ChildrenService {
         }
       }
 
-      bool? response = await update(children);
+      await update(children);
 
       return true;
     }catch(error){
@@ -125,8 +121,6 @@ class ChildrenService {
 
       return true;
     } on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     }finally{
       await boxChildren.close();

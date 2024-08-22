@@ -20,12 +20,6 @@ class QrCodeScanner{
       qrCodeInfo = {'result': 'Não validado'};
     }
 
-    qrCodeInfo = {
-      'risk': 'Risco Médio',
-      'punctuation': 7.0,
-      'answers': ['Não', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Não', 'Sim', 'Sim', 'Não']
-    };
-
     return qrCodeInfo;
   }
 }

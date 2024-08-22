@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gerenciador/services/children_service.dart';
 import 'package:gerenciador/services/qrcode_scanner.dart';
 import 'package:gerenciador/views/answers/answer_add.dart';
@@ -39,14 +37,13 @@ class _ChildrenPageState extends State<ChildrenPage> {
       setState(() {
         answersList = listResponse;
       });
-    } catch (e) {
-      print('Erro ao inicializar a caixa Hive: $e');
+    } catch (error) {
+      throw Exception(error);
     }
   }
 
   @override
   void dispose() async{
-
     super.dispose();
   }
 
@@ -69,7 +66,6 @@ class _ChildrenPageState extends State<ChildrenPage> {
                 bool resultOptions = false;
                 bool? responseChildrenDelete = false;
                 bool? responseAnswersListDelete = false;
-                Map<String, dynamic> message = {};
 
                 try {
                   resultOptions = await SnackbarDialogYesNo.exibirModalDialog(context, 'Confirmar exclusão do perfil da criança?', 'Isso irá apagar todas as respostas cadastradas junto ao perfil!');
@@ -110,7 +106,6 @@ class _ChildrenPageState extends State<ChildrenPage> {
         onPressed: () async {
           Map<String, dynamic> qrCodeInfo = {};
           Map<String, dynamic>? responseAddAnswer = {};
-          bool? responseUpdatePunctuation = false;
 
           try{
             qrCodeInfo = await qrCodeScanner.readQRcode();
@@ -125,7 +120,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
               if(responseAddAnswer != null && responseAddAnswer.isNotEmpty){
                 SnackbarNotify.createSnackBar(context, responseAddAnswer);
                 await Future.delayed(const Duration(seconds: 2));
-                responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
+                await childrenService.updatePunctuationChildren(widget.children);
                 SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
               }
             }else {
@@ -243,7 +238,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text("Média:", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                        Text(widget.children.risk, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: getColor(widget.children.risk)))
+                        Text(widget.children.risk == ''? '---': widget.children.risk, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: getColor(widget.children.risk)))
                       ],
                     ),
                   )
@@ -358,7 +353,6 @@ class _ChildrenPageState extends State<ChildrenPage> {
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? resultUpdateAnswer = {};
-        bool? responseUpdatePunctuation = false;
 
         try{
           resultUpdateAnswer = await Navigator.push(context, MaterialPageRoute(builder: (context) => AnswerAdd(edit: true, answerModel: answer)));
@@ -367,7 +361,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
             SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
             await Future.delayed(const Duration(seconds: 1));
             if(resultUpdateAnswer['message'] == 'Resposta deletada!'){
-              responseUpdatePunctuation = await childrenService.updatePunctuationChildren(widget.children);
+              await childrenService.updatePunctuationChildren(widget.children);
               SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
             }
           }

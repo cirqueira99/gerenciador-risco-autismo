@@ -1,15 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import '../../models/child_model.dart';
 import '../../services/children_service.dart';
 import '../../shared/snackbar_notify.dart';
 
 
-
 class ChildrenAdd extends StatefulWidget {
-  bool edit;
+  final bool edit;
   ChildrenModel childrenModel;
 
   ChildrenAdd({super.key, required this.edit, required this.childrenModel});
@@ -98,7 +95,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   }
 
   Widget nameChildren(){
-    return Container(
+    return SizedBox(
       height: 40,
       width: 320,
       child: TextFormField(
@@ -152,7 +149,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   }
 
   Widget dateBirth(){
-    return Container(
+    return SizedBox(
       height: 40,
       width: 320,
       child: Row(
@@ -180,7 +177,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   }
 
   Widget radioSexChildren(){
-    return Container(
+    return SizedBox(
         height: 40,
         width: 320,
         child: RadioSexChildren(widget.childrenModel, updateSexChildren)
@@ -188,7 +185,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   }
 
   Widget nameResponsibleChildren(){
-    return Container(
+    return SizedBox(
       height: 40,
       width: 320,
       child: TextFormField(
@@ -222,7 +219,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
 
   Widget getInputs(String title, Icon icon, Widget textFormField){
 
-    return Container(
+    return SizedBox(
       height: 110,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -274,7 +271,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   }
 
   Widget btnSave(){
-    return Container(
+    return SizedBox(
         width: 120,
         child: ElevatedButton.icon(
           onPressed: () async {
@@ -317,7 +314,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   }
 
   Widget btnCancel(){
-    return Container(
+    return SizedBox(
         width: 120,
         child: OutlinedButton.icon(
             onPressed: (){
@@ -337,7 +334,7 @@ class RadioSexChildren extends StatefulWidget {
   final ChildrenModel children;
   final Function(String answer) updateSexChildren;
 
-  const RadioSexChildren(this.children, this.updateSexChildren, {Key? key}) : super(key: key);
+  const RadioSexChildren(this.children, this.updateSexChildren, {super.key});
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();

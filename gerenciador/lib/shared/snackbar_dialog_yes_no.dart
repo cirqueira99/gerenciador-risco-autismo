@@ -20,7 +20,7 @@ class SnackbarDialogYesNo{
           ),
           contentPadding: const EdgeInsets.only(top: 15, bottom: 15, right: 15, left: 15),
           actions: <Widget>[
-            Container(
+            SizedBox(
               width: double.infinity,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

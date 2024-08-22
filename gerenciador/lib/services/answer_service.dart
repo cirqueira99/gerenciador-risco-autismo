@@ -1,7 +1,6 @@
 import 'package:hive/hive.dart';
-
 import '../models/answer_model.dart';
-import '../models/child_model.dart';
+
 
 class AnswerService {
   Future<bool> create(AnswerModel answer) async{
@@ -13,8 +12,6 @@ class AnswerService {
 
       return true;
     }on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     } finally{
       await boxAnswers.close();
@@ -32,7 +29,7 @@ class AnswerService {
       answers = executeOrder(answers);
 
     }on HiveError catch (error) {
-      print('Erro ao inicializar a caixa Hive: $error');
+      throw Exception(error);
     }finally{
       await boxAnswers.close();
     }
@@ -63,8 +60,6 @@ class AnswerService {
 
       return true;
     } on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     }finally{
       await boxAnswers.close();
@@ -80,8 +75,6 @@ class AnswerService {
 
       return true;
     } on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     }finally{
       await boxAnswers.close();
@@ -97,8 +90,6 @@ class AnswerService {
 
       return true;
     } on HiveError catch (error) {
-      print('>>> Erro Hive: $error');
-
       throw Exception(error);
     }finally{
       await boxAnswers.close();

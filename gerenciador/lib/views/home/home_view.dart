@@ -46,8 +46,8 @@ class _HomePageState extends State<HomePage> {
         childrenList = orderChildrens.executeOrder(listResponse, 1);
         childrenListAux = orderChildrens.executeOrder(listResponse, 1);
       });
-    } catch (e) {
-      print('Erro ao inicializar a caixa Hive: $e');
+    } catch (error) {
+      throw Exception(error);
     }
   }
 
@@ -71,8 +71,9 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Lista de Pacientes", style: TextStyle(fontSize: 18, color: Colors.white),),
       ),
       body: Center(
-        child: SizedBox(
+        child: Container(
           height: screenH,
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -216,17 +217,7 @@ class _HomePageState extends State<HomePage> {
                     const Color(0xFF5ABAAF) : const Color(0xFF179384):
                     const Color(0xFF23645D)),
                 onPressed: () async {
-                  Map<String, dynamic> optionOrderResponse = { };
-
                   try{
-                    //optionOrderResponse = await orderChildrens.exibirModalDialog(context, childrenListAux, orderCurrent);
-
-                    // if(optionOrderResponse['execute'] == true){
-                    //   setState(() {
-                    //     childrenListAux = optionOrderResponse['newChildrenList'];
-                    //     orderCurrent = optionOrderResponse['optionOrder'];
-                    //   });
-                    // }
                     setState(() {
                       orderCurrent+1 < 4? orderCurrent += 1 : orderCurrent = 1;
                       childrenListAux = orderChildrens.executeOrder(childrenListAux, orderCurrent);
