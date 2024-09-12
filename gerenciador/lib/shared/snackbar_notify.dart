@@ -15,7 +15,7 @@ class SnackbarNotify{
         icon = Icons.check;
         break;
       case "warning":
-        backColor = Colors.red.shade500;
+        backColor = Colors.orange.shade500;
         txtColor = Colors.black54;
         icon = Icons.info_outline;
         break;

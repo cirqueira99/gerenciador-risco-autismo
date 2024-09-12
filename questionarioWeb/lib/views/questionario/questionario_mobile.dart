@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:questionario/shared/showdialog_notify.dart';
+import 'package:flutter/widgets.dart';
+import '../../shared/showDialog_help.dart';
+import '../../shared/showdialog_notify.dart';
 import '../../shared/showdialog_modal_yes_no.dart';
 
 
@@ -16,6 +19,7 @@ class QuizPageMobile extends StatefulWidget {
 class _QuizPageMobileState extends State<QuizPageMobile> {
   Map<String, dynamic> message = {};
   num answeredTotal = 0;
+  bool checking = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,9 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
+            height: 20,
             width: screenWidth * 0.8,
-            margin: const EdgeInsets.only(top: 20),
+            margin: const EdgeInsets.only(top: 10),
             child: SizedBox(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,9 +57,9 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 
   Widget listQuestions(num screenHeight, num screenWidth){
     return Container(
-      height: screenHeight * 0.72,
+      height: screenHeight * 0.75,
       width: 400,
-      margin: const EdgeInsets.only(top: 25),
+      margin: const EdgeInsets.only(top: 10),
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
@@ -69,38 +74,45 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
   }
 
   Widget cardQuestion(Map<String, dynamic> info, int index){
+    bool isAnswered = widget.infos['result']['answers'][index] != "";
     int q = index+1;
+
     return Container(
-      color: index%2==0? Colors.deepPurple.shade50: Colors.grey.shade50,
+      decoration: BoxDecoration(
+          border: Border(
+              bottom: BorderSide(
+                  color: Colors.deepPurple.shade100, width: 1.0
+              )
+          )
+      ),
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(left: 10, right: 10, top: 2),
+                  margin: const EdgeInsets.only(right: 10, top: 2),
                   padding: const EdgeInsets.only(left: 5, right: 5),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40.0),
                       color: Colors.deepPurple
                   ),
-                  child: Text(q.toString(), style: const TextStyle(fontSize: 12, color: Colors.white)),
+                  child: Text(q<10? "0${q.toString()}" : q.toString(), style: const TextStyle(fontSize: 10, color: Colors.white)),
                 ),
                 Container(
                   padding: const EdgeInsets.only(right: 10),
                   width: 350,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(info['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0XFF535353)), textAlign: TextAlign.center,),
-                      info['second'] != ''?
-                      Text(info['second'], style: const TextStyle(fontSize: 12, color: Color(0XFF535353)), textAlign: TextAlign.center):
+                      Text(info['first'], style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0XFF535353)), textAlign: TextAlign.start,),
                       const SizedBox(height: 1)
                     ],
                   ),
@@ -108,8 +120,33 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
               ],
             ),
           ),
-          RadioWidget(index, updateAnswers),
+          Container(
+              color: Colors.white,
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RadioWidget(index, updateAnswers, isAnswered, checking),
+                  info['second'] != ""? iconHelp(info['second']) : const SizedBox(height: 2,),
+                ],
+              )
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget iconHelp(String txtHelp){
+    return SizedBox(
+      child: IconButton(
+        onPressed: () async {
+          try{
+             await ShowDialogHelp.exibirModalDialog(context, txtHelp);
+          }catch(e){
+            throw Exception(e);
+          }
+        },
+        icon: const Icon(Icons.help, color: Colors.amber, size: 20,),
       ),
     );
   }
@@ -123,8 +160,11 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
             String option = "";
 
             if(widget.infos['result']['answers'].contains("")){
-              message = {"message": "Responda todas as perguntas!", "type": "warning"};
+              message = {"message": "Responda todas as perguntas \n restantes em vermelho!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
+              setState(() {
+                checking = true;
+              });
             }else{
               try{
                 option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
@@ -134,7 +174,7 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
                   Navigator.pushReplacementNamed(context, '/resultado', arguments: widget.infos);
                 }
               }catch(e){
-                print(e.toString());
+                throw Exception(e);
               }
             }
           },
@@ -168,8 +208,10 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 class RadioWidget extends StatefulWidget {
   final int index;
   final Function(int index, String answer) updateAnswers;
+  final bool isAnswered;
+  final bool checking;
 
-  const RadioWidget(this.index, this.updateAnswers, {Key? key}) : super(key: key);
+  const RadioWidget(this.index, this.updateAnswers, this.isAnswered, this.checking, {Key? key}) : super(key: key);
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();
@@ -181,15 +223,15 @@ class _RadioWidgetState extends State<RadioWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
-      width: double.infinity,
-      margin: const EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(left: 20),
+      decoration: BoxDecoration(
+        border: widget.checking? widget.isAnswered ? null :  Border.all(color: Colors.red, width: 1) : null,
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          Container(
-            width: 200,
-            color: Colors.white,
+          SizedBox(
+            width: 80,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -207,9 +249,8 @@ class _RadioWidgetState extends State<RadioWidget> {
               ],
             ),
           ),
-          Container(
-            width: 200,
-            color: Colors.white,
+          SizedBox(
+            width: 80,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

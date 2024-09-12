@@ -101,10 +101,10 @@ class _QuizPageState extends State<QuizPage> {
     'result': {
       'risk': '',
       'punctuation': 0.0,
-      'answers': ['', 'Não', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
+      'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
     }
   };
-  //'answers': ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+  //'answers': ['', 'Não', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Não', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim', 'Sim']
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +112,7 @@ class _QuizPageState extends State<QuizPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepPurple,
-        title: const Text("Questionario", style: TextStyle(fontSize: 20, color: Colors.white),),
+        title: const Text("Questionário", style: TextStyle(fontSize: 20, color: Colors.white),),
       ),
       body: Center(
           child: LayoutBuilder(builder: (context, constraints) {

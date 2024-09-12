@@ -5,31 +5,45 @@ import 'package:flutter_flushbar/flutter_flushbar.dart';
 
 class SnackBarNotify{
   static Future createSnackBar(BuildContext context, Map<String, dynamic> message) {
+    Color backColor;
+    Color txtColor;
+    IconData icon;
+
     switch(message["type"]){
       case "success":
-        message["backColor"] = Colors.green.shade400;
-        message["txtColor"] = Colors.black87;
-        message["icon"] = Icons.check;
+        backColor = Colors.green.shade500;
+        txtColor = Colors.white60;
+        icon = Icons.check;
         break;
       case "warning":
-        message["backColor"] = Colors.orange.shade500;
-        message["txtColor"] = Colors.white;
-        message["icon"] = Icons.info_outline;
+        backColor = Colors.orange.shade500;
+        txtColor = Colors.black54;
+        icon = Icons.info_outline;
         break;
       case "error":
-        message["backColor"] = Colors.red.shade500;
-        message["txtColor"] = Colors.white60;
-        message["icon"] = Icons.error;
+        backColor = Colors.red.shade500;
+        txtColor = Colors.white60;
+        icon = Icons.cancel_outlined;
         break;
       default:
+        backColor = Colors.green.shade500;
+        txtColor = Colors.white60;
+        icon = Icons.check;
         break;
     }
 
     return Flushbar(
       flushbarPosition: FlushbarPosition.TOP,
-      duration: const Duration(seconds: 3),
-      messageText: SizedBox( height: 30,child:Text(message['message'], style: TextStyle(color: message["txtColor"]), textAlign: TextAlign.center)),
-      backgroundColor: message["backColor"],
+      duration: const Duration(seconds: 4),
+      messageText: SizedBox(
+          height: 40,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(message['message'], style: TextStyle(color: txtColor, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            ],
+          )),
+      backgroundColor: backColor,
       messageSize: 14.0,
       maxWidth: 250,
       //margin: const EdgeInsets.only(top: 20),
@@ -37,7 +51,7 @@ class SnackBarNotify{
       borderRadius: BorderRadius.circular(5.0),
       icon: Padding(
         padding: const EdgeInsets.only(bottom: 40.0), // Define o preenchimento do ícone
-        child: Icon(message["icon"], color: message["txtColor"]),
+        child: Icon(icon, color: txtColor),
       ),
       reverseAnimationCurve: Curves.linearToEaseOut,
     ).show(context);

@@ -16,6 +16,7 @@ class QuizPageDesktop extends StatefulWidget {
 class _QuizPageDesktopState extends State<QuizPageDesktop> {
   Map<String, dynamic> message = {};
   num answeredTotal = 0;
+  bool checking = false;
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +94,9 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
   }
 
   Widget cardQuestion(Map<String, dynamic> info, int index){
+    bool isAnswered = widget.infos['result']['answers'][index] != "";
     int q = index+1;
+
     return Container(
       color: index%2==0? Colors.deepPurple.shade50: Colors.white,
       height: 70,
@@ -112,7 +115,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
                       borderRadius: BorderRadius.circular(40.0),
                       color: Colors.deepPurple
                   ),
-                  child: Text(q.toString(), style: const TextStyle(fontSize: 12, color: Colors.white)),
+                  child: Text(q<10? "0${q.toString()}" : q.toString(), style: const TextStyle(fontSize: 12, color: Colors.white)),
                 ),
                 SizedBox(
                   width: 800,
@@ -133,7 +136,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
           Container(
               width: 100,
               margin: const EdgeInsets.only(right: 25),
-              child: RadioWidget(index, updateAnswers)
+              child: RadioWidget(index, updateAnswers, isAnswered, checking)
           ),
         ],
       ),
@@ -149,8 +152,11 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
             String? option = "";
 
             if(widget.infos['result']['answers'].contains("")){
-              message = {"message": "Responda todas as perguntas!", "type": "warning"};
+              message = {"message": "Responda todas as perguntas \n restantes em vermelho!", "type": "warning"};
               SnackBarNotify.createSnackBar(context, message);
+              setState(() {
+                checking = true;
+              });
             }else{
               try{
                 option = await ShowDialogYesNo.exibirModalDialog(context, 'Atenção', 'Você deseja gerar QRcode das respostas?');
@@ -160,7 +166,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
                   Navigator.pushReplacementNamed(context, '/resultado', arguments: widget.infos);
                 }
               }catch(e){
-                print(e.toString());
+                throw Exception(e);
               }
             }
           },
@@ -194,8 +200,10 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
 class RadioWidget extends StatefulWidget {
   final int index;
   final Function(int index, String answer) updateAnswers;
+  final bool isAnswered;
+  final bool checking;
 
-  const RadioWidget(this.index, this.updateAnswers, {Key? key}) : super(key: key);
+  const RadioWidget(this.index, this.updateAnswers, this.isAnswered, this.checking, {Key? key}) : super(key: key);
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();
@@ -206,30 +214,36 @@ class _RadioWidgetState extends State<RadioWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Radio<String>(
-          value: 'sim',
-          groupValue: selectedOption,
-          onChanged: (value) {
-            setState(() {
-              selectedOption = value;
-              widget.updateAnswers(widget.index, selectedOption!);
-            });
-          },
-        ),
-        Radio<String>(
-          value: 'não',
-          groupValue: selectedOption,
-          onChanged: (value) {
-            setState(() {
-              selectedOption = value;
-              widget.updateAnswers(widget.index, selectedOption!);
-            });
-          },
-        ),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        border: widget.checking? widget.isAnswered ? null :  Border.all(color: Colors.red, width: 1) : null,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Radio<String>(
+            value: 'sim',
+            groupValue: selectedOption,
+            onChanged: (value) {
+              setState(() {
+                selectedOption = value;
+                widget.updateAnswers(widget.index, selectedOption!);
+              });
+            },
+          ),
+          Radio<String>(
+            value: 'não',
+            groupValue: selectedOption,
+            onChanged: (value) {
+              setState(() {
+                selectedOption = value;
+                widget.updateAnswers(widget.index, selectedOption!);
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 }
