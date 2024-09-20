@@ -124,7 +124,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                 SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
               }
             }else {
-              SnackbarNotify.createSnackBar(context, {"message": "Erro ao scanear o QRcode!", "type": "error"});
+              SnackbarNotify.createSnackBar(context, {"message": "QRcode não escaneado!", "type": "warning"});
             }
           }catch(error){
             SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a média de risco!", "type": "error"});

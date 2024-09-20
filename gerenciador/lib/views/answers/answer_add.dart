@@ -19,7 +19,8 @@ class AnswerAdd extends StatefulWidget {
 
 class _AnswersAddState extends State<AnswerAdd> {
   AnswerService answerService = AnswerService();
-  final _formkey = GlobalKey<FormState>();
+  bool validing = false;
+  bool formsValid = false;
 
   @override
   void initState(){
@@ -97,14 +98,11 @@ class _AnswersAddState extends State<AnswerAdd> {
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
       ),
-      child: Form(
-          key: _formkey,
-          child: forms()
-      )
+      child: forms(screenW)
     );
   }
 
-  Widget forms(){
+  Widget forms(num screenW){
     return Container(
       margin: const EdgeInsets.only(top: 25),
       child: Column(
@@ -114,79 +112,91 @@ class _AnswersAddState extends State<AnswerAdd> {
           getInputs("Data de registro", const Icon(Icons.calendar_month, size: 20, color: Colors.white), widget.answerModel.dateregister),
           getInputs("Resultado do questionário", const Icon(Icons.spellcheck, size: 20, color: Colors.white), widget.answerModel.risk),
           getInputs("Pontuação", const Icon(Icons.assessment_outlined, size: 20, color: Colors.white), widget.answerModel.punctuation.toString()),
-          getInputs("Parentesco:", const Icon(Icons.supervisor_account, size: 20, color: Colors.white), "", name()),
-          getInputs("Nome do responsável:", const Icon(Icons.assignment_ind, size: 20, color: Colors.white), "", kinship()),
+          getInputs("Respondido por", const Icon(Icons.supervisor_account, size: 20, color: Colors.white), widget.answerModel.name, name(screenW)),
+          getInputs("Parentesco", const Icon(Icons.assignment_ind, size: 20, color: Colors.white), widget.answerModel.kinship, kinship(screenW)),
         ],
       ),
     );
   }
 
-  Widget kinship(){
+  Widget name(num screenW){
     return SizedBox(
       height: 40,
-      width: 320,
-      child: TextFormField(
-        initialValue: widget.answerModel.kinship,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 0, color: Colors.white),
-              borderRadius: BorderRadius.circular(10.0)
+      width: screenW * 0.70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextField(
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
+                decoration: InputDecoration(
+                    hintText: widget.answerModel.name == "" ? 'Digite aqui...' : widget.answerModel.name,
+                    hintStyle: widget.answerModel.name == "" ?
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    counterStyle: const TextStyle(fontSize: 10),
+                    border: InputBorder.none
+                ),
+                onChanged: (String value) {
+                  setState(() {
+                    widget.answerModel.name = value;
+                  });
+                },
+              ),
+            ),
           ),
-        ),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-        textAlign: TextAlign.center,
-        validator: (String? value){
-          if(value == null || value.isEmpty){
-            return "Preencha o campo parentesco!";
-          }
-          return null;
-        },
-        onChanged: (String? kinship) => setState(() {
-          if(kinship != null){
-            setState(() {
-              widget.answerModel.kinship = kinship;
-            });
-          }
-        }),
+        ],
       ),
     );
   }
 
-  Widget name(){
+  Widget kinship(num screenW){
     return SizedBox(
       height: 40,
-      width: 320,
-      child: TextFormField(
-        initialValue: widget.answerModel.name ,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 0, color: Colors.white),
-              borderRadius: BorderRadius.circular(10.0)
+      width: screenW * 0.70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextField(
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
+                decoration: InputDecoration(
+                    hintText: widget.answerModel.kinship == "" ? 'Digite aqui...' : widget.answerModel.kinship,
+                    hintStyle: widget.answerModel.kinship == "" ?
+                    TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
+                    TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    counterStyle: const TextStyle(fontSize: 10),
+                    border: InputBorder.none
+                ),
+                onChanged: (String value) {
+                  setState(() {
+                    widget.answerModel.kinship = value;
+                  });
+                },
+              ),
+            ),
           ),
-        ),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-        textAlign: TextAlign.center,
-        validator: (String? value){
-          if(value == null || value.isEmpty){
-            return "Preencha o campo nome!";
-          }
-          return null;
-        },
-        onChanged: (String? name) => setState(() {
-          if(name != null){
-            setState(() {
-              widget.answerModel.name = name;
-            });
-          }
-        }),
+        ],
       ),
     );
   }
 
   Widget getInputs(String title, Icon icon, String text, [Widget? textFormField]){
+    double screenW = MediaQuery.of(context).size.width;
 
     return SizedBox(
       height: 100,
+      width: screenW * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -197,7 +207,7 @@ class _AnswersAddState extends State<AnswerAdd> {
             padding: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               color: textFormField != null? Colors.white: Colors.grey.shade100,
-              border: Border.all(color: Colors.grey.shade500),
+              border: validing? text.isNotEmpty? Border.all(color: Colors.grey.shade500) : Border.all(color: Colors.red.shade500) : Border.all(color: Colors.grey.shade500),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -214,8 +224,8 @@ class _AnswersAddState extends State<AnswerAdd> {
                 ),
                 textFormField ??
                 SizedBox(
-                  width: 300,
-                  child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87))
+                    width: screenW * 0.70,
+                    child: Text(text, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87))
                 )
               ],
             ),
@@ -246,7 +256,7 @@ class _AnswersAddState extends State<AnswerAdd> {
           onPressed: () async {
             Map<String, dynamic> message = {};
 
-            if(_formkey.currentState!.validate()){
+            if(validInputs()){
               try{
                 if(widget.edit){
                   await answerService.update(widget.answerModel);
@@ -263,6 +273,11 @@ class _AnswersAddState extends State<AnswerAdd> {
                 SnackbarNotify.createSnackBar(context, {"message": "Não foi possível cadastrar a resposta!", "type": "error"});
                 throw Exception(error);
               }
+            }else {
+              setState(() {
+                validing = true;
+              });
+              SnackbarNotify.createSnackBar(context, {"message": "Preencha os campos em vermelho!", "type": "warning"});
             }
           },
           icon: const Icon(Icons.save, size: 20, color: Colors.white),
@@ -286,5 +301,15 @@ class _AnswersAddState extends State<AnswerAdd> {
             label: const Text("Cancelar", style: TextStyle(fontSize: 12, color: Color(0xFF26877B))),
         )
     );
+  }
+
+  bool validInputs(){
+    bool isValid = true;
+
+    if( widget.answerModel.kinship.isEmpty || widget.answerModel.name.isEmpty){
+      isValid = false;
+    }
+
+    return isValid;
   }
 }

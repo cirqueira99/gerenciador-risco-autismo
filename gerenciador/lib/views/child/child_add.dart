@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/child_model.dart';
@@ -17,8 +18,9 @@ class ChildrenAdd extends StatefulWidget {
 
 class _ChildrensAddState extends State<ChildrenAdd> {
   ChildrenService childrenService = ChildrenService();
-  final _formkey = GlobalKey<FormState>();
   DateTime selectedDateToday = DateTime.now();
+  bool validing = false;
+  bool formsValid = false;
 
   @override
   void initState(){
@@ -71,58 +73,58 @@ class _ChildrensAddState extends State<ChildrenAdd> {
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
       ),
-      child: Form(
-          key: _formkey,
-          child: forms()
-      )
+      child: forms(screenW)
     );
   }
 
-  Widget forms(){
+  Widget forms(num screenW){
     return Container(
       margin: const EdgeInsets.only(top: 25),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getInputs("Nome da criança:", const Icon(Icons.child_care, size: 20, color: Colors.white), nameChildren()),
-          getInputs("Data de nascimento", const Icon(Icons.calendar_month, size: 20, color: Colors.white), dateBirth()),
-          getInputs("Sexo:", const Icon(Icons.child_friendly_outlined, size: 20, color: Colors.white), radioSexChildren()),
-          getInputs("Nome do responsável:", const Icon(Icons.person, size: 20, color: Colors.white), nameResponsibleChildren())
+          getInputs("Nome da criança:", const Icon(Icons.child_care, size: 20, color: Colors.white), nameChildren(screenW), widget.childrenModel.name.isNotEmpty),
+          getInputs("Data de nascimento:", const Icon(Icons.calendar_month, size: 20, color: Colors.white), dateBirth(screenW), widget.childrenModel.dataNasc == "00/00/0000"? false: true),
+          getInputs("Sexo:", const Icon(Icons.child_friendly_outlined, size: 20, color: Colors.white), radioSexChildren(screenW), widget.childrenModel.sex.isNotEmpty),
+          getInputs("Nome do responsável:", const Icon(Icons.person, size: 20, color: Colors.white), nameResponsibleChildren(screenW), widget.childrenModel.responsible.isNotEmpty)
         ],
       ),
     );
   }
 
-  Widget nameChildren(){
+  Widget nameChildren(num screenW){
     return SizedBox(
       height: 40,
-      width: 320,
-      child: TextFormField(
-        initialValue: widget.childrenModel.name,
-        decoration: InputDecoration(
-          hintText: "Digite aqui...",
-          hintStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 0, color: Colors.white),
-              borderRadius: BorderRadius.circular(10.0)
+      width: screenW * 0.70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextField(
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
+                decoration: InputDecoration(
+                    hintText: widget.childrenModel.name == "" ? 'Digite aqui...' : widget.childrenModel.name,
+                    hintStyle: widget.childrenModel.name == "" ?
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    counterStyle: const TextStyle(fontSize: 10),
+                    border: InputBorder.none
+                ),
+                onChanged: (String value) {
+                  setState(() {
+                    widget.childrenModel.name = value;
+                  });
+                },
+              ),
+            ),
           ),
-        ),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
-        textAlign: TextAlign.center,
-        validator: (String? value){
-          if(value == null || value.isEmpty){
-            return "Preencha o campo nome!";
-          }
-          return null;
-        },
-        onChanged: (String? value) => setState(() {
-          if(value != null){
-            setState(() {
-              widget.childrenModel.name = value;
-            });
-          }
-        }),
+        ],
       ),
     );
   }
@@ -148,10 +150,10 @@ class _ChildrensAddState extends State<ChildrenAdd> {
     }
   }
 
-  Widget dateBirth(){
+  Widget dateBirth(num screenW){
     return SizedBox(
       height: 40,
-      width: 320,
+      width: screenW * 0.75,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -162,13 +164,19 @@ class _ChildrensAddState extends State<ChildrenAdd> {
             },
             child:
             widget.childrenModel.dataNasc == "00/00/0000"?
-            Text(
-              widget.childrenModel.dataNasc,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black54),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Text(
+                widget.childrenModel.dataNasc,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black54),
+              ),
             ):
-            Text(
-              widget.childrenModel.dataNasc,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
+            Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: Text(
+                widget.childrenModel.dataNasc,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green.shade900),
+              ),
             )
           ),
         ],
@@ -176,51 +184,57 @@ class _ChildrensAddState extends State<ChildrenAdd> {
     );
   }
 
-  Widget radioSexChildren(){
-    return SizedBox(
+  Widget radioSexChildren(num screenW){
+    return Container(
         height: 40,
-        width: 320,
+        width: screenW * 0.75,
+        padding: const EdgeInsets.only(right: 10),
         child: RadioSexChildren(widget.childrenModel, updateSexChildren)
     );
   }
 
-  Widget nameResponsibleChildren(){
+  Widget nameResponsibleChildren(num screenW){
     return SizedBox(
       height: 40,
-      width: 320,
-      child: TextFormField(
-        initialValue: widget.childrenModel.responsible,
-        decoration: InputDecoration(
-          hintText: "Digite aqui...",
-          hintStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
-          enabledBorder: OutlineInputBorder(
-              borderSide: const BorderSide(width: 0, color: Colors.white),
-              borderRadius: BorderRadius.circular(10.0)
+      width: screenW * 0.70,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: TextField(
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
+                decoration: InputDecoration(
+                    hintText: widget.childrenModel.responsible == "" ? 'Digite aqui...' : widget.childrenModel.responsible,
+                    hintStyle: widget.childrenModel.responsible == "" ?
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
+                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    counterStyle: const TextStyle(fontSize: 10),
+                    border: InputBorder.none
+                ),
+                onChanged: (String value) {
+                  setState(() {
+                    widget.childrenModel.responsible = value;
+                  });
+                },
+              ),
+            ),
           ),
-        ),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black54),
-        textAlign: TextAlign.center,
-        validator: (String? value){
-          if(value == null || value.isEmpty){
-            return "Preencha o campo nome do responsável!";
-          }
-          return null;
-        },
-        onChanged: (String? value) => setState(() {
-          if(value != null){
-            setState(() {
-              widget.childrenModel.responsible = value;
-            });
-          }
-        }),
+        ],
       ),
     );
   }
 
-  Widget getInputs(String title, Icon icon, Widget textFormField){
+  Widget getInputs(String title, Icon icon, Widget textFormField, bool textValid){
+    double screenW = MediaQuery.of(context).size.width;
 
     return SizedBox(
-      height: 110,
+      height: 100,
+      width: screenW * 0.9,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -231,10 +245,11 @@ class _ChildrensAddState extends State<ChildrenAdd> {
             padding: const EdgeInsets.only(left: 5, right: 5),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.grey.shade500),
+              border: validing? textValid? Border.all(color: Colors.grey.shade500) : Border.all(color: Colors.red.shade500) : Border.all(color: Colors.grey.shade500),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
@@ -277,31 +292,29 @@ class _ChildrensAddState extends State<ChildrenAdd> {
           onPressed: () async {
             Map<String, dynamic> message = {};
 
-            if (_formkey.currentState!.validate()) {
-              if (widget.childrenModel.dataNasc.isEmpty || widget.childrenModel.dataNasc == "00/00/0000") {
-                message = {"message": "Selecione a data de nascimento!", "type": "warning"};
-                SnackbarNotify.createSnackBar(context, message);
-              } else if (widget.childrenModel.sex == "") {
-                message = {"message": "Selecione o sexo da criança!", "type": "warning"};
-                SnackbarNotify.createSnackBar(context, message);
-              } else {
-                try {
-                  if (widget.edit) {
-                    await childrenService.update(widget.childrenModel);
-                    message = {"message": "Dados atualizados!", "type": "success"};
-                  } else {
-                    await childrenService.create(widget.childrenModel);
-                    message = {"message": "Criança cadastrada!", "type": "success"};
-                  }
-                  Navigator.pop(context, message);
-                } catch (error) {
-                  widget.edit ?
-                  SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a criança!", "type": "error"})
-                  :
-                  SnackbarNotify.createSnackBar(context, {"message": "Não foi possível cadastrar a criança!", "type": "error"});
-                  throw Exception(error);
+            if (validInputs()) {
+              try {
+                if (widget.edit) {
+                  await childrenService.update(widget.childrenModel);
+                  message = {"message": "Dados atualizados!", "type": "success"};
+                } else {
+                  await childrenService.create(widget.childrenModel);
+                  message = {"message": "Criança cadastrada!", "type": "success"};
                 }
+
+                Navigator.pop(context, message);
+              } catch (error) {
+                widget.edit ?
+                SnackbarNotify.createSnackBar(context, {"message": "Não foi possível atualizar a criança!", "type": "error"})
+                :
+                SnackbarNotify.createSnackBar(context, {"message": "Não foi possível cadastrar a criança!", "type": "error"});
+                throw Exception(error);
               }
+            }else {
+              setState(() {
+                validing = true;
+              });
+              SnackbarNotify.createSnackBar(context, {"message": "Preencha os campos em vermelho!", "type": "warning"});
             }
           },
           icon: const Icon(Icons.save, size: 20, color: Colors.white),
@@ -327,7 +340,15 @@ class _ChildrensAddState extends State<ChildrenAdd> {
     );
   }
 
+  bool validInputs(){
+    bool isValid = true;
 
+    if(widget.childrenModel.name.isEmpty || widget.childrenModel.dataNasc == "00/00/0000" || widget.childrenModel.sex.isEmpty || widget.childrenModel.responsible.isEmpty){
+      isValid = false;
+    }
+
+    return isValid;
+  }
 }
 
 class RadioSexChildren extends StatefulWidget {
@@ -350,7 +371,7 @@ class _RadioWidgetState extends State<RadioSexChildren> {
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         SizedBox(
@@ -366,7 +387,7 @@ class _RadioWidgetState extends State<RadioSexChildren> {
                   });
                 },
               ),
-              const Text("Masculino", style: TextStyle(fontSize: 16, color: Colors.black),)
+              Text("Masculino", style: TextStyle(fontSize: 14, color: Colors.green.shade900),)
             ],
           ),
         ),
@@ -383,7 +404,7 @@ class _RadioWidgetState extends State<RadioSexChildren> {
                   });
                 },
               ),
-              const Text("Feminino", style: TextStyle(fontSize: 16, color: Colors.black),)
+              Text("Feminino", style: TextStyle(fontSize: 14, color: Colors.green.shade900),)
             ],
           ),
         ),

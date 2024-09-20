@@ -157,10 +157,11 @@ class _HomePageState extends State<HomePage> {
 
   Widget listPacients(num sH, num sW){
     return Container(
-      height: sH * 0.78,
+      height: sH >= 850? sH * 0.8 : sH * 0.75,
       width: sW * 0.9,
       color: Colors.white,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           filter(),
           list(sH)
@@ -287,7 +288,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget list(num sH){
     return Container(
-      height: sH * 0.70,
+      height: sH >= 850? sH * 0.70 : sH * 0.65,
       padding: const EdgeInsets.only(top: 10),
       child: ListView.builder(
           shrinkWrap: true,
