@@ -126,7 +126,7 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RadioWidget(index, updateAnswers, isAnswered, checking),
+                  RadioWidget(index, widget.infos['result']['answers'][index], isAnswered, checking, updateAnswers),
                   info['second'] != ""? iconHelp(info['second']) : const SizedBox(height: 2,),
                 ],
               )
@@ -153,7 +153,8 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 
   Widget butFinished(){
     return Container(
-      width: 200,
+      height: 60,
+      width: 180,
       padding: const EdgeInsets.only(top: 30),
       child: ElevatedButton(
           onPressed:  () async{
@@ -186,9 +187,9 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
             children: [
               Container(
                   margin: const EdgeInsets.only(right: 10),
-                  child: const Icon(Icons.send, size: 16, color: Colors.white)
+                  child: const Icon(Icons.send, size: 12, color: Colors.white)
               ),
-              const Text("Enviar respostas", style: TextStyle(fontSize: 16, color: Colors.white))
+              const Text("Enviar respostas", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white))
             ],
           )
       ),
@@ -207,21 +208,23 @@ class _QuizPageMobileState extends State<QuizPageMobile> {
 
 class RadioWidget extends StatefulWidget {
   final int index;
-  final Function(int index, String answer) updateAnswers;
+  String valueAnswer;
   final bool isAnswered;
   final bool checking;
+  final Function(int index, String answer) updateAnswers;
 
-  const RadioWidget(this.index, this.updateAnswers, this.isAnswered, this.checking, {Key? key}) : super(key: key);
+  RadioWidget(this.index, this.valueAnswer, this.isAnswered, this.checking, this.updateAnswers, {Key? key}) : super(key: key);
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();
 }
 
 class _RadioWidgetState extends State<RadioWidget> {
-  String? selectedOption;
 
   @override
   Widget build(BuildContext context) {
+    String? selectedOption = widget.valueAnswer;
+
     return Container(
       margin: const EdgeInsets.only(left: 20),
       decoration: BoxDecoration(

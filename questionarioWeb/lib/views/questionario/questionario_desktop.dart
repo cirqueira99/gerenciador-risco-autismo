@@ -65,11 +65,11 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
         children: [
           Container(
               margin: const EdgeInsets.only(right: 20),
-              child: const Text("Sim")
+              child: const Text("Sim", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.deepPurple),)
           ),
           Container(
               margin: const EdgeInsets.only(right: 40),
-              child: const Text("Não")
+              child: const Text("Não", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.deepPurple))
           ),
         ],
       ),
@@ -136,7 +136,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
           Container(
               width: 100,
               margin: const EdgeInsets.only(right: 25),
-              child: RadioWidget(index, updateAnswers, isAnswered, checking)
+              child: RadioWidget(index, widget.infos['result']['answers'][index], isAnswered, checking, updateAnswers)
           ),
         ],
       ),
@@ -146,7 +146,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
   Widget butFinished(){
     return Container(
       width: 200,
-      padding: const EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 20),
       child: ElevatedButton(
           onPressed:  () async{
             String? option = "";
@@ -180,7 +180,7 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
                   margin: const EdgeInsets.only(right: 10),
                   child: const Icon(Icons.send, size: 16, color: Colors.white)
               ),
-              const Text("Enviar respostas", style: TextStyle(fontSize: 16, color: Colors.white))
+              const Text("Enviar respostas", style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.white))
             ],
           )
       ),
@@ -199,21 +199,23 @@ class _QuizPageDesktopState extends State<QuizPageDesktop> {
 
 class RadioWidget extends StatefulWidget {
   final int index;
-  final Function(int index, String answer) updateAnswers;
+  String valueAnswer;
   final bool isAnswered;
   final bool checking;
+  final Function(int index, String answer) updateAnswers;
 
-  const RadioWidget(this.index, this.updateAnswers, this.isAnswered, this.checking, {Key? key}) : super(key: key);
+  RadioWidget(this.index, this.valueAnswer, this.isAnswered, this.checking, this.updateAnswers, {Key? key}) : super(key: key);
 
   @override
   _RadioWidgetState createState() => _RadioWidgetState();
 }
 
 class _RadioWidgetState extends State<RadioWidget> {
-  String? selectedOption;
 
   @override
   Widget build(BuildContext context) {
+    String? selectedOption = widget.valueAnswer;
+
     return Container(
       decoration: BoxDecoration(
         border: widget.checking? widget.isAnswered ? null :  Border.all(color: Colors.red, width: 1) : null,
@@ -223,6 +225,7 @@ class _RadioWidgetState extends State<RadioWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Radio<String>(
+
             value: 'sim',
             groupValue: selectedOption,
             onChanged: (value) {
