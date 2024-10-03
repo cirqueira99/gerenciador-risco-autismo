@@ -58,7 +58,7 @@ class ChildrenService {
     late Box boxChildren;
     ChildrenModel childrenModelUpdate = ChildrenModel(
         name: childrenModel.name,
-        dataNasc: childrenModel.dataNasc,
+        dateNasc: childrenModel.dateNasc,
         sex: childrenModel.sex,
         responsible: childrenModel.responsible,
         risk: childrenModel.risk,

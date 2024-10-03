@@ -3,9 +3,9 @@ import 'package:hive/hive.dart';
 
 class AnswerModel extends HiveObject {
   @HiveField(0)
-  String fkchildren;
+  String fkChildren;
   @HiveField(1)
-  String dateregister;
+  String dateRegister;
   @HiveField(2)
   String risk;
   @HiveField(3)
@@ -16,8 +16,8 @@ class AnswerModel extends HiveObject {
   String name;
 
   AnswerModel({
-    required this.fkchildren,
-    required this.dateregister,
+    required this.fkChildren,
+    required this.dateRegister,
     required this.risk,
     required this.punctuation,
     required this.kinship,
@@ -26,23 +26,12 @@ class AnswerModel extends HiveObject {
 
   Map<String, dynamic> toMap() {
     return {
-      'fkchildren': fkchildren,
-      'dateregister': dateregister,
+      'fkchildren': fkChildren,
+      'dateregister': dateRegister,
       'risk': risk,
       'punctuation': punctuation,
       'kinship': kinship,
       'name': name,
     };
   }
-
-// Map<String, dynamic> fromMap() {
-//   return {
-//     'id': id,
-//     'nome': nome,
-//     'idade': idade,
-//     'sexo': sexo,
-//     'responsavel': responsavel,
-//     'medresults': medresults,
-//   };
-// }
 }

@@ -21,17 +21,21 @@ class _AnswersAddState extends State<AnswerAdd> {
   AnswerService answerService = AnswerService();
   bool validing = false;
   bool formsValid = false;
+  late TextEditingController _nameController;
+  late TextEditingController _kinshipController;
 
   @override
   void initState(){
-    _initValuesAnswer();
     super.initState();
+    _initValuesAnswer();
+    _nameController = TextEditingController(text: widget.answerModel.name);
+    _kinshipController = TextEditingController(text: widget.answerModel.kinship);
   }
 
   _initValuesAnswer() {
     if(!widget.edit){
       setState(() {
-        widget.answerModel.dateregister = DateFormat('dd/MM/yyyy').format(DateTime.now());
+        widget.answerModel.dateRegister = DateFormat('dd/MM/yyyy').format(DateTime.now());
       });
     }
   }
@@ -109,7 +113,7 @@ class _AnswersAddState extends State<AnswerAdd> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          getInputs("Data de registro", const Icon(Icons.calendar_month, size: 20, color: Colors.white), widget.answerModel.dateregister),
+          getInputs("Data de registro", const Icon(Icons.calendar_month, size: 20, color: Colors.white), widget.answerModel.dateRegister),
           getInputs("Resultado do questionário", const Icon(Icons.spellcheck, size: 20, color: Colors.white), widget.answerModel.risk),
           getInputs("Pontuação", const Icon(Icons.assessment_outlined, size: 20, color: Colors.white), widget.answerModel.punctuation.toString()),
           getInputs("Respondido por", const Icon(Icons.supervisor_account, size: 20, color: Colors.white), widget.answerModel.name, name(screenW)),
@@ -130,15 +134,14 @@ class _AnswersAddState extends State<AnswerAdd> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextField(
+                controller: _nameController,
                 keyboardType: TextInputType.text,
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
                 decoration: InputDecoration(
-                    hintText: widget.answerModel.name == "" ? 'Digite aqui...' : widget.answerModel.name,
-                    hintStyle: widget.answerModel.name == "" ?
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    hintText: 'Digite aqui...',
+                    hintStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
                     counterStyle: const TextStyle(fontSize: 10),
                     border: InputBorder.none
                 ),
@@ -166,15 +169,14 @@ class _AnswersAddState extends State<AnswerAdd> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextField(
+                controller: _kinshipController,
                 keyboardType: TextInputType.text,
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
                 decoration: InputDecoration(
-                    hintText: widget.answerModel.kinship == "" ? 'Digite aqui...' : widget.answerModel.kinship,
-                    hintStyle: widget.answerModel.kinship == "" ?
-                    TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
-                    TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    hintText: 'Digite aqui...',
+                    hintStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
                     counterStyle: const TextStyle(fontSize: 10),
                     border: InputBorder.none
                 ),

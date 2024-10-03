@@ -113,7 +113,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
             if(qrCodeInfo['result'] != 'Não validado'){
               responseAddAnswer = await Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>
-                      AnswerAdd(edit: false, answerModel: AnswerModel(fkchildren: widget.children.key.toString(), dateregister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),)
+                      AnswerAdd(edit: false, answerModel: AnswerModel(fkChildren: widget.children.key.toString(), dateRegister: '', risk: qrCodeInfo['risk'], punctuation: qrCodeInfo['punctuation'], kinship: '', name: ''),)
                   )
               );
 
@@ -209,7 +209,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text("Data de Nasc:", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                        Text(widget.children.dataNasc, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                        Text(widget.children.dateNasc, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -219,7 +219,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text("Idade:", style: TextStyle(fontSize: 14, color: Colors.black54)),
-                        Text("${calcAge(widget.children.dataNasc)} anos", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                        Text("${calcAge(widget.children.dateNasc)} anos", style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -400,7 +400,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(answer.dateregister, style: const TextStyle(fontSize: 12, color: Colors.black)),
+                    Text(answer.dateRegister, style: const TextStyle(fontSize: 12, color: Colors.black)),
                   ],
                 )
             ),

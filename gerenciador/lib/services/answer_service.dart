@@ -24,7 +24,7 @@ class AnswerService {
 
     try{
       boxAnswers = await Hive.openBox('answers');
-      answers = boxAnswers.values.where((a) => a.fkchildren == fkChildren).toList().cast<AnswerModel>();
+      answers = boxAnswers.values.where((a) => a.fkChildren == fkChildren).toList().cast<AnswerModel>();
 
       answers = executeOrder(answers);
 
@@ -38,7 +38,7 @@ class AnswerService {
   }
 
   List<AnswerModel> executeOrder(List<AnswerModel> answersList){
-    answersList.sort((a1, a2) => a1.dateregister.compareTo(a2.dateregister));
+    answersList.sort((a1, a2) => a1.dateRegister.compareTo(a2.dateRegister));
 
     return answersList;
   }
@@ -46,8 +46,8 @@ class AnswerService {
   Future<bool> update(AnswerModel answerModel) async {
     late Box boxAnswers;
     AnswerModel answerModelUpdate = AnswerModel(
-        fkchildren: answerModel.fkchildren,
-        dateregister: answerModel.dateregister,
+        fkChildren: answerModel.fkChildren,
+        dateRegister: answerModel.dateRegister,
         risk: answerModel.risk,
         punctuation: answerModel.punctuation,
         kinship: answerModel.kinship,

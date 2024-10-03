@@ -70,17 +70,20 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: const Color(0xFF184F49),
         title: const Text("Lista de Pacientes", style: TextStyle(fontSize: 18, color: Colors.white),),
       ),
-      body: Center(
-        child: Container(
-          height: screenH,
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              search(screenW),
-              listPacients(screenH, screenW)
-            ],
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Container(
+            height: screenH,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                search(screenW),
+                listPacients(screenH, screenW)
+              ],
+            ),
           ),
         ),
       ),
@@ -160,6 +163,7 @@ class _HomePageState extends State<HomePage> {
       height: sH >= 850? sH * 0.8 : sH * 0.75,
       width: sW * 0.9,
       color: Colors.white,
+      margin: const EdgeInsets.only(top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -194,7 +198,7 @@ class _HomePageState extends State<HomePage> {
                     try{
                       resultChildrenPage = await Navigator.push(context,
                           MaterialPageRoute(builder: (context) =>
-                              ChildrenAdd(edit: false, childrenModel: ChildrenModel(name: "", dataNasc: "00/00/0000", sex: "", responsible: "", risk: "", punctuation: 0.0)),
+                              ChildrenAdd(edit: false, childrenModel: ChildrenModel(name: "", dateNasc: "00/00/0000", sex: "", responsible: "", risk: "", punctuation: 0.0)),
                           )
                       );
                       if(resultChildrenPage != null && resultChildrenPage.isNotEmpty){
@@ -303,7 +307,6 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget card(ChildrenModel children){
-
     return GestureDetector(
       onTap: () async{
         Map<String, dynamic>? resultChidrenPage = {};

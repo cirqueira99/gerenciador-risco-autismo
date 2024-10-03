@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/child_model.dart';
@@ -21,11 +20,16 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   DateTime selectedDateToday = DateTime.now();
   bool validing = false;
   bool formsValid = false;
+  late TextEditingController _nameController;
+  late TextEditingController _responsibleController;
+
 
   @override
   void initState(){
-    _initValuesChildren();
     super.initState();
+    _initValuesChildren();
+    _nameController = TextEditingController(text: widget.childrenModel.name);
+    _responsibleController = TextEditingController(text: widget.childrenModel.responsible);
   }
 
   _initValuesChildren() {
@@ -85,7 +89,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           getInputs("Nome da criança:", const Icon(Icons.child_care, size: 20, color: Colors.white), nameChildren(screenW), widget.childrenModel.name.isNotEmpty),
-          getInputs("Data de nascimento:", const Icon(Icons.calendar_month, size: 20, color: Colors.white), dateBirth(screenW), widget.childrenModel.dataNasc == "00/00/0000"? false: true),
+          getInputs("Data de nascimento:", const Icon(Icons.calendar_month, size: 20, color: Colors.white), dateBirth(screenW), widget.childrenModel.dateNasc == "00/00/0000"? false: true),
           getInputs("Sexo:", const Icon(Icons.child_friendly_outlined, size: 20, color: Colors.white), radioSexChildren(screenW), widget.childrenModel.sex.isNotEmpty),
           getInputs("Nome do responsável:", const Icon(Icons.person, size: 20, color: Colors.white), nameResponsibleChildren(screenW), widget.childrenModel.responsible.isNotEmpty)
         ],
@@ -104,15 +108,14 @@ class _ChildrensAddState extends State<ChildrenAdd> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextField(
+                controller: _nameController,
                 keyboardType: TextInputType.text,
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
                 decoration: InputDecoration(
-                    hintText: widget.childrenModel.name == "" ? 'Digite aqui...' : widget.childrenModel.name,
-                    hintStyle: widget.childrenModel.name == "" ?
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    hintText: 'Digite aqui...',
+                    hintStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
                     counterStyle: const TextStyle(fontSize: 10),
                     border: InputBorder.none
                 ),
@@ -145,7 +148,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
     if (picked != null && picked != selectedDateToday) {
       setState(() {
         selectedDateToday = picked;
-        widget.childrenModel.dataNasc = DateFormat('dd/MM/yyyy').format(picked);
+        widget.childrenModel.dateNasc = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
   }
@@ -163,18 +166,18 @@ class _ChildrensAddState extends State<ChildrenAdd> {
               await _selectedDateToday(context);
             },
             child:
-            widget.childrenModel.dataNasc == "00/00/0000"?
+            widget.childrenModel.dateNasc == "00/00/0000"?
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: Text(
-                widget.childrenModel.dataNasc,
+                widget.childrenModel.dateNasc,
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Colors.black54),
               ),
             ):
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: Text(
-                widget.childrenModel.dataNasc,
+                widget.childrenModel.dateNasc,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green.shade900),
               ),
             )
@@ -204,15 +207,14 @@ class _ChildrensAddState extends State<ChildrenAdd> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: TextField(
+                controller: _responsibleController,
                 keyboardType: TextInputType.text,
                 maxLines: 1,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900),
                 decoration: InputDecoration(
-                    hintText: widget.childrenModel.responsible == "" ? 'Digite aqui...' : widget.childrenModel.responsible,
-                    hintStyle: widget.childrenModel.responsible == "" ?
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic) :
-                      TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.green.shade900, fontStyle: FontStyle.normal),
+                    hintText: 'Digite aqui...',
+                    hintStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.normal, color: Colors.grey.shade500, fontStyle: FontStyle.italic),
                     counterStyle: const TextStyle(fontSize: 10),
                     border: InputBorder.none
                 ),
@@ -343,7 +345,7 @@ class _ChildrensAddState extends State<ChildrenAdd> {
   bool validInputs(){
     bool isValid = true;
 
-    if(widget.childrenModel.name.isEmpty || widget.childrenModel.dataNasc == "00/00/0000" || widget.childrenModel.sex.isEmpty || widget.childrenModel.responsible.isEmpty){
+    if(widget.childrenModel.name.isEmpty || widget.childrenModel.dateNasc == "00/00/0000" || widget.childrenModel.sex.isEmpty || widget.childrenModel.responsible.isEmpty){
       isValid = false;
     }
 
