@@ -359,7 +359,7 @@ class _ChildrenPageState extends State<ChildrenPage> {
 
           if(resultUpdateAnswer != null && resultUpdateAnswer.isNotEmpty){
             SnackbarNotify.createSnackBar(context, resultUpdateAnswer);
-            await Future.delayed(const Duration(seconds: 1));
+            await Future.delayed(const Duration(seconds: 2));
             if(resultUpdateAnswer['message'] == 'Resposta deletada!'){
               await childrenService.updatePunctuationChildren(widget.children);
               SnackbarNotify.createSnackBar(context, {"message": "Média de risco atualizada!", "type": "success"});
