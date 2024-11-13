@@ -26,10 +26,10 @@ class _HomePageMobileState extends State<HomePageMobile> {
             width: 350,
             child: Column(
               children: [
-                Text('Escala M-CHAT: a principal escala de rastreio para autismo. A M-CHAT é uma escala de rastreio que pode ser utilizada em todas as crianças com idade entre 16 e 30 meses com objetivo de identificar precocemente riscos para autismo.\n',
+                Text('Escala M-CHAT-R/F: a principal escala de rastreio para autismo. A M-CHAT-R/F é uma escala de rastreio que pode ser utilizada em todas as crianças com idade entre 16 a 30 meses com objetivo de identificar precocemente riscos para autismo.\n',
                     textAlign: TextAlign.center, style: TextStyle(fontSize: 14)
                 ),
-                Text('IMPORTANTE: a aplicação da M-CHAT não substitui uma avaliação diagnóstica feita por um médico e por uma equipe multidisciplinar especializada. Seu uso deve ser feito somente para confirmar algumas suspeitas e a partir dai procurar ajuda profissional.',
+                Text('IMPORTANTE: a aplicação da M-CHAT-R/F não substitui uma avaliação diagnóstica feita por um médico e por uma equipe multidisciplinar especializada. Seu uso deve ser feito somente para confirmar algumas suspeitas e a partir dai procurar ajuda profissional.',
                     textAlign: TextAlign.center, style: TextStyle(fontSize: 12, color: Colors.black54)
                 ),
               ],
