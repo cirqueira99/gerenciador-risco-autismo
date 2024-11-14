@@ -1,6 +1,7 @@
-﻿
-<h2 align="center">Projecto TCC: Questionário de Risco de Autismo e Gerenciador de respostas</h2>
-<h1 align="center">Flutter & Web</h1>
+﻿<h2 align="center">Questionário WEB identificador de Risco de Autismo</h2>
+<h1 align="center">e</h1>
+<h1 align="center">Gerenciador dos resultados</h1>
+<h1 align="center">Flutter WEB & Flutter APP</h1>
 <hr>
 <br>
 <h4 align="left">Link para a página de <stronger>"formulário online":</stronger></h4>
