@@ -3,7 +3,7 @@
 <h2 align="center">Gerenciador dos resultados</h2>
 <hr>
 <br>
-<p align="left">:memo: Link para a página de <stronger>"formulário online"</stronger>:</p>
+<p align="left">:memo: Link para a página de <i>"formulário online"</i>:</p>
 <h4><a href="https://cirqueira99.github.io/questionario_autismo/">  * FORMULÁRIO ONLINE</a></h4>
 <br>
 <p align="left">:iphone: O arquivo flutter APK se encontra no diretório raiz do repositório com o nome:</p>
