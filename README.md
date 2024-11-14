@@ -7,7 +7,7 @@
 <h4><a href="https://cirqueira99.github.io/questionario_autismo/">  * FORMULÁRIO ONLINE</a></h4>
 <br>
 <p align="left">:iphone: O arquivo flutter APK se encontra no diretório raiz do repositório com o nome:</p>
-<h4>  app-release.apk</h4>
+<h4>  mcht_manager_v1.apk</h4>
 <br>
-<p align="left"> :movie_camera: Link para a ver o vídeo de explicação passo a passo da utilização do <stronger>"formulário online"</p></stronger> e <stronger>"aplicativo celular"</p></stronger>:</p>
+<p align="left"> :movie_camera: Link para a ver o vídeo de explicação passo a passo da utilização do <i>"formulário online"</i> e <i>"aplicativo celular"</i>:</p>
 <h4><a href="https://drive.google.com/file/d/134Ju2yU3XT-F43x4kkp5UvXgVjchLG6D/view?usp=sharing">  * VÍDEO EXPLICATIVO</a></h4>
